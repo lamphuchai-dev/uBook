@@ -1,0 +1,8 @@
+{
+  "home": {
+    "title": "HOME"
+  },
+  "search": {
+    "noSearchResults": "No results found for the keyword {}"
+  }
+}

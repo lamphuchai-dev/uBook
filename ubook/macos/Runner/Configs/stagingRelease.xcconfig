@@ -1,0 +1,7 @@
+#include "../../Flutter/stagingRelease.xcconfig"
+#include "Warnings.xcconfig"
+
+FLUTTER_TARGET=lib/main_staging.dart
+ASSET_PREFIX=staging
+BUNDLE_NAME=uBook Stag
+BUNDLE_DISPLAY_NAME=uBook Stag

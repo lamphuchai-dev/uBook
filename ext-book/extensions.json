@@ -1,0 +1,123 @@
+[
+    {
+        "name": "Say Truyện",
+        "author": "uBook",
+        "slug": "say_truyen",
+        "version": 1,
+        "source": "https://saytruyenmoi.com",
+        "regexp": "",
+        "description": "Đọc truyện trên trang Say Truyện",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "comic",
+        "tabsHome": [
+            {
+                "title": "Truyện mới cập nhật",
+                "url": "/"
+            },
+            {
+                "title": "Manhwa",
+                "url": "/genre/manhwa"
+            },
+            {
+                "title": "Manga",
+                "url": "/genre/manga"
+            },
+            {
+                "title": "Romance",
+                "url": "/genre/romance"
+            }
+        ],
+        "path": "https://github.com/lamphuchai-dev/book_project/raw/main/ext-book/extensions/say_truyen/extension.zip"
+    },
+    {
+        "name": "Phê truyện",
+        "author": "uBook",
+        "slug": "phe_truyen",
+        "version": 1,
+        "source": "https://phetruyen.net",
+        "regexp": "",
+        "description": "Đọc truyện trên trang Phê truyện",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "comic",
+        "tabsHome": [
+            {
+                "title": "Truyện mới cập nhật",
+                "url": "/"
+            },
+            {
+                "title": "Truyện mới",
+                "url": "/new-stories"
+            },
+            {
+                "title": "Truyện Full",
+                "url": "/completed"
+            }
+        ],
+        "path": "https://github.com/lamphuchai-dev/book_project/raw/main/ext-book/extensions/phe_truyen/extension.zip"
+    },
+    {
+        "name": "Net Truyện",
+        "slug": "net_truyen",
+        "author": "uBook",
+        "version": 1,
+        "source": "https://www.nettruyenus.com",
+        "regexp": "",
+        "description": "Đọc truyện trên trang Net Truyện",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "comic",
+        "tabsHome": [
+            {
+                "title": "Mới cập nhật",
+                "url": "/tim-truyen"
+            },
+            {
+                "title": "Truyện mới",
+                "url": "/tim-truyen?status=-1&sort=15"
+            },
+            {
+                "title": "Truyện Full",
+                "url": "/truyen-full"
+            },
+            {
+                "title": "Tất cả - Số chapter",
+                "url": "/tim-truyen?status=-1&sort=30"
+            },
+            {
+                "title": "Truyện con trai",
+                "url": "/truyen-con-trai"
+            },
+            {
+                "title": "Truyện con gái",
+                "url": "/truyen-con-gai"
+            },
+            {
+                "title": "Top all",
+                "url": "/tim-truyen?status=-1&sort=10"
+            },
+            {
+                "title": "Top tháng",
+                "url": "/tim-truyen?status=-1&sort=11"
+            },
+            {
+                "title": "Top tuần",
+                "url": "/tim-truyen?status=-1&sort=12"
+            },
+            {
+                "title": "Top ngày",
+                "url": "/tim-truyen?status=-1&sort=13"
+            },
+            {
+                "title": "Theo dõi",
+                "url": "/tim-truyen?status=-1&sort=20"
+            },
+            {
+                "title": "Bình luận",
+                "url": "/tim-truyen?status=-1&sort=25"
+            }
+        ],
+        "path": "https://github.com/lamphuchai-dev/book_project/raw/main/ext-book/extensions/net_truyen/extension.zip"
+    }
+]

@@ -1,0 +1,47 @@
+# docs https://pub.dev/packages/flutter_flavorizr
+# run init: flutter pub run flutter_flavorizr
+# run update: flutter pub run flutter_flavorizr -p ....
+
+ide: "vscode"
+app:
+  android:
+    flavorDimensions: "ubook-type"
+flavors:
+  dev:
+    app:
+      name: "uBook DEV"
+    android:
+      applicationId: "com.lph.u_book_dev"
+      icon: assets/icons/app_icon.png
+    ios:
+      bundleId: "com.lph.u_book_dev"
+      icon: assets/icons/app_icon.png
+    macos:
+      bundleId: "com.lph.u_book_dev"
+      icon: assets/icons/app_icon.png
+
+  staging:
+    app:
+      name: "uBook Stag"
+    android:
+      applicationId: "com.lph.u_book_stag"
+      icon: assets/icons/app_icon.png
+    ios:
+      bundleId: "com.lph.u_book_stag"
+      icon: assets/icons/app_icon.png
+    macos:
+      bundleId: "com.lph.u_book_stag"
+      icon: assets/icons/app_icon.png
+
+  product:
+    app:
+      name: "uBook"
+    android:
+      applicationId: "com.lph.u_book"
+      icon: assets/icons/app_icon.png
+    ios:
+      bundleId: "com.lph.u_book"
+      icon: assets/icons/app_icon.png
+    macos:
+      bundleId: "com.lph.u_book"
+      icon: assets/icons/app_icon.png

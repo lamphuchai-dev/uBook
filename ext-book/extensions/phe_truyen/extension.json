@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "name": "Phê truyện",
+    "author": "uBook",
+    "slug": "phe_truyen",
+    "version": 1,
+    "source": "https://phetruyen.net",
+    "regexp": "",
+    "description": "Đọc truyện trên trang Phê truyện",
+    "locale": "vi_VN",
+    "language": "javascript",
+    "type": "comic",
+    "tabsHome": [
+      { "title": "Truyện mới cập nhật", "url": "/" },
+      { "title": "Truyện mới", "url": "/new-stories" },
+      { "title": "Truyện Full", "url": "/completed" }
+    ]
+  },
+  "script": {
+    "home": "src/home.js",
+    "detail": "src/detail.js",
+    "chapters": "src/chapters.js",
+    "chapter": "src/chapter.js",
+    "genre": "src/genre.js"
+  }
+}
