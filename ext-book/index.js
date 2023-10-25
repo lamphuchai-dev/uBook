@@ -33,7 +33,7 @@ function updateINFO() {
   const data = [];
   var files = glob.sync("./extensions/*/*.json");
   const urlPath =
-    "https://github.com/lamphuchai-dev/book_project/raw/main/ext-book/extensions";
+    "https://raw.githubusercontent.com/lamphuchai-dev/book_project/main/ext-book/extensions";
   files.forEach((file) => {
     let raw_data = fs.readFileSync(file, { encoding: "utf8" });
     let plugin_detail = JSON.parse(raw_data);

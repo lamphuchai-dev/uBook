@@ -28,7 +28,7 @@
                 "url": "/genre/romance"
             }
         ],
-        "path": "https://github.com/lamphuchai-dev/book_project/raw/main/ext-book/extensions/say_truyen/extension.zip"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/book_project/main/ext-book/extensions/say_truyen/extension.zip"
     },
     {
         "name": "Phê truyện",
@@ -55,7 +55,7 @@
                 "url": "/completed"
             }
         ],
-        "path": "https://github.com/lamphuchai-dev/book_project/raw/main/ext-book/extensions/phe_truyen/extension.zip"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/book_project/main/ext-book/extensions/phe_truyen/extension.zip"
     },
     {
         "name": "Net Truyện",
@@ -118,6 +118,6 @@
                 "url": "/tim-truyen?status=-1&sort=25"
             }
         ],
-        "path": "https://github.com/lamphuchai-dev/book_project/raw/main/ext-book/extensions/net_truyen/extension.zip"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/book_project/main/ext-book/extensions/net_truyen/extension.zip"
     }
 ]
