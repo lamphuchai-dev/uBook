@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_client/index.dart';
+import 'package:ubook/app/config/app_config.dart';
 import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/data/models/metadata.dart';
@@ -123,8 +124,7 @@ class ExtensionsService {
 
   Future<List<Metadata>> getListExts() async {
     try {
-      final res = await _dioClient.get(
-          "https://github.com/lamphuchai-dev/book_project/raw/main/ext-book/extensions.json");
+      final res = await _dioClient.get(AppConfig.extensionsUrl);
       final metadata = jsonDecode(res)
           .map<Metadata>((map) => Metadata.fromMap(map))
           .toList();
