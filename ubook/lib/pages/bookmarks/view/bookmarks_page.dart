@@ -44,31 +44,38 @@ class _BookmarksPageState extends State<BookmarksPage> {
     );
   }
 
+  Widget _girdBook(List<Book> books) {
+    return BooksGridWidget(
+      useFetch: false,
+      initialBooks: books,
+      useRefresh: false,
+      listenBooks: true,
+      layout: BookLayoutType.stack,
+      onFetchListBook: (page) async {
+        return [];
+      },
+      onTap: (book) {
+        Navigator.pushNamed(context, RoutesName.readBook,
+            arguments: ReadBookArgs(
+                book: book,
+                chapters: [],
+                readChapter: book.readBook?.index ?? 0,
+                fromBookmarks: true,
+                loadChapters: true));
+      },
+      onLongTap: (book) {
+        print("object");
+      },
+    );
+  }
+
   Widget _buildBooks(List<Book> books) {
     if (books.isEmpty) {
       return const EmptyListDataWidget(
         svgType: SvgType.defaultSvg,
       );
     } else if (books.length < 3) {
-      return BooksGridWidget(
-        useFetch: false,
-        initialBooks: books,
-        useRefresh: false,
-        listenBooks: true,
-        layout: BookLayoutType.stack,
-        onFetchListBook: (page) async {
-          return [];
-        },
-        onTap: (book) {
-          Navigator.pushNamed(context, RoutesName.readBook,
-              arguments: ReadBookArgs(
-                  book: book,
-                  chapters: [],
-                  readChapter: book.readBook?.index ?? 0,
-                  fromBookmarks: true,
-                  loadChapters: true));
-        },
-      );
+      return _girdBook(books);
     } else if (books.length == 3) {
       return BooksSlider(
         nameExtension: _bookmarksCubit.getNameExtensionBySource,
@@ -101,26 +108,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
             },
           ),
           Gaps.hGap8,
-          Expanded(
-              child: BooksGridWidget(
-            useFetch: false,
-            initialBooks: list.$2,
-            layout: BookLayoutType.stack,
-            useRefresh: false,
-            listenBooks: true,
-            onFetchListBook: (page) async {
-              return [];
-            },
-            onTap: (book) {
-              Navigator.pushNamed(context, RoutesName.readBook,
-                  arguments: ReadBookArgs(
-                      book: book,
-                      chapters: [],
-                      readChapter: book.readBook?.index ?? 0,
-                      fromBookmarks: true,
-                      loadChapters: true));
-            },
-          ))
+          Expanded(child: _girdBook(list.$2))
         ],
       );
     }

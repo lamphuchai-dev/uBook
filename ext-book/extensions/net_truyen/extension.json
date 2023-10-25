@@ -5,7 +5,7 @@
     "author": "uBook",
     "version": 1,
     "source": "https://www.nettruyenus.com",
-    "regexp": "",
+    "regexp": "(www.)?(nettruyenus).(com)",
     "description": "Đọc truyện trên trang Net Truyện",
     "locale": "vi_VN",
     "language": "javascript",
@@ -52,6 +52,6 @@
     "chapters": "src/chapters.js",
     "chapter": "src/chapter.js",
     "search": "src/search.js",
-    "genre":"src/genre.js"
+    "genre": "src/genre.js"
   }
 }

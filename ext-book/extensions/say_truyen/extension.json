@@ -5,7 +5,7 @@
     "slug": "say_truyen",
     "version": 1,
     "source": "https://saytruyenmoi.com",
-    "regexp": "",
+    "regexp": "(saytruyenmoi).(com)",
     "description": "Đọc truyện trên trang Say Truyện",
     "locale": "vi_VN",
     "language": "javascript",

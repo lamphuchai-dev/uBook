@@ -60,17 +60,19 @@ class _HomePageState extends State<HomePage> {
           title = const Text("Tiện ích");
         } else if (state is LoadedExtensionState) {
           body = _extReady(state.extension);
-          actions = [
-            IconButton(
-                onPressed: () {
-                  showSearch(
-                      context: context,
-                      delegate: SearchBookDelegate(
-                          onSearchBook: _homeCubit.onSearchBook,
-                          extensionModel: state.extension));
-                },
-                icon: const Icon(Icons.search_rounded))
-          ];
+          if (state.extension.script.search != null) {
+            actions = [
+              IconButton(
+                  onPressed: () {
+                    showSearch(
+                        context: context,
+                        delegate: SearchBookDelegate(
+                            onSearchBook: _homeCubit.onSearchBook,
+                            extensionModel: state.extension));
+                  },
+                  icon: const Icon(Icons.search_rounded))
+            ];
+          }
           title = GestureDetector(
             onTap: () {
               showModalBottomSheet(

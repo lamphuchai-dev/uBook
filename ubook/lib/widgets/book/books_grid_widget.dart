@@ -23,6 +23,7 @@ class BooksGridWidget extends StatefulWidget {
       this.initialBooks,
       this.listenBooks = false,
       this.onTap,
+      this.onLongTap,
       this.layout = BookLayoutType.column});
   final OnFetchListBook? onFetchListBook;
   final Widget? emptyWidget;
@@ -32,6 +33,8 @@ class BooksGridWidget extends StatefulWidget {
   final bool useRefresh;
   final bool listenBooks;
   final ValueChanged<Book>? onTap;
+  final ValueChanged<Book>? onLongTap;
+
   final BookLayoutType layout;
 
   @override
@@ -152,7 +155,7 @@ class _BooksGridWidgetState extends State<BooksGridWidget> {
                           book: book,
                           layout: widget.layout,
                           onTap: () => widget.onTap?.call(book),
-                          onLongTap: () {},
+                          onLongTap: () => widget.onLongTap?.call(book),
                         );
                       },
                       childCount: _listBook.length,
