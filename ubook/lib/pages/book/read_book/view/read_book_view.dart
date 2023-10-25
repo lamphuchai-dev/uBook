@@ -31,11 +31,11 @@ class ReadBookView extends StatelessWidget {
 }
 
 class ReadBookArgs {
-  final Book book;
-  final int readChapter;
-  final List<Chapter> chapters;
-  final bool fromBookmarks;
-  final bool loadChapters;
+  Book book;
+  int readChapter;
+  List<Chapter> chapters;
+  bool fromBookmarks;
+  bool loadChapters;
   ReadBookArgs(
       {required this.book,
       this.readChapter = 0,

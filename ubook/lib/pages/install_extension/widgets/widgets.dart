@@ -1,1 +1,3 @@
-export './extension_card_widget.dart';
+
+export './installed_extensions_widget.dart';
+export './all_extensions_widget.dart';

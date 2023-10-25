@@ -39,8 +39,8 @@ class ItemBook extends StatelessWidget {
                                 fit: StackFit.expand,
                                 children: [
                                   Positioned.fill(child: _coverBook()),
-                                  Positioned(
-                                      left: 0, top: 0, child: _cardPercent()),
+                                  // Positioned(
+                                  //     left: 0, top: 0, child: _cardPercent()),
                                 ],
                               ))),
                       Gaps.hGap4,
@@ -60,8 +60,15 @@ class ItemBook extends StatelessWidget {
                                   Positioned.fill(child: _coverBook()),
                                   Positioned(
                                       left: 0, top: 0, child: _cardPercent()),
+                                  Positioned(
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
+                                      child: _readChapter()),
                                 ],
                               ))),
+                      Gaps.hGap4,
+                      _info(des: false)
                     ],
                   ),
               }),
@@ -73,23 +80,38 @@ class ItemBook extends StatelessWidget {
   }
 
   Widget _cardPercent() {
-    if (bookMark) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-            color: Colors.black54,
-            borderRadius: BorderRadius.only(bottomRight: Radius.circular(8))),
-        // child: Text(
-        //   "${book.chapterCount}c - ${book.getPercentRead}%",
-        //   style: const TextStyle(fontSize: 12),
-        // ),
-      );
-    }
-    return const SizedBox();
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(8))),
+      child: Text(
+        "${book.readBook?.index ?? 1}/${book.totalChapters}",
+        style: const TextStyle(fontSize: 10),
+      ),
+    );
   }
 
-  Widget _info() {
+  Widget _readChapter() {
+    if (book.readBook == null) return const SizedBox();
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(8))),
+      child: Text(
+        "${book.readBook!.titleChapter}",
+        style: const TextStyle(
+          fontSize: 10,
+        ),
+        maxLines: 3,
+      ),
+    );
+  }
+
+  Widget _info({bool des = true}) {
     return Column(
       children: [
         SizedBox(
@@ -101,12 +123,13 @@ class ItemBook extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
-        Text(
-          book.description,
-          style: const TextStyle(fontSize: 11, height: 0.8),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-        ),
+        if (des)
+          Text(
+            book.description,
+            style: const TextStyle(fontSize: 11, height: 0.8),
+            textAlign: TextAlign.center,
+            maxLines: 1,
+          ),
       ],
     );
   }

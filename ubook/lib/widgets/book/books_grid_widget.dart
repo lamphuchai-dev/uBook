@@ -1,12 +1,14 @@
 // ignore_for_file: unused_element
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ubook/app/constants/dimens.dart';
 import 'package:ubook/app/extensions/context_extension.dart';
 import 'package:ubook/data/models/book.dart';
 import 'package:ubook/widgets/book/item_book.dart';
-import 'package:ubook/widgets/loading_widget.dart';
+import 'package:ubook/widgets/widgets.dart';
 
 typedef OnFetchListBook = Future<List<Book>> Function(int page);
 
@@ -20,7 +22,8 @@ class BooksGridWidget extends StatefulWidget {
       this.useRefresh = true,
       this.initialBooks,
       this.listenBooks = false,
-      this.onTap});
+      this.onTap,
+      this.layout = BookLayoutType.column});
   final OnFetchListBook? onFetchListBook;
   final Widget? emptyWidget;
   final ValueChanged<List<Book>>? onChangeBooks;
@@ -29,6 +32,7 @@ class BooksGridWidget extends StatefulWidget {
   final bool useRefresh;
   final bool listenBooks;
   final ValueChanged<Book>? onTap;
+  final BookLayoutType layout;
 
   @override
   State<BooksGridWidget> createState() => _BooksGridWidgetState();
@@ -119,53 +123,54 @@ class _BooksGridWidgetState extends State<BooksGridWidget> {
       return const LoadingWidget();
     }
 
-    if (_listBook.isEmpty) {
-      return widget.emptyWidget ?? const _EmptyBooks();
-    }
-
-    final girdConfig = _get(3);
+    final girdConfig = _get(context.width > 800 ? 5 : 3);
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: Dimens.horizontalPadding,
       ),
       child: _refreshWidget(
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 8),
-            ),
-            SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: girdConfig.crossAxisCount,
-                  crossAxisSpacing: 8,
-                  mainAxisExtent: girdConfig.heightItem,
-                  mainAxisSpacing: 8),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  final book = _listBook[index];
-                  return ItemBook(
-                    book: book,
-                    onTap: () => widget.onTap?.call(book),
-                    onLongTap: () {},
-                  );
-                },
-                childCount: _listBook.length,
+        child: _listBook.isEmpty
+            ? const EmptyListDataWidget(
+                svgType: SvgType.defaultSvg,
+              )
+            : CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 8),
+                  ),
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: girdConfig.crossAxisCount,
+                        crossAxisSpacing: 8,
+                        mainAxisExtent: girdConfig.heightItem,
+                        mainAxisSpacing: 8),
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        final book = _listBook[index];
+                        return ItemBook(
+                          book: book,
+                          layout: widget.layout,
+                          onTap: () => widget.onTap?.call(book),
+                          onLongTap: () {},
+                        );
+                      },
+                      childCount: _listBook.length,
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _isLoadMore
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: SpinKitThreeBounce(
+                              color: context.colorScheme.primary,
+                              size: 25.0,
+                            ),
+                          )
+                        : const SizedBox(height: 8),
+                  ),
+                ],
               ),
-            ),
-            SliverToBoxAdapter(
-              child: _isLoadMore
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      child: SpinKitThreeBounce(
-                        color: context.colorScheme.primary,
-                        size: 25.0,
-                      ),
-                    )
-                  : const SizedBox(height: 8),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -190,20 +195,5 @@ class _BooksGridWidgetState extends State<BooksGridWidget> {
       );
     }
     return child;
-  }
-}
-
-class _EmptyBooks extends StatelessWidget {
-  const _EmptyBooks({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = context.appTextTheme;
-    return Center(
-      child: Text(
-        "Không có dữ liệu hiện thị",
-        style: textTheme.bodyLarge,
-      ),
-    );
   }
 }

@@ -2,26 +2,32 @@
 part of 'install_extension_cubit.dart';
 
 class InstallExtensionState extends Equatable {
-  const InstallExtensionState(
-      {required this.installedExts,
-      required this.notInstalledExts,
-      required this.statusType});
+  const InstallExtensionState({
+    required this.installedExts,
+    required this.notInstalledExts,
+    required this.statusInstalled,
+    required this.statusAllExtension,
+  });
   final List<Extension> installedExts;
   final List<Metadata> notInstalledExts;
-  final StatusType statusType;
+  final StatusType statusInstalled;
+  final StatusType statusAllExtension;
 
   @override
-  List<Object> get props => [installedExts, notInstalledExts, statusType];
+  List<Object> get props =>
+      [installedExts, notInstalledExts, statusInstalled, statusAllExtension];
 
-  InstallExtensionState copyWith({
-    List<Extension>? installedExts,
-    List<Metadata>? notInstalledExts,
-    StatusType? statusType,
-  }) {
+  InstallExtensionState copyWith(
+      {List<Extension>? installedExts,
+      List<Metadata>? notInstalledExts,
+      StatusType? statusType,
+      StatusType? statusInstalled,
+      StatusType? statusAllExtension}) {
     return InstallExtensionState(
       installedExts: installedExts ?? this.installedExts,
       notInstalledExts: notInstalledExts ?? this.notInstalledExts,
-      statusType: statusType ?? this.statusType,
+      statusInstalled: statusInstalled ?? this.statusInstalled,
+      statusAllExtension: statusAllExtension ?? this.statusAllExtension,
     );
   }
 }

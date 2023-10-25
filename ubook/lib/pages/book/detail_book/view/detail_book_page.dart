@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -6,7 +7,9 @@ import 'package:ubook/app/constants/dimens.dart';
 import 'package:ubook/app/constants/gaps.dart';
 import 'package:ubook/app/extensions/context_extension.dart';
 import 'package:ubook/app/routes/routes_name.dart';
+import 'package:ubook/data/models/models.dart';
 import 'package:ubook/pages/book/chapters/chapters.dart';
+import 'package:ubook/pages/book/read_book/read_book.dart';
 import 'package:ubook/widgets/cache_network_image.dart';
 import 'package:ubook/widgets/widgets.dart';
 import '../cubit/detail_book_cubit.dart';
@@ -30,7 +33,6 @@ class _DetailBookPageState extends State<DetailBookPage> {
   void initState() {
     _detailBookCubit = context.read<DetailBookCubit>();
 
-    // SystemUtils.setSystemNavigationBarColor(context.colorScheme.surface);
     super.initState();
   }
 
@@ -200,15 +202,15 @@ class _DetailBookPageState extends State<DetailBookPage> {
                 decoration: BoxDecoration(
                   color: colorScheme.background,
                 ),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        _detailBookCubit.actionBookmark();
-                      },
-                      child: BlocBuilder<DetailBookCubit, DetailBookState>(
-                        builder: (context, state) {
-                          return Container(
+                child: BlocBuilder<DetailBookCubit, DetailBookState>(
+                  builder: (context, state) {
+                    return Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _detailBookCubit.actionBookmark();
+                          },
+                          child: Container(
                             width: 100,
                             decoration: BoxDecoration(
                                 color: colorScheme.surface,
@@ -225,36 +227,100 @@ class _DetailBookPageState extends State<DetailBookPage> {
                                     Icons.bookmark_add_rounded,
                                     size: 30,
                                   ),
-                          );
-                        },
-                      ),
-                    ),
-                    Gaps.wGap8,
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, RoutesName.chaptersBook,
-                            arguments: ChaptersBookArgs(
-                                book: _detailBookCubit.state.book,
-                                extensionModel: _detailBookCubit.extension));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: colorScheme.primary,
-                            borderRadius: BorderRadius.circular(Dimens.radius)),
-                        alignment: Alignment.center,
-                        child: const Icon(
-                          Icons.menu_book_rounded,
-                          size: 30,
+                          ),
                         ),
-                      ),
-                    ))
-                  ],
+                        Gaps.wGap8,
+                        Expanded(
+                            child:
+                                state.isBookmark && state.book.readBook != null
+                                    ? _readContinue(colorScheme.primary,
+                                        state.book.copyWith(bookmark: true))
+                                    : _listChapters(
+                                        colorScheme.primary, state.book))
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _listChapters(Color primaryColor, Book book) {
+    final textTheme = context.appTextTheme;
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, RoutesName.chaptersBook,
+            arguments: ChaptersBookArgs(
+                book: book, extensionModel: _detailBookCubit.extension));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: primaryColor,
+            borderRadius: BorderRadius.circular(Dimens.radius)),
+        alignment: Alignment.center,
+        child: Row(
+          children: [
+            const Expanded(
+                child: Align(
+              alignment: Alignment.centerRight,
+              child: Icon(
+                Icons.format_list_bulleted,
+                size: 30,
+              ),
+            )),
+            Gaps.wGap12,
+            Text(
+              "book.chapters".tr(),
+              style: textTheme.titleMedium,
+            ),
+            const Expanded(child: SizedBox())
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _readContinue(Color primaryColor, Book book) {
+    final textTheme = context.appTextTheme;
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, RoutesName.readBook,
+            arguments: ReadBookArgs(
+                book: book,
+                chapters: [],
+                readChapter: book.readBook?.index ?? 0,
+                fromBookmarks: true,
+                loadChapters: true));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: primaryColor,
+            borderRadius: BorderRadius.circular(Dimens.radius)),
+        alignment: Alignment.center,
+        child: Row(
+          children: [
+            const Expanded(
+                child: Align(
+              alignment: Alignment.centerRight,
+              child: Icon(
+                Icons.format_list_bulleted,
+                size: 30,
+              ),
+            )),
+            Gaps.wGap12,
+            Text(
+              "book.readContinue".tr(),
+              style: textTheme.titleMedium,
+            ),
+            const Expanded(child: SizedBox())
+          ],
+        ),
       ),
     );
   }

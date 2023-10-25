@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ubook/app/constants/assets.dart';
 import 'package:ubook/app/routes/routes_name.dart';
-import 'package:ubook/widgets/widgets.dart';
+import 'package:ubook/pages/splash/view/list_test.dart';
 import '../cubit/splash_cubit.dart';
 
 class SplashPage extends StatefulWidget {
@@ -32,25 +31,26 @@ class _SplashPageState extends State<SplashPage> {
             Navigator.pushReplacementNamed(context, RoutesName.installExt);
           }
         },
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Align(
-                child: Image.asset(
-              AppAssets.iconApp,
-              width: 80,
-              height: 80,
-            )),
-            const Positioned(
-              bottom: 16,
-              left: 0,
-              right: 0,
-              child: LoadingWidget(
-                radius: 15,
-              ),
-            )
-          ],
-        ),
+        child: const ListTest(),
+        //   child: const Stack(
+        //     fit: StackFit.expand,
+        //     children: [
+        //       // Align(
+        //       //     child: Image.asset(
+        //       //   AppAssets.iconApp,
+        //       //   width: 80,
+        //       //   height: 80,
+        //       // )),
+        //       Positioned(
+        //         bottom: 16,
+        //         left: 0,
+        //         right: 0,
+        //         child: LoadingWidget(
+        //           radius: 15,
+        //         ),
+        //       )
+        //     ],
+        //   ),
       ),
     );
   }

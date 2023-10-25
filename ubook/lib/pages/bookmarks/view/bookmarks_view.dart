@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ubook/di/components/service_locator.dart';
 import 'package:ubook/services/database_service.dart';
+import 'package:ubook/services/extensions_service.dart';
 import '../cubit/bookmarks_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bookmarks_page.dart';
@@ -13,7 +14,7 @@ class BookmarksView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          BookmarksCubit(databaseService: getIt<DatabaseService>())..onInit(),
+          BookmarksCubit(databaseService: getIt<DatabaseService>(),extensionsService: getIt<ExtensionsService>())..onInit(),
       child: const BookmarksPage(),
     );
   }

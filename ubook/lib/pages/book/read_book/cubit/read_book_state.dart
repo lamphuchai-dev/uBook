@@ -57,3 +57,7 @@ class AutoScrollReadBook extends ReadBookState {
   @override
   List<Object> get props => [totalChapters, timerScroll, scrollStatus];
 }
+
+class ErrorReadBook extends ReadBookState {
+  const ErrorReadBook({required super.totalChapters});
+}

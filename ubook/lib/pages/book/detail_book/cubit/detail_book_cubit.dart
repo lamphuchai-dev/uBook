@@ -29,7 +29,9 @@ class DetailBookCubit extends Cubit<DetailBookState> {
   final JsRuntime _jsRuntime;
   int? _idBook;
   void onInit() async {
-    await Future.wait([getDetailBook(), getBookInBookmarks()]);
+    // await Future.wait([getDetailBook(), getBookInBookmarks()]);
+    await getDetailBook();
+    await getBookInBookmarks();
   }
 
   Future<void> getDetailBook() async {
@@ -50,8 +52,12 @@ class DetailBookCubit extends Cubit<DetailBookState> {
     final bookmark = await _databaseService.getBookByUrl(state.book.bookUrl);
     if (bookmark != null) {
       _idBook = bookmark.id;
+      final book = state.book.copyWith(
+          id: bookmark.id, readBook: bookmark.readBook, bookmark: true);
+      emit(state.copyWith(isBookmark: true, book: book));
+    } else {
+      emit(state.copyWith(isBookmark: false));
     }
-    emit(state.copyWith(isBookmark: bookmark != null));
   }
 
   void actionBookmark() async {
@@ -63,7 +69,8 @@ class DetailBookCubit extends Cubit<DetailBookState> {
     } else {
       final idBook = await _databaseService.onInsertBook(state.book);
       if (idBook is int) {
-        emit(state.copyWith(isBookmark: true));
+        emit(state.copyWith(
+            isBookmark: true, book: state.book.copyWith(id: idBook)));
         _idBook = idBook;
       }
     }

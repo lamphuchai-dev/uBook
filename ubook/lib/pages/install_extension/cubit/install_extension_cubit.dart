@@ -15,23 +15,30 @@ class InstallExtensionCubit extends Cubit<InstallExtensionState> {
         super(InstallExtensionState(
             installedExts: extensionManager.getExtensions,
             notInstalledExts: const [],
-            statusType: StatusType.init)) {
-    _streamSubscription = extensionManager.extensionsChange.listen((exts) {
-      emit(state.copyWith(installedExts: exts));
-    });
-  }
+            statusInstalled: StatusType.loaded,
+            statusAllExtension: StatusType.init));
 
   final ExtensionsService _extensionManager;
-  late StreamSubscription? _streamSubscription;
 
   bool fromToHome = false;
 
   void onInit() async {
-    if (state.installedExts.isNotEmpty) {
-      fromToHome = true;
-    }
+    onGetListExtension();
+  }
+
+  Future<void> onGetListExtension() async {
+    emit(state.copyWith(statusAllExtension: StatusType.loading));
     final list = await _extensionManager.getListExts();
-    emit(state.copyWith(notInstalledExts: list));
+    emit(state.copyWith(
+        notInstalledExts: removeExtInstalled(list),
+        statusAllExtension: StatusType.loaded));
+  }
+
+  Future<void> onRefreshExtensions() async {
+    final list = await _extensionManager.getListExts();
+    emit(state.copyWith(
+      notInstalledExts: removeExtInstalled(list),
+    ));
   }
 
   Future<bool> onInstallExt(String extUrl) async {
@@ -40,13 +47,20 @@ class InstallExtensionCubit extends Cubit<InstallExtensionState> {
       final exts = state.notInstalledExts;
       final noIn =
           exts.where((ext) => ext.source != isInstallExt.source).toList();
-      emit(state.copyWith(notInstalledExts: noIn));
+      emit(state.copyWith(
+          notInstalledExts: noIn,
+          installedExts: _extensionManager.getExtensions));
     }
     return isInstallExt != null;
   }
 
   Future<bool> onUninstallExt(Extension extension) async {
     final result = await _extensionManager.uninstallExtension(extension);
+    if (result) {
+      emit(state.copyWith(
+          notInstalledExts: [...state.notInstalledExts, extension.metadata],
+          installedExts: _extensionManager.getExtensions));
+    }
     return result;
   }
 
@@ -59,9 +73,15 @@ class InstallExtensionCubit extends Cubit<InstallExtensionState> {
     return notInstalledExts;
   }
 
-  @override
-  Future<void> close() {
-    _streamSubscription?.cancel();
-    return super.close();
+  List<Metadata> removeExtInstalled(List<Metadata> list) {
+    Map<String, Metadata> mapList = {
+      for (var element in list) element.name: element
+    };
+    for (var ext in state.installedExts) {
+      if (mapList[ext.metadata.name] != null) {
+        mapList.remove(ext.metadata.name);
+      }
+    }
+    return mapList.values.toList();
   }
 }

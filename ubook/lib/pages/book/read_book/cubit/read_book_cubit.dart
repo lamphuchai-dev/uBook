@@ -60,33 +60,53 @@ class ReadBookCubit extends Cubit<ReadBookState> {
   Timer? chaptersSliderTime;
 
   void onInit() async {
-    final ext =
-        _extensionManager.getExtensionBySource(book.getSourceByBookUrl());
-    if (ext == null) {
-      emit(ReadBookInitial(
-          totalChapters: _readBookArgs.chapters.length,
-          extensionStatus: ExtensionStatus.error));
-      return;
-    }
+    try {
+      final ext =
+          _extensionManager.getExtensionBySource(book.getSourceByBookUrl());
+      if (ext == null) {
+        emit(ReadBookInitial(
+            totalChapters: _readBookArgs.chapters.length,
+            extensionStatus: ExtensionStatus.error));
+        return;
+      }
 
-    _extension = ext;
+      _extension = ext;
 
-    if (_readBookArgs.fromBookmarks) {
-      final list = await _jsRuntime.getChapters(
-          url: book.bookUrl,
-          jsScript:
-              DirectoryUtils.getJsScriptByPath(_extension!.script.chapters));
-      chapters = list;
-      indexPageChapter = _readBookArgs.readChapter;
-      readChapter.value = chapters[indexPageChapter];
-      pageController = PageController(initialPage: indexPageChapter);
-      emit(BaseReadBook(totalChapters: state.totalChapters));
-    } else {
-      chapters = _readBookArgs.chapters;
-      indexPageChapter = _readBookArgs.readChapter;
-      readChapter.value = chapters[indexPageChapter];
-      pageController = PageController(initialPage: indexPageChapter);
-      emit(BaseReadBook(totalChapters: state.totalChapters));
+      final bookLocal =
+          await _databaseService.getBookByUrl(_readBookArgs.book.bookUrl);
+      // Kiểm tra và cập nhật book từ local ->add bookmark -> page chapters -> read book
+      if (bookLocal != null && !_readBookArgs.fromBookmarks) {
+        _readBookArgs.book = bookLocal;
+      }
+
+      if (_readBookArgs.fromBookmarks) {
+        final list = await _jsRuntime.getChapters(
+            url: book.bookUrl,
+            jsScript:
+                DirectoryUtils.getJsScriptByPath(_extension!.script.chapters));
+        chapters = list;
+        indexPageChapter = _readBookArgs.readChapter;
+        readChapter.value = chapters[indexPageChapter];
+        pageController = PageController(initialPage: indexPageChapter);
+        emit(BaseReadBook(totalChapters: state.totalChapters));
+      } else {
+        chapters = _readBookArgs.chapters;
+        indexPageChapter = _readBookArgs.readChapter;
+        readChapter.value = chapters[indexPageChapter];
+        pageController = PageController(initialPage: indexPageChapter);
+        emit(BaseReadBook(totalChapters: state.totalChapters));
+      }
+      if (book.bookmark && readChapter.value != null) {
+        _databaseService.updateBook(book.copyWith(
+            updateAt: DateTime.now(),
+            readBook: ReadBook(
+                index: readChapter.value!.index,
+                offsetLast: 0.0,
+                titleChapter: readChapter.value!.title,
+                nameExtension: _extension?.metadata.name)));
+      }
+    } catch (error) {
+      emit(const ErrorReadBook(totalChapters: 0));
     }
   }
 
@@ -153,17 +173,6 @@ class ReadBookCubit extends Cubit<ReadBookState> {
     }
   }
 
-  // int get getInitialReadChapter {
-  //   if (_readBookArgs.readChapter == null) {
-  //     return 0;
-  //   } else {
-  //     final chapter = chapters
-  //         .firstWhereOrNull((e) => e.title == _readBookArgs.readChapter);
-  //     if (chapter == null) return 0;
-  //     return chapters.indexOf(chapter);
-  //   }
-  // }
-
   void onPageChanged(int index) {
     indexPageChapter = index;
     readChapter.value = chapters[index];
@@ -171,7 +180,11 @@ class ReadBookCubit extends Cubit<ReadBookState> {
     if (book.bookmark) {
       _databaseService.updateBook(book.copyWith(
           updateAt: DateTime.now(),
-          currentReadChapter: readChapter.value!.index));
+          readBook: ReadBook(
+              index: readChapter.value!.index,
+              offsetLast: 0.0,
+              titleChapter: readChapter.value!.title,
+              nameExtension: _extension?.metadata.name)));
     }
   }
 

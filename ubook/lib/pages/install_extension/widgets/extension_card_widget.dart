@@ -79,10 +79,11 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
   }
 
   Widget _leadingCardWidget(ColorScheme colorScheme) {
-    final icon = widget.installed
+    Widget icon = widget.installed
         ? Icon(
             Icons.delete_forever_rounded,
             color: colorScheme.error,
+            size: 24,
           )
         : Icon(
             Icons.download_rounded,
@@ -90,7 +91,9 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
             size: 24,
           );
     if (_loading) {
-      return Padding(
+      return Container(
+        height: 48,
+        width: 48,
         padding: const EdgeInsets.only(right: 8),
         child: LoadingWidget(
           radius: 10,
@@ -98,6 +101,6 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
         ),
       );
     }
-    return IconButton(onPressed: _onTap, icon: icon);
+    return IconButton(splashRadius: 20, onPressed: _onTap, icon: icon);
   }
 }

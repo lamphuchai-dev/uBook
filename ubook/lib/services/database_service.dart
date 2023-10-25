@@ -34,6 +34,7 @@ class DatabaseService {
 
   Future<Book?> getBookByUrl(String bookUrl) =>
       database.books.filter().bookUrlMatches(bookUrl).findFirst();
+  
 
   Stream<void> get bookStream => database.books.watchLazy();
 }

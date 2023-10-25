@@ -4,7 +4,10 @@ async function home(url, page) {
       page: page ?? 1,
     },
   });
-  const list = await Extension.querySelectorAll(res, "ul.list_grid li");
+  const list = await Extension.querySelectorAll(
+    res,
+    "div.list_grid_out ul.list_grid li"
+  );
   const result = [];
   for (const item of list) {
     const html = item.content;

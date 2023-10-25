@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:isar/isar.dart';
+
 import 'package:ubook/app/config/app_type.dart';
 import 'package:ubook/data/models/genre.dart';
 
@@ -21,16 +22,15 @@ class Book {
   final String description;
   final String cover;
   final String bookStatus;
-  @Index()
-  final String host;
   final int totalChapters;
   @Enumerated(EnumType.ordinal)
   final BookType type;
   final bool bookmark;
-  final int? currentReadChapter;
   final DateTime? updateAt;
   @ignore
   final List<Genre> genres;
+
+  final ReadBook? readBook;
 
   const Book(
       {this.id,
@@ -40,11 +40,10 @@ class Book {
       required this.bookStatus,
       required this.description,
       required this.cover,
-      required this.host,
       required this.totalChapters,
       required this.type,
       required this.bookmark,
-      this.currentReadChapter,
+      this.readBook,
       this.genres = const [],
       this.updateAt});
 
@@ -62,7 +61,8 @@ class Book {
       bool? bookmark,
       int? currentReadChapter,
       DateTime? updateAt,
-      List<Genre>? genres}) {
+      List<Genre>? genres,
+      ReadBook? readBook}) {
     return Book(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -71,13 +71,12 @@ class Book {
         bookStatus: bookStatus ?? this.bookStatus,
         description: description ?? this.description,
         cover: cover ?? this.cover,
-        host: host ?? this.host,
         totalChapters: totalChapters ?? this.totalChapters,
         type: type ?? this.type,
         genres: genres ?? this.genres,
         bookmark: bookmark ?? this.bookmark,
-        currentReadChapter: currentReadChapter ?? this.currentReadChapter,
-        updateAt: updateAt ?? this.updateAt);
+        updateAt: updateAt ?? this.updateAt,
+        readBook: readBook ?? this.readBook);
   }
 
   Map<String, dynamic> toMap() {
@@ -88,10 +87,12 @@ class Book {
       'author': author,
       'description': description,
       'cover': cover,
-      'host': host,
       'totalChapters': totalChapters,
       'type': type.name,
-      "genres": genres.map((e) => e.toMap())
+      "genres": genres.map(
+        (e) => e.toMap(),
+      ),
+      'readBook': readBook?.toMap()
     };
   }
 
@@ -102,7 +103,6 @@ class Book {
         author: map['author'] ?? "",
         description: map['description'] ?? "",
         cover: map['cover'] ?? "",
-        host: map['host'] ?? "",
         totalChapters: map['totalChapters'] ?? 0,
         bookStatus: map["bookStatus"] ?? "",
         type: BookType.values.firstWhere(
@@ -117,8 +117,9 @@ class Book {
               )
             : [],
         bookmark: map["bookmark"] ?? false,
-        currentReadChapter: map["currentReadChapter"],
-        updateAt: map["updateAt"]);
+        updateAt: map["updateAt"],
+        readBook:
+            map["readBook"] != null ? ReadBook.fromMap(map["readBook"]) : null);
   }
 
   factory Book.fromMapComic(Map<String, dynamic> map) {
@@ -143,11 +144,95 @@ class Book {
 
   @override
   String toString() {
-    return 'Book(id: $id, name: $name, bookUrl: $bookUrl, author: $author, description: $description, cover: $cover, host: $host, totalChapters: $totalChapters, type: $type, bookmark: $bookmark, currentReadChapter: $currentReadChapter, updateAt: $updateAt)';
+    return 'Book(id: $id, name: $name, bookUrl: $bookUrl, author: $author, description: $description, cover: $cover, bookStatus: $bookStatus, totalChapters: $totalChapters, type: $type, bookmark: $bookmark, updateAt: $updateAt, genres: $genres, readBook: $readBook)';
+  }
+}
+
+extension BookExtension on Book {
+  String get getPercentRead {
+    final result = ((readBook?.index ?? 1) / totalChapters) * 100;
+    return result.toStringAsFixed(2);
   }
 
   String getSourceByBookUrl() {
     final uri = Uri.parse(bookUrl);
     return "${uri.scheme}://${uri.host}";
+  }
+}
+
+@embedded
+class ReadBook {
+  final int? index;
+  final String? titleChapter;
+  final String? nameExtension;
+  final double? offsetLast;
+  ReadBook({
+    this.index,
+    this.titleChapter,
+    this.nameExtension,
+    this.offsetLast,
+  });
+
+  ReadBook copyWith({
+    int? index,
+    String? titleChapter,
+    String? nameExtension,
+    double? offsetLast,
+  }) {
+    return ReadBook(
+      index: index ?? this.index,
+      titleChapter: titleChapter ?? this.titleChapter,
+      nameExtension: nameExtension ?? this.nameExtension,
+      offsetLast: offsetLast ?? this.offsetLast,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'index': index,
+      'titleChapter': titleChapter,
+      'nameExtension': nameExtension,
+      'offsetLast': offsetLast,
+    };
+  }
+
+  factory ReadBook.fromMap(Map<String, dynamic> map) {
+    return ReadBook(
+      index: map['index'] != null ? map['index'] as int : null,
+      titleChapter:
+          map['titleChapter'] != null ? map['titleChapter'] as String : null,
+      nameExtension:
+          map['nameExtension'] != null ? map['nameExtension'] as String : null,
+      offsetLast:
+          map['offsetLast'] != null ? map['offsetLast'] as double : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ReadBook.fromJson(String source) =>
+      ReadBook.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'ReadBook(index: $index, titleChapter: $titleChapter, nameExtension: $nameExtension, offsetLast: $offsetLast)';
+  }
+
+  @override
+  bool operator ==(covariant ReadBook other) {
+    if (identical(this, other)) return true;
+
+    return other.index == index &&
+        other.titleChapter == titleChapter &&
+        other.nameExtension == nameExtension &&
+        other.offsetLast == offsetLast;
+  }
+
+  @override
+  int get hashCode {
+    return index.hashCode ^
+        titleChapter.hashCode ^
+        nameExtension.hashCode ^
+        offsetLast.hashCode;
   }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ubook/app/extensions/context_extension.dart';
+
 import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/pages/book/read_book/widgets/book_drawer.dart';
 import 'package:ubook/pages/home/cubit/home_cubit.dart';
 import 'package:ubook/utils/system_utils.dart';
 import 'package:ubook/widgets/widgets.dart';
+
 import '../cubit/read_book_cubit.dart';
 import '../widgets/widgets.dart';
 
@@ -50,6 +52,13 @@ class _ReadBookPageState extends State<ReadBookPage>
               );
             }
             return const LoadingWidget();
+          } else if (state is ErrorReadBook) {
+            return Scaffold(
+              appBar: AppBar(),
+              body: const Center(
+                child: Text("ERROR"),
+              ),
+            );
           }
           final chapters = _readBookCubit.chapters;
 
@@ -132,19 +141,19 @@ class _ReadBookPageState extends State<ReadBookPage>
   }
 
   Widget _buildFooterWidget() {
-    const textStyle = TextStyle(fontSize: 11);
+    const textStyle = TextStyle(fontSize: 11, color: Colors.white);
     return ValueListenableBuilder(
       valueListenable: _readBookCubit.readChapter,
       builder: (context, value, child) {
         if (value != null) {
           return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 4),
             color: Colors.black54,
             child: Row(
               children: [
                 Text(
                   "${value.index + 1}/${_readBookCubit.chapters.length}",
-                  style: const TextStyle(fontSize: 11),
+                  style: textStyle,
                 ),
                 ValueListenableBuilder(
                   valueListenable: _readBookCubit.contentPaginationValue,
