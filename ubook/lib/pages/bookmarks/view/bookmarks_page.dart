@@ -78,7 +78,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
       return _girdBook(books);
     } else if (books.length == 3) {
       return BooksSlider(
-        nameExtension: _bookmarksCubit.getNameExtensionBySource,
         books: books,
         onTapBook: (book) {
           Navigator.pushNamed(context, RoutesName.readBook,
@@ -95,7 +94,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
       return Column(
         children: [
           BooksSlider(
-            nameExtension: _bookmarksCubit.getNameExtensionBySource,
             books: list.$1,
             onTapBook: (book) {
               Navigator.pushNamed(context, RoutesName.readBook,

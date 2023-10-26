@@ -11,14 +11,9 @@ import 'package:ubook/widgets/cache_network_image.dart';
 import 'package:ubook/widgets/widgets.dart';
 
 class BooksSlider extends StatelessWidget {
-  const BooksSlider(
-      {super.key,
-      required this.books,
-      required this.onTapBook,
-      required this.nameExtension});
+  const BooksSlider({super.key, required this.books, required this.onTapBook});
   final List<Book> books;
   final ValueChanged<Book> onTapBook;
-  final String Function(String bookUrl) nameExtension;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,7 +36,7 @@ class BooksSlider extends StatelessWidget {
             builder: (BuildContext context) {
               return _ItemBookSlider(
                 book: book,
-                nameExtension: nameExtension(book.getSourceByBookUrl()),
+                nameExtension: book.readBook?.nameExtension ?? "",
                 onTap: () => onTapBook(book),
               );
             },

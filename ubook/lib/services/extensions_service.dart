@@ -135,7 +135,15 @@ class ExtensionsService {
   }
 
   Extension? getExtensionBySource(String source) {
-    return _exts.firstWhereOrNull((elm) => elm.metadata.source == source);
+    return _exts.firstWhereOrNull((elm) {
+      RegExp regExp = RegExp(elm.metadata.regexp);
+      if (regExp.hasMatch(source)) {
+        return true;
+      } else {
+        return false;
+      }
+      // return elm.metadata.source == source;
+    });
   }
 
   close() {

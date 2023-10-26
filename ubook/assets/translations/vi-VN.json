@@ -21,6 +21,7 @@
   "book": {
     "chapter": "chương",
     "chapters": "Danh sách chương",
-    "readContinue": "Đọc tiếp"
+    "readContinue": "Đọc tiếp",
+    "downloadBook": "Tải truyện {} chương"
   }
 }

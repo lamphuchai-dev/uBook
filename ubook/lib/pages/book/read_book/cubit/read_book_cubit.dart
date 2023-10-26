@@ -69,6 +69,12 @@ class ReadBookCubit extends Cubit<ReadBookState> {
             extensionStatus: ExtensionStatus.error));
         return;
       }
+      if (ext.metadata.source != book.getSourceByBookUrl()) {
+        final bookUrl = book.bookUrl
+            .replaceAll(book.getSourceByBookUrl(), ext.metadata.source);
+        _databaseService.updateBook(book.copyWith(bookUrl: bookUrl));
+        _readBookArgs.book = book.copyWith(bookUrl: bookUrl);
+      }
 
       _extension = ext;
 
@@ -277,6 +283,10 @@ class ReadBookCubit extends Cubit<ReadBookState> {
 
   void setContentPagination(ContentPagination contentPagination) {
     contentPaginationValue.value = contentPagination;
+  }
+
+  void downloadBook(){
+    
   }
 
   @override

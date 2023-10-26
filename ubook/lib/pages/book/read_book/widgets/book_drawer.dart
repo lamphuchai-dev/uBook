@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ubook/app/constants/gaps.dart';
 import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/data/models/book.dart';
@@ -37,25 +39,49 @@ class _BookDrawerState extends State<BookDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    // final textTheme = context.appTextTheme;
-    // final colorScheme = context.colorScheme;
+    final textTheme = context.appTextTheme;
+    final colorScheme = context.colorScheme;
     return Drawer(
       width: context.width * 0.85,
-      // backgroundColor: backgroundColor,
       shape: const RoundedRectangleBorder(),
       child: Column(children: [
         _headerDrawer(),
         Expanded(
           child: ListChaptersWidget(
-            // padding: const EdgeInsets.symmetric(horizontal: 8),
             indexSelect: _readBookCubit.indexPageChapter,
             chapters: _readBookCubit.chapters,
+            usePage: UsePage.readChapter,
             onTapChapter: (chapter) {
               _readBookCubit.onToPageByChapter(chapter);
               Scaffold.of(context).openEndDrawer();
             },
           ),
         ),
+        SafeArea(
+          top: false,
+          bottom: true,
+          child: Container(
+            height: 56,
+            decoration: BoxDecoration(color: colorScheme.surface),
+            alignment: Alignment.center,
+            child: Row(
+              children: [
+                const Expanded(
+                    child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Icon(Icons.download_rounded),
+                )),
+                Gaps.wGap8,
+                Text(
+                  "book.downloadBook"
+                      .tr(args: [_readBookCubit.chapters.length.toString()]),
+                  style: textTheme.titleMedium,
+                ),
+                const Expanded(child: SizedBox()),
+              ],
+            ),
+          ),
+        )
       ]),
     );
   }

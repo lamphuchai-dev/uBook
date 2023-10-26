@@ -158,9 +158,9 @@ class _ReadBookPageState extends State<ReadBookPage>
                 ValueListenableBuilder(
                   valueListenable: _readBookCubit.contentPaginationValue,
                   builder: (context, value, child) {
-                    if (value == null) return const SizedBox();
+                    final text = value == null ? "1/1" : value.formatText;
                     return Text(
-                      value.formatText,
+                      text,
                       style: textStyle,
                       textAlign: TextAlign.right,
                     );

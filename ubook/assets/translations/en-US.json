@@ -21,6 +21,7 @@
   "book": {
     "chapter": "chapter",
     "chapters": "List chapter",
-    "readContinue":"Continue read"
+    "readContinue": "Continue read",
+    "downloadBook": "Download book {} chapters"
   }
 }

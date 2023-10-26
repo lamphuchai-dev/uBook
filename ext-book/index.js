@@ -40,7 +40,8 @@ function updateINFO() {
     const metadata = plugin_detail.metadata;
     if (metadata) {
       const pathExt = `${urlPath}/${plugin_detail.metadata.slug}/extension.zip`;
-      data.push({ ...metadata, path: pathExt });
+      const icon = `${urlPath}/${plugin_detail.metadata.slug}/icon.png`;
+      data.push({ ...metadata, path: pathExt, icon: icon });
     }
   });
 
