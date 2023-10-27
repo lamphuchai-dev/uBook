@@ -27,6 +27,19 @@ class DirectoryUtils {
     return _appDir(directory, filename: "extensions");
   }
 
+  static Future<String> getDirectoryDownloadBook(int bookId) async {
+    final directory = await createDirectory("download");
+    return _appDir(directory, filename: bookId.toString());
+  }
+
+  static Future<Directory> createDirectory(String name) async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    Directory dir = Directory(path.join(directory.path, name));
+    dir.createSync(recursive: true);
+    return dir;
+  }
+
   static Future<List<FileSystemEntity>> getListFileExt() async {
     return Directory(await DirectoryUtils.getDirectoryExtensions).listSync();
   }
@@ -38,7 +51,6 @@ class DirectoryUtils {
   static String getJsScriptByPath(String path) {
     try {
       final file = File(path);
-      print(file.existsSync());
       return file.readAsStringSync();
     } catch (error) {
       rethrow;

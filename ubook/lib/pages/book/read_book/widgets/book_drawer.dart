@@ -73,7 +73,7 @@ class _BookDrawerState extends State<BookDrawer> {
                 )),
                 Gaps.wGap8,
                 Text(
-                  "book.downloadBook"
+                  "book.downloadBookChapters"
                       .tr(args: [_readBookCubit.chapters.length.toString()]),
                   style: textTheme.titleMedium,
                 ),

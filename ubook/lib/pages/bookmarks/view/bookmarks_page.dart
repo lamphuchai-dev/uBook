@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:ubook/app/config/app_type.dart';
 import 'package:ubook/app/constants/gaps.dart';
+import 'package:ubook/app/extensions/context_extension.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/data/models/models.dart';
 import 'package:ubook/pages/book/read_book/read_book.dart';
@@ -63,10 +64,18 @@ class _BookmarksPageState extends State<BookmarksPage> {
                 fromBookmarks: true,
                 loadChapters: true));
       },
-      onLongTap: (book) {
-        print("object");
-      },
+      onLongTap: _openBottomSheet,
     );
+  }
+
+  void _openBottomSheet(Book book) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => BookBottomSheet(
+              book: book,
+              bookmarksCubit: _bookmarksCubit,
+            ));
   }
 
   Widget _buildBooks(List<Book> books) {
@@ -88,6 +97,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                   fromBookmarks: true,
                   loadChapters: true));
         },
+        onLongTapBook: _openBottomSheet,
       );
     } else {
       final list = _bookmarksCubit.getBooks(books);
@@ -104,6 +114,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
                       fromBookmarks: true,
                       loadChapters: true));
             },
+            onLongTapBook: _openBottomSheet,
           ),
           Gaps.hGap8,
           Expanded(child: _girdBook(list.$2))

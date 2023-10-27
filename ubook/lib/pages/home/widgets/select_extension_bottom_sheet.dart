@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:ubook/app/constants/dimens.dart';
+import 'package:ubook/app/constants/gaps.dart';
 import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/data/models/extension.dart';
@@ -136,26 +139,56 @@ class ExtensionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5),
         decoration: BoxDecoration(
             color: isPrimary
                 ? colorScheme.primary.withOpacity(0.7)
                 : colorScheme.surface,
             borderRadius: Dimens.cardBookBorderRadius),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Row(
           children: [
-            Text(
-              extension.metadata.name,
-              style: textTheme.titleMedium,
+            Gaps.wGap8,
+            SizedBox(
+              width: 40,
+              height: 40,
+              child: _leadingIcon,
             ),
-            Text(
-              uri.host,
-              style:
-                  textTheme.labelSmall?.copyWith(fontWeight: FontWeight.normal),
+            Gaps.wGap8,
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    extension.metadata.name,
+                    style: textTheme.titleMedium,
+                  ),
+                  Expanded(
+                    child: Text(
+                      uri.host,
+                      style: textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.normal, fontSize: 11),
+                      maxLines: 2,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget get _leadingIcon {
+    if (extension.metadata.icon == "") {
+      return const SizedBox();
+    }
+    try {
+      final file = File(extension.metadata.icon);
+      return Image.file(file);
+    } catch (e) {
+      return const SizedBox();
+    }
   }
 }

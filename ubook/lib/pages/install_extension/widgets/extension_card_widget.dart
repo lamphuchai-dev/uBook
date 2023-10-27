@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ubook/app/constants/dimens.dart';
 import 'package:ubook/app/constants/gaps.dart';
@@ -39,6 +42,7 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
     final colorScheme = context.colorScheme;
     final textTheme = context.appTextTheme;
     final uri = Uri.parse(widget.metadataExt.source);
+
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 12),
@@ -54,6 +58,7 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
             width: 40,
             height: 40,
             alignment: Alignment.center,
+            child: _leadingCardWidget,
           ),
           Gaps.wGap8,
           Expanded(
@@ -72,13 +77,30 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
               ],
             ),
           ),
-          _leadingCardWidget(colorScheme),
+          _tradingCardWidget(colorScheme),
         ],
       ),
     );
   }
 
-  Widget _leadingCardWidget(ColorScheme colorScheme) {
+  Widget get _leadingCardWidget {
+    if (widget.metadataExt.icon == "") {
+      return const SizedBox();
+    }
+
+    if (widget.metadataExt.icon.startsWith("https")) {
+      return CachedNetworkImage(imageUrl: widget.metadataExt.icon);
+    } else {
+      try {
+        final file = File(widget.metadataExt.icon);
+        return Image.file(file);
+      } catch (e) {
+        return const SizedBox();
+      }
+    }
+  }
+
+  Widget _tradingCardWidget(ColorScheme colorScheme) {
     Widget icon = widget.installed
         ? Icon(
             Icons.delete_forever_rounded,

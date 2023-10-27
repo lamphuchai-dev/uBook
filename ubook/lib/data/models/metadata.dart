@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+
 import 'package:ubook/app/config/app_type.dart';
 
 class Metadata {
@@ -16,6 +17,7 @@ class Metadata {
   String language;
   ExtensionType type;
   String path;
+  String icon;
   String localPath;
 
   List<TabsHome> tabsHome;
@@ -31,6 +33,7 @@ class Metadata {
     required this.language,
     required this.type,
     required this.path,
+    required this.icon,
     required this.localPath,
     required this.tabsHome,
   });
@@ -47,6 +50,7 @@ class Metadata {
     String? language,
     ExtensionType? type,
     String? path,
+    String? icon,
     String? localPath,
     List<TabsHome>? tabsHome,
   }) {
@@ -63,6 +67,7 @@ class Metadata {
       type: type ?? this.type,
       path: path ?? this.path,
       localPath: localPath ?? this.localPath,
+      icon: icon ?? this.icon,
       tabsHome: tabsHome ?? this.tabsHome,
     );
   }
@@ -81,6 +86,7 @@ class Metadata {
       'type': type.name,
       'path': path,
       'localPath': localPath,
+      'icon': icon,
       'tabsHome': tabsHome.map((x) => x.toMap()).toList(),
     };
   }
@@ -101,6 +107,7 @@ class Metadata {
         orElse: () => ExtensionType.novel,
       ),
       path: map['path'] ?? "",
+      icon: map['icon'] ?? "",
       localPath: map['localPath'] ?? "",
       tabsHome: map['tabsHome'] != null
           ? List<TabsHome>.from(
@@ -118,11 +125,6 @@ class Metadata {
       Metadata.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() {
-    return 'Metadata(name: $name, author: $author, slug: $slug, version: $version, source: $source, regexp: $regexp, description: $description, locale: $locale, language: $language, type: $type, path: $path, localPath: $localPath, tabsHome: $tabsHome)';
-  }
-
-  @override
   bool operator ==(covariant Metadata other) {
     if (identical(this, other)) return true;
 
@@ -137,6 +139,7 @@ class Metadata {
         other.language == language &&
         other.type == type &&
         other.path == path &&
+        other.icon == icon &&
         other.localPath == localPath &&
         listEquals(other.tabsHome, tabsHome);
   }
@@ -154,8 +157,14 @@ class Metadata {
         language.hashCode ^
         type.hashCode ^
         path.hashCode ^
+        icon.hashCode ^
         localPath.hashCode ^
         tabsHome.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'Metadata(name: $name, author: $author, slug: $slug, version: $version, source: $source, regexp: $regexp, description: $description, locale: $locale, language: $language, type: $type, path: $path, icon: $icon, localPath: $localPath, tabsHome: $tabsHome)';
   }
 }
 

@@ -1,7 +1,7 @@
 # docs https://pub.dev/packages/flutter_flavorizr
 # run init: flutter pub run flutter_flavorizr
 # run update: flutter pub run flutter_flavorizr -p ios:icons android:icons ....
-
+# android:androidManifest
 ide: "vscode"
 app:
   android:

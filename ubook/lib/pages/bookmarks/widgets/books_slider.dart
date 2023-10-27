@@ -11,9 +11,15 @@ import 'package:ubook/widgets/cache_network_image.dart';
 import 'package:ubook/widgets/widgets.dart';
 
 class BooksSlider extends StatelessWidget {
-  const BooksSlider({super.key, required this.books, required this.onTapBook});
+  const BooksSlider(
+      {super.key,
+      required this.books,
+      required this.onTapBook,
+      required this.onLongTapBook});
   final List<Book> books;
   final ValueChanged<Book> onTapBook;
+  final ValueChanged<Book> onLongTapBook;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,6 +44,7 @@ class BooksSlider extends StatelessWidget {
                 book: book,
                 nameExtension: book.readBook?.nameExtension ?? "",
                 onTap: () => onTapBook(book),
+                onLongTap: () => onLongTapBook(book),
               );
             },
           );
@@ -49,16 +56,21 @@ class BooksSlider extends StatelessWidget {
 
 class _ItemBookSlider extends StatelessWidget {
   const _ItemBookSlider(
-      {required this.book, required this.onTap, required this.nameExtension});
+      {required this.book,
+      required this.onTap,
+      required this.nameExtension,
+      required this.onLongTap});
   final Book book;
   final String nameExtension;
   final VoidCallback onTap;
+  final VoidCallback onLongTap;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.appTextTheme;
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongTap,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 2),
         clipBehavior: Clip.hardEdge,

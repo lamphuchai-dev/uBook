@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/config/app_type.dart';
 import 'package:ubook/data/models/book.dart';
+import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/services/database_service.dart';
 import 'package:ubook/services/extensions_service.dart';
 
@@ -52,6 +53,20 @@ class BookmarksCubit extends Cubit<BookmarksState> {
   String getNameExtensionBySource(String source) {
     final tmp = _extensionsService.getExtensionBySource(source);
     return tmp?.metadata.name ?? "";
+  }
+
+  Future<bool> onTapDelete(Book book) async {
+    final isDelete = await _databaseService.onDeleteBook(book.id!);
+    if (isDelete) {
+      final books =
+          state.books.where((el) => el.bookUrl == book.bookUrl).toList();
+      emit(state.copyWith(books: books));
+    }
+    return isDelete;
+  }
+
+  Extension? getExtension(String source) {
+    return _extensionsService.getExtensionBySource(source);
   }
 
   @override

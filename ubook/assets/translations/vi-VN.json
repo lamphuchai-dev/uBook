@@ -1,4 +1,7 @@
 {
+  "common": {
+    "delete": "Xóa"
+  },
   "home": {
     "title": "Trang chu"
   },
@@ -22,6 +25,8 @@
     "chapter": "chương",
     "chapters": "Danh sách chương",
     "readContinue": "Đọc tiếp",
-    "downloadBook": "Tải truyện {} chương"
+    "downloadBookChapters": "Tải truyện {} chương",
+    "downloadBook": "Tải truyện",
+    "export": "Xuất file"
   }
 }

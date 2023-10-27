@@ -90,7 +90,8 @@ class ExtensionsService {
           }
           ext = ext.copyWith(
               script: script,
-              metadata: ext.metadata.copyWith(localPath: pathExt, path: url));
+              metadata: ext.metadata.copyWith(
+                  localPath: pathExt, path: url, icon: "$pathExt/icon.png"));
           File("$pathExt/$fileExt")
             ..createSync(recursive: true)
             ..writeAsBytesSync(utf8.encode(ext.toJson()));

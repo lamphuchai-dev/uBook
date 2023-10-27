@@ -35,11 +35,9 @@ class BaseBottomSheetUi extends StatelessWidget {
                       width: 45,
                       padding: const EdgeInsets.only(top: 8),
                       child: Container(
-                        decoration: const ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(8))),
-                            color: Colors.grey),
+                        decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(8)),
                         height: 6,
                       ),
                     ),

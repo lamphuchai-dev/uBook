@@ -1,4 +1,7 @@
 {
+  "common": {
+    "delete": "Delete"
+  },
   "home": {
     "title": "HOME"
   },
@@ -22,6 +25,8 @@
     "chapter": "chapter",
     "chapters": "List chapter",
     "readContinue": "Continue read",
-    "downloadBook": "Download book {} chapters"
+    "downloadBookChapters": "Download book {} chapters",
+    "downloadBook": "Download book",
+    "export": "Export"
   }
 }
