@@ -41,8 +41,8 @@ class DioClientConcurrent {
           .asStream()
           .doOnError(entry.completer.completeError)
           .doOnData(entry.completer.complete)
-          .onErrorResumeNext(const Stream.empty())
-          .doOnCancel(() => debugPrint('DioClientConcurrent: <--'));
+          .onErrorResumeNext(const Stream.empty());
+      // .doOnCancel(() => debugPrint('DioClientConcurrent: <--'));
     }
 
     _subscription = requestController.stream

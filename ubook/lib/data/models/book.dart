@@ -27,6 +27,7 @@ class Book {
   final BookType type;
   final bool bookmark;
   final DateTime? updateAt;
+  final bool isDownload;
   @ignore
   final List<Genre> genres;
 
@@ -35,6 +36,7 @@ class Book {
   const Book(
       {this.id,
       required this.name,
+      required this.isDownload,
       required this.bookUrl,
       required this.author,
       required this.bookStatus,
@@ -59,6 +61,7 @@ class Book {
       int? totalChapters,
       BookType? type,
       bool? bookmark,
+      bool? isDownload,
       int? currentReadChapter,
       DateTime? updateAt,
       List<Genre>? genres,
@@ -67,6 +70,7 @@ class Book {
         id: id ?? this.id,
         name: name ?? this.name,
         bookUrl: bookUrl ?? this.bookUrl,
+        isDownload: isDownload ?? this.isDownload,
         author: author ?? this.author,
         bookStatus: bookStatus ?? this.bookStatus,
         description: description ?? this.description,
@@ -105,6 +109,7 @@ class Book {
         cover: map['cover'] ?? "",
         totalChapters: map['totalChapters'] ?? 0,
         bookStatus: map["bookStatus"] ?? "",
+        isDownload: map["isDownload"] ?? false,
         type: BookType.values.firstWhere(
           (element) => element.name == map["type"],
           orElse: () => BookType.novel,

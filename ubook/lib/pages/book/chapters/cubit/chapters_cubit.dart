@@ -55,7 +55,6 @@ class ChaptersCubit extends Cubit<ChaptersState> {
     } else {
       list.sort((a, b) => a.index.compareTo(b.index));
     }
-    print(type);
     return list;
   }
 }

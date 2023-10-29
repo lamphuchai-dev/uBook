@@ -35,7 +35,7 @@ class ReadBookCubit extends Cubit<ReadBookState> {
 
   Book get book => _readBookArgs.book;
 
-  late final JsRuntime _jsRuntime;
+  final JsRuntime _jsRuntime;
 
   final ReadBookArgs _readBookArgs;
   final ExtensionsService _extensionManager;
@@ -85,23 +85,15 @@ class ReadBookCubit extends Cubit<ReadBookState> {
         _readBookArgs.book = bookLocal;
       }
 
-      if (_readBookArgs.fromBookmarks) {
-        final list = await _jsRuntime.getChapters(
-            url: book.bookUrl,
-            jsScript:
-                DirectoryUtils.getJsScriptByPath(_extension!.script.chapters));
-        chapters = list;
-        indexPageChapter = _readBookArgs.readChapter;
-        readChapter.value = chapters[indexPageChapter];
-        pageController = PageController(initialPage: indexPageChapter);
-        emit(BaseReadBook(totalChapters: state.totalChapters));
+      if (_readBookArgs.book.id != null) {
+        chapters = await _databaseService.getChaptersByBookId(book.id!);
       } else {
         chapters = _readBookArgs.chapters;
-        indexPageChapter = _readBookArgs.readChapter;
-        readChapter.value = chapters[indexPageChapter];
-        pageController = PageController(initialPage: indexPageChapter);
-        emit(BaseReadBook(totalChapters: state.totalChapters));
       }
+      indexPageChapter = _readBookArgs.readChapter;
+      readChapter.value = chapters[indexPageChapter];
+      pageController = PageController(initialPage: indexPageChapter);
+      emit(BaseReadBook(totalChapters: state.totalChapters));
       if (book.bookmark && readChapter.value != null) {
         _databaseService.updateBook(book.copyWith(
             updateAt: DateTime.now(),
@@ -122,9 +114,9 @@ class ReadBookCubit extends Cubit<ReadBookState> {
 
   Future<Chapter> getChapterContent(Chapter chapter) async {
     try {
-      final content = chapters.firstWhereOrNull(
+      final chapterLocal = chapters.firstWhereOrNull(
           (item) => item.index == chapter.index && item.content.isNotEmpty);
-      if (content != null) return content;
+      if (chapterLocal != null) return chapterLocal;
       List<String> result = await _jsRuntime.chapter(
           url: chapter.url,
           jsScript:
@@ -285,8 +277,40 @@ class ReadBookCubit extends Cubit<ReadBookState> {
     contentPaginationValue.value = contentPagination;
   }
 
-  void downloadBook(){
-    
+  void downloadBook() {}
+
+  void addBookmark() async {
+    _readBookArgs.book = book.copyWith(
+        bookmark: true,
+        updateAt: DateTime.now(),
+        readBook: ReadBook(
+            index: readChapter.value!.index,
+            titleChapter: readChapter.value!.title,
+            nameExtension: _extension!.metadata.name));
+    final bookId = await _databaseService.onInsertBook(_readBookArgs.book);
+    if (bookId != null) {
+      chapters = chapters.map((e) => e.copyWith(bookId: bookId)).toList();
+      await _databaseService.insertChapters(chapters);
+      _readBookArgs.book = book.copyWith(id: bookId);
+    }
+  }
+
+  Future<void> onRefreshChapters() async {
+    final lstChapter = await _jsRuntime.getChapters(
+        url: book.bookUrl,
+        jsScript: DirectoryUtils.getJsScriptByPath(extension.script.chapters));
+    if (lstChapter.length > chapters.length) {
+      if (book.bookmark && book.id != null) {
+        List<Chapter> newChapters =
+            lstChapter.getRange(chapters.length, lstChapter.length).toList();
+        newChapters =
+            newChapters.map((e) => e.copyWith(bookId: book.id)).toList();
+        await _databaseService.insertChapters(newChapters);
+        chapters = await _databaseService.getChaptersByBookId(book.id!);
+      } else {
+        chapters = lstChapter;
+      }
+    }
   }
 
   @override

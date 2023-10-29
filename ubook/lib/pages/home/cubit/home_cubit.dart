@@ -15,9 +15,11 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit(
-      {required StorageService storageService, required this.extensionManager})
+      {required StorageService storageService,
+      required this.extensionManager,
+      required JsRuntime jsRuntime})
       : _storageService = storageService,
-        _jsRuntime = extensionManager.jsRuntime,
+        _jsRuntime = jsRuntime,
         super(HomeStateInitial()) {
     _streamSubscription =
         extensionManager.extensionsChange.listen((exts) async {

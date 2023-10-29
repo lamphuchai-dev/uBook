@@ -10,31 +10,21 @@ import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/data/models/metadata.dart';
 import 'package:ubook/data/models/script.dart';
-import 'package:ubook/services/js_runtime.dart';
 import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 
 class ExtensionsService {
+  ExtensionsService({required DioClient dioClient}) : _dioClient = dioClient;
   final _logger = Logger('ExtensionsManager');
   List<Extension> _exts = [];
-  final DioClient _dioClient = DioClient();
+  final DioClient _dioClient;
 
   List<Extension> get getExtensions => _exts;
-  late final JsRuntime _runTime;
-
-  JsRuntime get jsRuntime => _runTime;
-
   final StreamController<List<Extension>> _extensionStreamController =
       StreamController<List<Extension>>.broadcast();
 
   Stream<List<Extension>> get extensionsChange =>
       _extensionStreamController.stream;
-
-  Future<void> onInit() async {
-    _runTime = JsRuntime();
-    _runTime.initRuntime();
-    await loadLocalExtension();
-  }
 
   Future<void> loadLocalExtension() async {
     final dir = await DirectoryUtils.getListFileExt();

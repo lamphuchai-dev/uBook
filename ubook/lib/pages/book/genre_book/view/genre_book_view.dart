@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/data/models/genre.dart';
 import 'package:ubook/di/components/service_locator.dart';
-import 'package:ubook/services/extensions_service.dart';
+import 'package:ubook/services/js_runtime.dart';
 
 import '../cubit/genre_book_cubit.dart';
 import 'genre_book_page.dart';
@@ -21,7 +21,7 @@ class GenreBookView extends StatelessWidget {
       create: (context) => GenreBookCubit(
           extension: arg.extension,
           genre: arg.genre,
-          jsRuntime: getIt<ExtensionsService>().jsRuntime)
+          jsRuntime: getIt<JsRuntime>())
         ..onInit(),
       child: const GenreBookPage(),
     );

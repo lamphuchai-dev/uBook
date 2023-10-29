@@ -278,7 +278,7 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) {
     _dioClientConcurrent ??=
-        DioClientConcurrent(dioClient: this, maxConcurrent: 10);
+        DioClientConcurrent(dioClient: this, maxConcurrent: 5);
     return _dioClientConcurrent!.get(uri,
         queryParameters: queryParameters,
         options: options,

@@ -6,16 +6,20 @@ import 'package:ubook/app/config/app_type.dart';
 import 'package:ubook/data/models/book.dart';
 import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/services/database_service.dart';
+import 'package:ubook/services/download_service.dart';
 import 'package:ubook/services/extensions_service.dart';
+import 'package:ubook/utils/directory_utils.dart';
 
 part 'bookmarks_state.dart';
 
 class BookmarksCubit extends Cubit<BookmarksState> {
   BookmarksCubit(
       {required DatabaseService databaseService,
-      required ExtensionsService extensionsService})
+      required ExtensionsService extensionsService,
+      required DownloadService downloadService})
       : _databaseService = databaseService,
         _extensionsService = extensionsService,
+        _downloadService = downloadService,
         super(const BookmarksState(books: [], statusType: StatusType.init)) {
     _booksSubscription = _databaseService.bookStream.listen((event) {
       onInit();
@@ -24,6 +28,7 @@ class BookmarksCubit extends Cubit<BookmarksState> {
 
   final DatabaseService _databaseService;
   final ExtensionsService _extensionsService;
+  final DownloadService _downloadService;
 
   late StreamSubscription _booksSubscription;
   void onInit() async {
@@ -58,15 +63,20 @@ class BookmarksCubit extends Cubit<BookmarksState> {
   Future<bool> onTapDelete(Book book) async {
     final isDelete = await _databaseService.onDeleteBook(book.id!);
     if (isDelete) {
-      final books =
-          state.books.where((el) => el.bookUrl == book.bookUrl).toList();
-      emit(state.copyWith(books: books));
+      await Future.wait([
+        _databaseService.deleteChaptersByBookId(book.id!),
+        DirectoryUtils.deleteDirBook(book.id!)
+      ]);
     }
     return isDelete;
   }
 
   Extension? getExtension(String source) {
     return _extensionsService.getExtensionBySource(source);
+  }
+
+  Future<void> downloadBook(Book book) async {
+    _downloadService.addDownload(book);
   }
 
   @override

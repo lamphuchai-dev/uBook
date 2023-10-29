@@ -27,6 +27,7 @@
     "readContinue": "Đọc tiếp",
     "downloadBookChapters": "Tải truyện {} chương",
     "downloadBook": "Tải truyện",
-    "export": "Xuất file"
+    "export": "Xuất file",
+    "menu_book": "Mục lục"
   }
 }

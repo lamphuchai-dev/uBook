@@ -12,7 +12,7 @@ class SplashCubit extends Cubit<SplashState> {
   final ExtensionsService _extensionsService;
   void onInit() async {
     emit(const LoadingLocalExts());
-    await _extensionsService.onInit();
+    await _extensionsService.loadLocalExtension();
     emit(const LoadedLocalExts());
   }
 }

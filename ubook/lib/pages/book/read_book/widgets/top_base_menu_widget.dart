@@ -42,9 +42,9 @@ class TopBaseMenuWidget extends StatelessWidget {
                       )),
                   IconButton(
                       onPressed: () {
-                        // _readBookCubit.onSkipNext();
+                        context.read<ReadBookCubit>().addBookmark();
                       },
-                      icon: const Icon(Icons.more_vert)),
+                      icon: const Icon(Icons.bookmark_add_rounded)),
                 ],
               )
             ],

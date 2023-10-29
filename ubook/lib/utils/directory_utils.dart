@@ -56,4 +56,14 @@ class DirectoryUtils {
       rethrow;
     }
   }
+
+  static Future<bool> deleteDirBook(int bookId) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final dirBook = Directory("${directory.path}/download/$bookId");
+    if (dirBook.existsSync()) {
+      dirBook.deleteSync();
+      return true;
+    }
+    return false;
+  }
 }

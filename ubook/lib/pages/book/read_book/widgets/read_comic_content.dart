@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -42,6 +44,7 @@ class _ReadComicContentState extends State<ReadComicContent> {
     if (mounted) {
       _getChapterContent();
     }
+
     _contentPaginationValue = ValueNotifier(null);
     _scrollController = ScrollController();
     _scrollController.addListener(_handlerScrollListener);
@@ -159,8 +162,12 @@ class _ReadComicContentState extends State<ReadComicContent> {
                     return switch (_readBookCubit.bookType) {
                       BookType.comic => Column(
                           children: _chapter.content.map((src) {
-                            if (src == "" || !src.startsWith("http")) {
-                              return const SizedBox(child: Text("EROR"));
+                            if (src == "") {
+                              return const SizedBox(child: Text("ERROR"));
+                            } else if (!src.startsWith("http")) {
+                              return ImageFileWidget(
+                                pathFile: src,
+                              );
                             }
                             return CacheNetWorkImage(
                               src,
@@ -219,5 +226,19 @@ class _ReadComicContentState extends State<ReadComicContent> {
     _scrollController.dispose();
     _contentPaginationValue.dispose();
     super.dispose();
+  }
+}
+
+class ImageFileWidget extends StatelessWidget {
+  const ImageFileWidget({super.key, required this.pathFile});
+  final String pathFile;
+
+  @override
+  Widget build(BuildContext context) {
+    final file = File(pathFile);
+    if (file.existsSync()) {
+      return Image.file(File(pathFile));
+    }
+    return const SizedBox();
   }
 }

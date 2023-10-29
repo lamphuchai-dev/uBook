@@ -1,10 +1,8 @@
 // ignore_for_file: unused_element, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/widgets/widgets.dart';
-import '../cubit/install_extension_cubit.dart';
 import '../widgets/widgets.dart';
 
 class InstallExtensionPage extends StatefulWidget {
@@ -15,10 +13,10 @@ class InstallExtensionPage extends StatefulWidget {
 }
 
 class _InstallExtensionPageState extends State<InstallExtensionPage> {
-  late InstallExtensionCubit _installExtensionCubit;
+  // late InstallExtensionCubit _installExtensionCubit;
   @override
   void initState() {
-    _installExtensionCubit = context.read<InstallExtensionCubit>();
+    // _installExtensionCubit = context.read<InstallExtensionCubit>();
     super.initState();
   }
 

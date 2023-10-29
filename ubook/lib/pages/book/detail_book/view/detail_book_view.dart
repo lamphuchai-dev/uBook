@@ -8,6 +8,7 @@ import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/di/components/service_locator.dart';
 import 'package:ubook/services/database_service.dart';
 import 'package:ubook/services/extensions_service.dart';
+import 'package:ubook/services/js_runtime.dart';
 
 import '../cubit/detail_book_cubit.dart';
 
@@ -25,7 +26,8 @@ class DetailBookView extends StatelessWidget {
           book: args.book,
           extension: args.extensionModel,
           extensionManager: getIt<ExtensionsService>(),
-          databaseService: getIt<DatabaseService>())
+          databaseService: getIt<DatabaseService>(),
+          jsRuntime: getIt<JsRuntime>())
         ..onInit(),
       child: const DetailBookPage(),
     );

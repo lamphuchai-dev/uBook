@@ -217,26 +217,25 @@ class _DetailBookPageState extends State<DetailBookPage> {
                                 borderRadius:
                                     BorderRadius.circular(Dimens.radius)),
                             alignment: Alignment.center,
-                            child: state.isBookmark
-                                ? Icon(
-                                    Icons.bookmark_added_rounded,
-                                    size: 30,
-                                    color: colorScheme.primary,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.download_rounded),
+                                  Text(
+                                    "Tải truyện",
+                                    style: textTheme.titleSmall,
                                   )
-                                : const Icon(
-                                    Icons.bookmark_add_rounded,
-                                    size: 30,
-                                  ),
+                                ]),
                           ),
                         ),
                         Gaps.wGap8,
                         Expanded(
                             child:
-                                state.isBookmark && state.book.readBook != null
-                                    ? _readContinue(colorScheme.primary,
-                                        state.book.copyWith(bookmark: true))
-                                    : _listChapters(
-                                        colorScheme.primary, state.book))
+                                _listChapters(colorScheme.primary, state.book)),
+                        Gaps.wGap8,
+                        _tradingWidget(
+                            state.isBookmark, colorScheme, state.book)
                       ],
                     );
                   },
@@ -247,6 +246,50 @@ class _DetailBookPageState extends State<DetailBookPage> {
         },
       ),
     );
+  }
+
+  Widget _tradingWidget(bool isBookmark, ColorScheme colorScheme, Book book) {
+    if (isBookmark) {
+      return GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, RoutesName.readBook,
+              arguments: ReadBookArgs(
+                  book: book,
+                  chapters: [],
+                  readChapter: book.readBook?.index ?? 0,
+                  fromBookmarks: true,
+                  loadChapters: true));
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(Dimens.radius)),
+          alignment: Alignment.center,
+          child: const Icon(
+            Icons.reply,
+            size: 30,
+          ),
+        ),
+      );
+    } else {
+      return GestureDetector(
+        onTap: () {
+          _detailBookCubit.add();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+              color: colorScheme.surface,
+              borderRadius: BorderRadius.circular(Dimens.radius)),
+          alignment: Alignment.center,
+          child: const Icon(
+            Icons.bookmark_add_rounded,
+            size: 30,
+          ),
+        ),
+      );
+    }
   }
 
   Widget _listChapters(Color primaryColor, Book book) {
@@ -263,62 +306,18 @@ class _DetailBookPageState extends State<DetailBookPage> {
             color: primaryColor,
             borderRadius: BorderRadius.circular(Dimens.radius)),
         alignment: Alignment.center,
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Expanded(
-                child: Align(
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.format_list_bulleted,
-                size: 30,
-              ),
-            )),
-            Gaps.wGap12,
+            const Icon(
+              Icons.menu_book_rounded,
+              size: 30,
+            ),
             Text(
-              "book.chapters".tr(),
+              "book.menu_book".tr(),
               style: textTheme.titleMedium,
             ),
-            const Expanded(child: SizedBox())
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _readContinue(Color primaryColor, Book book) {
-    final textTheme = context.appTextTheme;
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, RoutesName.readBook,
-            arguments: ReadBookArgs(
-                book: book,
-                chapters: [],
-                readChapter: book.readBook?.index ?? 0,
-                fromBookmarks: true,
-                loadChapters: true));
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            color: primaryColor,
-            borderRadius: BorderRadius.circular(Dimens.radius)),
-        alignment: Alignment.center,
-        child: Row(
-          children: [
-            const Expanded(
-                child: Align(
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.format_list_bulleted,
-                size: 30,
-              ),
-            )),
-            Gaps.wGap12,
-            Text(
-              "book.readContinue".tr(),
-              style: textTheme.titleMedium,
-            ),
-            const Expanded(child: SizedBox())
           ],
         ),
       ),

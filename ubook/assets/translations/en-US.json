@@ -27,6 +27,7 @@
     "readContinue": "Continue read",
     "downloadBookChapters": "Download book {} chapters",
     "downloadBook": "Download book",
-    "export": "Export"
+    "export": "Export",
+    "menu_book": "Book menu"
   }
 }

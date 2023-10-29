@@ -30,7 +30,7 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
       _loading = true;
     });
 
-    final result = await widget.onTap.call();
+    await widget.onTap.call();
 
     setState(() {
       _loading = false;

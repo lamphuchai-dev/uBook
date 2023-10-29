@@ -16,7 +16,7 @@ class GenreBookCubit extends Cubit<GenreBookState> {
 
   final Extension extension;
   final Genre genre;
-  late JsRuntime _jsRuntime;
+  final JsRuntime _jsRuntime;
   void onInit() {}
 
   Future<List<Book>> onGetListBook(int page) async {

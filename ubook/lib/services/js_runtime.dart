@@ -20,10 +20,13 @@ import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 
 class JsRuntime {
+  JsRuntime({DioClient? dioClient}) : _dioClient = dioClient ?? DioClient();
   late JavascriptRuntime runtime;
 
   final _logger = Logger("JsRuntime");
-  final _dioClient = DioClient();
+  final DioClient _dioClient;
+
+  DioClient get getDioClient => _dioClient;
 
   Future<bool> initRuntime() async {
     final jsExtension =
@@ -200,13 +203,14 @@ class JsRuntime {
   }
 
   Future<List<Chapter>> getChapters(
-      {required String url, required String jsScript}) async {
+      {required String url, required String jsScript, int? bookId}) async {
     return _runExtension(() async {
       evaluateJsScript(jsScript);
       final jsResult = await runtime.handlePromise(
           await evaluateAsyncJsScript('stringify(()=>chapters("$url"))'));
-      List<Chapter> chapters =
-          jsResult.toJson.map<Chapter>((map) => Chapter.fromMap(map)).toList();
+      List<Chapter> chapters = jsResult.toJson
+          .map<Chapter>((map) => Chapter.fromMap({...map, "bookId": bookId}))
+          .toList();
       chapters.sort((a, b) => a.index.compareTo(b.index));
       return chapters;
     });

@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/data/models/book.dart';
 import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/di/components/service_locator.dart';
-import 'package:ubook/services/extensions_service.dart';
+import 'package:ubook/services/js_runtime.dart';
 
 import '../cubit/chapters_cubit.dart';
 
@@ -22,7 +22,7 @@ class ChaptersView extends StatelessWidget {
       create: (context) => ChaptersCubit(
           book: args.book,
           extensionModel: args.extensionModel,
-          jsRuntime: getIt<ExtensionsService>().jsRuntime)
+          jsRuntime: getIt<JsRuntime>())
         ..onInit(),
       child: const ChaptersPage(),
     );

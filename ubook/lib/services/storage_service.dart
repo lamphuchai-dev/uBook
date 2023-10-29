@@ -20,11 +20,11 @@ class StorageService {
     _logger.log(_path);
   }
 
-  Future<void> _initSetting(String key, dynamic value) async {
-    if (!settings.containsKey(key)) {
-      await settings.put(key, value);
-    }
-  }
+  // Future<void> _initSetting(String key, dynamic value) async {
+  //   if (!settings.containsKey(key)) {
+  //     await settings.put(key, value);
+  //   }
+  // }
 
   Future<void> setSetting(String key, dynamic value) async {
     await settings.put(key, value);

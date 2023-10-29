@@ -1,5 +1,6 @@
 import 'package:isar/isar.dart';
-import 'package:ubook/data/models/book.dart';
+import 'package:ubook/data/models/download_task.dart';
+import 'package:ubook/data/models/models.dart';
 import 'package:ubook/utils/directory_utils.dart';
 
 class DatabaseService {
@@ -10,9 +11,21 @@ class DatabaseService {
   Future<void> ensureInitialized() async {
     _path = await DirectoryUtils.getDirectory;
     database = await Isar.open(
-      [BookSchema],
+      [BookSchema, ChapterSchema, DownloadTaskSchema],
       directory: _path,
     );
+  }
+
+  Future<int?> onInsertChapter(Chapter chapter) async {
+    return database.writeTxn(() => database.chapters.put(chapter));
+  }
+
+  Future<Book?> onGetBookById(int bookId) async {
+    return database.writeTxn(() => database.books.get(bookId));
+  }
+
+  Future<List<Chapter>> getChaptersByBookId(int bookId) {
+    return database.chapters.filter().bookIdEqualTo(bookId).findAll();
   }
 
   Future<int?> onInsertBook(Book book) async {
@@ -34,7 +47,44 @@ class DatabaseService {
 
   Future<Book?> getBookByUrl(String bookUrl) =>
       database.books.filter().bookUrlMatches(bookUrl).findFirst();
-  
 
   Stream<void> get bookStream => database.books.watchLazy();
+
+  Future<List<int>> insertChapters(List<Chapter> chapters) {
+    return database.writeTxn(() => database.chapters.putAll(chapters));
+  }
+
+  Future<int> deleteChaptersByBookId(int bookId) {
+    return database.writeTxn(
+        () => database.chapters.filter().bookIdEqualTo(bookId).deleteAll());
+  }
+
+  Future<List<Chapter>> getChaptersDownload(int bookId) {
+    return database.chapters
+        .filter()
+        .bookIdEqualTo(bookId)
+        .contentIsEmpty()
+        .findAll();
+  }
+
+  Future<int> onInsertDownload(DownloadTask downloadTask) async {
+    return database.writeTxn(() => database.downloadTasks.put(downloadTask));
+  }
+
+  Future<int> onUpdateDownload(DownloadTask downloadTask) async {
+    return database.writeTxn(() => database.downloadTasks.put(downloadTask));
+  }
+
+  Future<DownloadTask?> onGetDownloadByBookId(int bookId) async {
+    return database.writeTxn(() =>
+        database.downloadTasks.filter().bookIdEqualTo(bookId).findFirst());
+  }
+
+  Future<DownloadTask?> onGetDownloadTask() async {
+    return database.writeTxn(() => database.downloadTasks
+        .filter()
+        .statusLessThan(DownloadStatus.complete)
+        .statusLessThan(DownloadStatus.cannel)
+        .findFirst());
+  }
 }

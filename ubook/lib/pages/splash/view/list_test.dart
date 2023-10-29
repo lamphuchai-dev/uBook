@@ -26,21 +26,38 @@ class _ListTestState extends State<ListTest> {
     return EasyRefresh(
       controller: _controller,
       header: const ClassicHeader(
-          // position: IndicatorPosition.behind,
+          // clamping: true,
           dragText: 'Kéo để quay lại chương',
           armedText: 'Thả để qua chương',
           readyText: 'Đang tải nội dung',
-          processedText: "",
+          processedText: "Tải thành công",
+          processingText: "Đang tải nội dung",
           processedDuration: Duration.zero,
           triggerWhenRelease: true,
           hapticFeedback: true,
-          succeededIcon: SizedBox(),
-          // progressIndicatorSize: 0,
+          messageText: "Chương 1: Giới thiệu"),
+
+      footer: const ClassicFooter(
+          dragText: 'Kéo để quay lại chương',
+          armedText: 'Thả để qua chương',
+          readyText: 'Đang tải nội dung',
+          processedText: "Tải thành công",
+          processingText: "Đang tải nội dung",
           infiniteOffset: null,
-          messageText: ""),
+          safeArea: false,
+          processedDuration: Duration.zero,
+          triggerWhenRelease: true,
+          hapticFeedback: true,
+          messageText: "Chương 1: Giới thiệu"),
+
       // header: PhoenixHeader(),
       onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 1));
         _controller.finishRefresh();
+      },
+      onLoad: () async {
+        await Future.delayed(const Duration(seconds: 1));
+        _controller.finishLoad(IndicatorResult.success, true);
       },
       child: SingleChildScrollView(
         child: Text(text),

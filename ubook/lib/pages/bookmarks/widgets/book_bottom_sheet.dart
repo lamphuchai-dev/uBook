@@ -128,7 +128,7 @@ class BookBottomSheet extends StatelessWidget {
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: colorScheme.surface),
-                        onPressed: () {},
+                        onPressed: () async {},
                         child: Row(
                           children: [
                             const Expanded(
@@ -154,7 +154,7 @@ class BookBottomSheet extends StatelessWidget {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent),
-                      onPressed: () {
+                      onPressed: () async {
                         bookmarksCubit.onTapDelete(book);
                         Navigator.pop(context);
                       },
@@ -179,7 +179,10 @@ class BookBottomSheet extends StatelessWidget {
                   Expanded(
                       flex: 3,
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            bookmarksCubit.downloadBook(book);
+                            Navigator.pop(context);
+                          },
                           child: Row(
                             children: [
                               const Expanded(

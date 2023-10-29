@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:ubook/utils/directory_utils.dart';
+import 'package:ubook/app/routes/routes_name.dart';
 import '../cubit/splash_cubit.dart';
+import 'list_test.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -31,28 +31,11 @@ class _SplashPageState extends State<SplashPage> {
           //   Navigator.pushReplacementNamed(context, RoutesName.installExt);
           // }
         },
-        // child: const ListTest(),
-        child: Center(
-          child: ElevatedButton(
-              onPressed: () async {
-                // final path = await DirectoryUtils.getDirectoryDownloadBook(100);
-                // print(path);
-                // // IsolateNameServer
-                // final taskId = await FlutterDownloader.enqueue(
-                //     url:
-                //         "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/say_truyen/icon.png",
-                //     headers: {}, // optional: header send with url (auth token etc)
-                //     savedDir: path,
-                //     fileName: "test.png",
-                //     showNotification:
-                //         true, // show download progress in status bar (for Android)
-                //     openFileFromNotification:
-                //         false, // click on notification to open downloaded file (for Android)
-                //     saveInPublicStorage: true);
-                // print(taskId);
-              },
-              child: const Text("EST")),
-        ),
+        child: const ListTest(),
+        // child: Center(
+        //   child:
+        //       ElevatedButton(onPressed: () async {}, child: const Text("EST")),
+        // ),
         //   child: const Stack(
         //     fit: StackFit.expand,
         //     children: [

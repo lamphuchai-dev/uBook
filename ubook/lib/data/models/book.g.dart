@@ -47,30 +47,35 @@ const BookSchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'isDownload': PropertySchema(
       id: 6,
+      name: r'isDownload',
+      type: IsarType.bool,
+    ),
+    r'name': PropertySchema(
+      id: 7,
       name: r'name',
       type: IsarType.string,
     ),
     r'readBook': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'readBook',
       type: IsarType.object,
       target: r'ReadBook',
     ),
     r'totalChapters': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'totalChapters',
       type: IsarType.long,
     ),
     r'type': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'type',
       type: IsarType.byte,
       enumMap: _BooktypeEnumValueMap,
     ),
     r'updateAt': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'updateAt',
       type: IsarType.dateTime,
     )
@@ -137,16 +142,17 @@ void _bookSerialize(
   writer.writeBool(offsets[3], object.bookmark);
   writer.writeString(offsets[4], object.cover);
   writer.writeString(offsets[5], object.description);
-  writer.writeString(offsets[6], object.name);
+  writer.writeBool(offsets[6], object.isDownload);
+  writer.writeString(offsets[7], object.name);
   writer.writeObject<ReadBook>(
-    offsets[7],
+    offsets[8],
     allOffsets,
     ReadBookSchema.serialize,
     object.readBook,
   );
-  writer.writeLong(offsets[8], object.totalChapters);
-  writer.writeByte(offsets[9], object.type.index);
-  writer.writeDateTime(offsets[10], object.updateAt);
+  writer.writeLong(offsets[9], object.totalChapters);
+  writer.writeByte(offsets[10], object.type.index);
+  writer.writeDateTime(offsets[11], object.updateAt);
 }
 
 Book _bookDeserialize(
@@ -163,16 +169,17 @@ Book _bookDeserialize(
     cover: reader.readString(offsets[4]),
     description: reader.readString(offsets[5]),
     id: id,
-    name: reader.readString(offsets[6]),
+    isDownload: reader.readBool(offsets[6]),
+    name: reader.readString(offsets[7]),
     readBook: reader.readObjectOrNull<ReadBook>(
-      offsets[7],
+      offsets[8],
       ReadBookSchema.deserialize,
       allOffsets,
     ),
-    totalChapters: reader.readLong(offsets[8]),
-    type: _BooktypeValueEnumMap[reader.readByteOrNull(offsets[9])] ??
+    totalChapters: reader.readLong(offsets[9]),
+    type: _BooktypeValueEnumMap[reader.readByteOrNull(offsets[10])] ??
         BookType.novel,
-    updateAt: reader.readDateTimeOrNull(offsets[10]),
+    updateAt: reader.readDateTimeOrNull(offsets[11]),
   );
   return object;
 }
@@ -197,19 +204,21 @@ P _bookDeserializeProp<P>(
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 7:
+      return (reader.readString(offset)) as P;
+    case 8:
       return (reader.readObjectOrNull<ReadBook>(
         offset,
         ReadBookSchema.deserialize,
         allOffsets,
       )) as P;
-    case 8:
-      return (reader.readLong(offset)) as P;
     case 9:
+      return (reader.readLong(offset)) as P;
+    case 10:
       return (_BooktypeValueEnumMap[reader.readByteOrNull(offset)] ??
           BookType.novel) as P;
-    case 10:
+    case 11:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1075,6 +1084,16 @@ extension BookQueryFilter on QueryBuilder<Book, Book, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Book, Book, QAfterFilterCondition> isDownloadEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isDownload',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Book, Book, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1478,6 +1497,18 @@ extension BookQuerySortBy on QueryBuilder<Book, Book, QSortBy> {
     });
   }
 
+  QueryBuilder<Book, Book, QAfterSortBy> sortByIsDownload() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDownload', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Book, Book, QAfterSortBy> sortByIsDownloadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDownload', Sort.desc);
+    });
+  }
+
   QueryBuilder<Book, Book, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1612,6 +1643,18 @@ extension BookQuerySortThenBy on QueryBuilder<Book, Book, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Book, Book, QAfterSortBy> thenByIsDownload() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDownload', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Book, Book, QAfterSortBy> thenByIsDownloadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDownload', Sort.desc);
+    });
+  }
+
   QueryBuilder<Book, Book, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1703,6 +1746,12 @@ extension BookQueryWhereDistinct on QueryBuilder<Book, Book, QDistinct> {
     });
   }
 
+  QueryBuilder<Book, Book, QDistinct> distinctByIsDownload() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isDownload');
+    });
+  }
+
   QueryBuilder<Book, Book, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1769,6 +1818,12 @@ extension BookQueryProperty on QueryBuilder<Book, Book, QQueryProperty> {
   QueryBuilder<Book, String, QQueryOperations> descriptionProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'description');
+    });
+  }
+
+  QueryBuilder<Book, bool, QQueryOperations> isDownloadProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isDownload');
     });
   }
 

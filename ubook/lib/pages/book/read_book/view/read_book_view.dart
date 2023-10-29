@@ -7,6 +7,7 @@ import 'package:ubook/data/models/chapter.dart';
 import 'package:ubook/di/components/service_locator.dart';
 import 'package:ubook/services/extensions_service.dart';
 import 'package:ubook/services/database_service.dart';
+import 'package:ubook/services/js_runtime.dart';
 
 import '../cubit/read_book_cubit.dart';
 import 'read_book_page.dart';
@@ -20,7 +21,7 @@ class ReadBookView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ReadBookCubit(
-          jsRuntime: getIt<ExtensionsService>().jsRuntime,
+          jsRuntime: getIt<JsRuntime>(),
           extensionManager: getIt<ExtensionsService>(),
           readBookArgs: readBookArgs,
           databaseService: getIt<DatabaseService>())

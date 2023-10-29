@@ -126,6 +126,15 @@ class _BookDrawerState extends State<BookDrawer> {
                     ))
                   ],
                 )),
+            Positioned(
+                bottom: 0,
+                right: 0,
+                child: IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: () {
+                    _readBookCubit.onRefreshChapters();
+                  },
+                ))
           ],
         ),
       ),

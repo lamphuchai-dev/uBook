@@ -16,9 +16,10 @@ class DetailBookCubit extends Cubit<DetailBookState> {
       {required Book book,
       required ExtensionsService extensionManager,
       required DatabaseService databaseService,
+      required JsRuntime jsRuntime,
       required this.extension})
       : _databaseService = databaseService,
-        _jsRuntime = extensionManager.jsRuntime,
+        _jsRuntime = jsRuntime,
         super(DetailBookState(
             book: book, statusType: StatusType.init, isBookmark: false));
 
@@ -64,15 +65,32 @@ class DetailBookCubit extends Cubit<DetailBookState> {
     if (state.isBookmark) {
       final isDelete = await _databaseService.onDeleteBook(_idBook!);
       if (isDelete) {
+        await _databaseService.deleteChaptersByBookId(_idBook!);
         emit(state.copyWith(isBookmark: false));
       }
     } else {
-      final idBook = await _databaseService.onInsertBook(state.book);
-      if (idBook is int) {
-        emit(state.copyWith(
-            isBookmark: true, book: state.book.copyWith(id: idBook)));
-        _idBook = idBook;
-      }
+      await add();
+    }
+  }
+
+  Future<bool> add() async {
+    try {
+      final bookId = await _databaseService.onInsertBook(state.book);
+      if (bookId == null) return false;
+      final chapters = await _jsRuntime.getChapters(
+        url: state.book.bookUrl,
+        bookId: bookId,
+        jsScript: DirectoryUtils.getJsScriptByPath(extension.script.chapters),
+      );
+
+      if (chapters.isEmpty) return false;
+      final listId = await _databaseService.insertChapters(chapters);
+
+      emit(state.copyWith(
+          isBookmark: true, book: state.book.copyWith(id: bookId)));
+      return listId.length == chapters.length;
+    } catch (error) {
+      return false;
     }
   }
 }

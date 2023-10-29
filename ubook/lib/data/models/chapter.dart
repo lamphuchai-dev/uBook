@@ -1,16 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:equatable/equatable.dart';
+import 'package:isar/isar.dart';
+part 'chapter.g.dart';
 
-
-class Chapter extends Equatable {
+@Collection()
+class Chapter {
+  final Id? id;
+  final int? bookId;
   final String title;
   final String url;
   final String bookUrl;
   final int index;
   final List<String> content;
   const Chapter({
+    this.id,
+    this.bookId,
     required this.title,
     required this.url,
     required this.bookUrl,
@@ -19,6 +24,8 @@ class Chapter extends Equatable {
   });
 
   Chapter copyWith({
+    Id? id,
+    int? bookId,
     String? title,
     String? url,
     String? bookUrl,
@@ -26,6 +33,8 @@ class Chapter extends Equatable {
     List<String>? content,
   }) {
     return Chapter(
+      id: id ?? this.id,
+      bookId: bookId ?? this.bookId,
       title: title ?? this.title,
       url: url ?? this.url,
       bookUrl: bookUrl ?? this.bookUrl,
@@ -36,6 +45,8 @@ class Chapter extends Equatable {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
+      'bookId': bookId,
       'title': title,
       'url': url,
       'bookUrl': bookUrl,
@@ -46,6 +57,8 @@ class Chapter extends Equatable {
 
   factory Chapter.fromMap(Map<String, dynamic> map) {
     return Chapter(
+        id: map['id'],
+        bookId: map["bookId"],
         title: map['title'] ?? "",
         url: map['url'] ?? "",
         bookUrl: map['bookUrl'] ?? "",
@@ -61,18 +74,4 @@ class Chapter extends Equatable {
 
   factory Chapter.fromJson(String source) =>
       Chapter.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  bool get stringify => true;
-
-  @override
-  List<Object> get props {
-    return [
-      title,
-      url,
-      bookUrl,
-      index,
-      content,
-    ];
-  }
 }

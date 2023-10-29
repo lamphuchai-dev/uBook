@@ -1,7 +1,5 @@
 // ignore_for_file: unused_element
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:ubook/app/constants/dimens.dart';
@@ -96,7 +94,9 @@ class _BooksGridWidgetState extends State<BooksGridWidget> {
         });
         widget.onChangeBooks?.call(_listBook);
       }
-    } catch (error) {}
+    } catch (error) {
+      //
+    }
     setState(() {
       _isLoadMore = false;
     });
