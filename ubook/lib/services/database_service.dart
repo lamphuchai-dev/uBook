@@ -28,7 +28,7 @@ class DatabaseService {
     return database.chapters.filter().bookIdEqualTo(bookId).findAll();
   }
 
-  Future<int?> onInsertBook(Book book) async {
+  Future<int> onInsertBook(Book book) async {
     return database.writeTxn(() => database.books
         .put(book.copyWith(updateAt: DateTime.now(), bookmark: true)));
   }
@@ -42,7 +42,8 @@ class DatabaseService {
   }
 
   Future<dynamic> updateBook(Book book) {
-    return database.writeTxn(() => database.books.put(book));
+    return database.writeTxn(
+        () => database.books.put(book.copyWith(updateAt: DateTime.now())));
   }
 
   Future<Book?> getBookByUrl(String bookUrl) =>

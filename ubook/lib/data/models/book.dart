@@ -83,6 +83,21 @@ class Book {
         readBook: readBook ?? this.readBook);
   }
 
+  Book deleteBookmark() {
+    return Book(
+        id: null,
+        name: name,
+        isDownload: isDownload,
+        bookUrl: bookUrl,
+        author: author,
+        bookStatus: bookStatus,
+        description: description,
+        cover: cover,
+        totalChapters: totalChapters,
+        type: type,
+        bookmark: false);
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
@@ -159,7 +174,7 @@ extension BookExtension on Book {
     return result.toStringAsFixed(2);
   }
 
-  String getSourceByBookUrl() {
+  String get getSourceByBookUrl {
     final uri = Uri.parse(bookUrl);
     return "${uri.scheme}://${uri.host}";
   }

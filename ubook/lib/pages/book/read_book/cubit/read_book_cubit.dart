@@ -1,134 +1,172 @@
 import 'dart:async';
-
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/config/app_type.dart';
-import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/data/models/book.dart';
 import 'package:ubook/data/models/chapter.dart';
-import 'package:ubook/pages/book/read_book/read_book.dart';
-import 'package:ubook/pages/home/cubit/home_cubit.dart';
 import 'package:ubook/data/models/extension.dart';
+import 'package:ubook/services/database_service.dart';
 import 'package:ubook/services/extensions_service.dart';
 import 'package:ubook/services/js_runtime.dart';
-import 'package:ubook/services/database_service.dart';
+import 'package:ubook/utils/device_utils.dart';
 import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 import 'package:ubook/utils/system_utils.dart';
+import 'package:ubook/widgets/widgets.dart';
+
 part 'read_book_state.dart';
 
 class ReadBookCubit extends Cubit<ReadBookState> {
   ReadBookCubit(
-      {required ReadBookArgs readBookArgs,
-      required ExtensionsService extensionManager,
+      {required Book book,
+      required JsRuntime jsRuntime,
       required DatabaseService databaseService,
-      required JsRuntime jsRuntime})
-      : _readBookArgs = readBookArgs,
-        _jsRuntime = jsRuntime,
-        _extensionManager = extensionManager,
+      required ExtensionsService extensionsService})
+      : _jsRuntime = jsRuntime,
         _databaseService = databaseService,
-        super(ReadBookInitial(
-            totalChapters: readBookArgs.chapters.length,
-            extensionStatus: ExtensionStatus.init));
+        _extensionsService = extensionsService,
+        super(ReadBookState(
+            chapters: const [],
+            statusType: StatusType.init,
+            extensionStatus: ExtensionStatus.init,
+            menuType: MenuType.base,
+            controlStatus: ControlStatus.none,
+            book: book));
+
   final _logger = Logger("ReadBookCubit");
-
-  Book get book => _readBookArgs.book;
-
   final JsRuntime _jsRuntime;
-
-  final ReadBookArgs _readBookArgs;
-  final ExtensionsService _extensionManager;
   final DatabaseService _databaseService;
+  final ExtensionsService _extensionsService;
 
-  Extension? _extension;
   bool _currentOnTouchScreen = false;
-
-  Extension get extension => _extension!;
-
   late final AnimationController _menuAnimationController;
-  PageController? pageController;
-
-  int indexPageChapter = 0;
-
-  List<Chapter> chapters = [];
-
-  ValueNotifier<Chapter?> readChapter = ValueNotifier(null);
-  ValueNotifier<ContentPagination?> contentPaginationValue =
-      ValueNotifier(null);
 
   Timer? chaptersSliderTime;
 
-  void onInit() async {
+  Chapter? previousChapter;
+  Chapter? nextChapter;
+
+  Book get book => state.book;
+  set setBook(Book book) => emit(state.copyWith(book: book));
+  Extension? _extension;
+
+  Extension get getExtension => _extension!;
+
+  final FToast fToast = FToast();
+
+  ValueNotifier<double> timeAutoScroll = ValueNotifier(10);
+  Timer? sliderTimeAutoScroll;
+
+  VoidCallback? handlerAutoScroll;
+
+  void onInitFToat(BuildContext context) {
+    fToast.init(context);
+  }
+
+  @override
+  void onChange(Change<ReadBookState> change) {
+    if (change.currentState.menuType != MenuType.autoScroll &&
+        change.nextState.menuType == MenuType.autoScroll) {
+      DeviceUtils.enableWakelock();
+    } else if (change.currentState.menuType == MenuType.autoScroll &&
+        change.nextState.menuType != MenuType.autoScroll) {
+      DeviceUtils.disableWakelock();
+    }
+
+    if (change.currentState.readChapter != null &&
+        change.nextState.readChapter != null &&
+        change.currentState.readChapter?.chapter !=
+            change.nextState.readChapter?.chapter) {
+      // update read book
+      if (book.bookmark) {
+        final chapter = change.nextState.readChapter!.chapter;
+        final readBook = ReadBook(
+            index: chapter.index,
+            titleChapter: chapter.title,
+            nameExtension: _extension!.metadata.name);
+        _databaseService.updateBook(book.copyWith(readBook: readBook));
+      }
+    }
+    super.onChange(change);
+  }
+
+  void onInit(
+      {required List<Chapter> chapters,
+      Extension? extension,
+      required int initReadChapter}) async {
     try {
-      final ext =
-          _extensionManager.getExtensionBySource(book.getSourceByBookUrl());
-      if (ext == null) {
-        emit(ReadBookInitial(
-            totalChapters: _readBookArgs.chapters.length,
-            extensionStatus: ExtensionStatus.error));
+      emit(state.copyWith(statusType: StatusType.loading));
+      _extension =
+          _extensionsService.getExtensionBySource(book.getSourceByBookUrl);
+      if (_extension == null) {
+        emit(state.copyWith(
+            extensionStatus: ExtensionStatus.noInstall,
+            statusType: StatusType.loaded));
         return;
       }
-      if (ext.metadata.source != book.getSourceByBookUrl()) {
+      final bookmark = await _databaseService.getBookByUrl(book.bookUrl);
+      if (bookmark != null) {
+        setBook = bookmark;
+      }
+      // Check up lại bookUrl khi extension thay đổi source
+      if (_extension!.metadata.source != book.getSourceByBookUrl) {
         final bookUrl = book.bookUrl
-            .replaceAll(book.getSourceByBookUrl(), ext.metadata.source);
+            .replaceAll(book.getSourceByBookUrl, _extension!.metadata.source);
         _databaseService.updateBook(book.copyWith(bookUrl: bookUrl));
-        _readBookArgs.book = book.copyWith(bookUrl: bookUrl);
+        setBook = book.copyWith(bookUrl: bookUrl);
+      }
+      // Lấy chapters của book đã lưu trong local,update chapter khi có sự thay đổi
+      // Khi từ page chapters -> readBook page
+      if (book.bookmark && book.id != null) {
+        final localChapters =
+            await _databaseService.getChaptersByBookId(book.id!);
+        if (chapters.isNotEmpty && chapters.length > localChapters.length) {
+          // Lấy ra các chapters mới
+          List<Chapter> newChapters =
+              chapters.getRange(localChapters.length, chapters.length).toList();
+          newChapters =
+              newChapters.map((e) => e.copyWith(bookId: book.id)).toList();
+          // Update vào database theo bookId
+          await _databaseService.insertChapters(newChapters);
+          chapters = await _databaseService.getChaptersByBookId(book.id!);
+        } else {
+          chapters = localChapters;
+        }
       }
 
-      _extension = ext;
-
-      final bookLocal =
-          await _databaseService.getBookByUrl(_readBookArgs.book.bookUrl);
-      // Kiểm tra và cập nhật book từ local ->add bookmark -> page chapters -> read book
-      if (bookLocal != null && !_readBookArgs.fromBookmarks) {
-        _readBookArgs.book = bookLocal;
+      if (chapters.isEmpty && initReadChapter > chapters.length) {
+        emit(state.copyWith(
+            statusType: StatusType.error,
+            extensionStatus: ExtensionStatus.ready));
+        return;
       }
+      ReadChapter readChapter = ReadChapter(
+          chapter: chapters[initReadChapter], status: StatusType.init);
 
-      if (_readBookArgs.book.id != null) {
-        chapters = await _databaseService.getChaptersByBookId(book.id!);
-      } else {
-        chapters = _readBookArgs.chapters;
-      }
-      indexPageChapter = _readBookArgs.readChapter;
-      readChapter.value = chapters[indexPageChapter];
-      pageController = PageController(initialPage: indexPageChapter);
-      emit(BaseReadBook(totalChapters: state.totalChapters));
-      if (book.bookmark && readChapter.value != null) {
+      emit(state.copyWith(
+          chapters: chapters,
+          readChapter: readChapter.copyWith(status: StatusType.init),
+          statusType: StatusType.loaded,
+          extensionStatus: ExtensionStatus.ready));
+      getContentsChapter();
+
+      if (book.bookmark && book.id != null) {
         _databaseService.updateBook(book.copyWith(
             updateAt: DateTime.now(),
             readBook: ReadBook(
-                index: readChapter.value!.index,
+                index: readChapter.chapter.index,
                 offsetLast: 0.0,
-                titleChapter: readChapter.value!.title,
-                nameExtension: _extension?.metadata.name)));
+                titleChapter: readChapter.chapter.title,
+                nameExtension: _extension!.metadata.name)));
       }
+
+      state;
     } catch (error) {
-      emit(const ErrorReadBook(totalChapters: 0));
-    }
-  }
-
-  Chapter get currentChapter => chapters[indexPageChapter];
-
-  BookType get bookType => book.type;
-
-  Future<Chapter> getChapterContent(Chapter chapter) async {
-    try {
-      final chapterLocal = chapters.firstWhereOrNull(
-          (item) => item.index == chapter.index && item.content.isNotEmpty);
-      if (chapterLocal != null) return chapterLocal;
-      List<String> result = await _jsRuntime.chapter(
-          url: chapter.url,
-          jsScript:
-              DirectoryUtils.getJsScriptByPath(_extension!.script.chapter));
-      chapter = chapter.copyWith(content: result);
-      chapters = chapters
-          .map((element) => element.index == chapter.index ? chapter : element)
-          .toList();
-      return chapter;
-    } catch (error) {
-      _logger.log(error, name: "getChapterContent");
-      rethrow;
+      _logger.error(error, name: "onInit");
+      emit(state.copyWith(statusType: StatusType.error));
     }
   }
 
@@ -141,15 +179,6 @@ class ReadBookCubit extends Cubit<ReadBookState> {
 
   void setMenuAnimationController(AnimationController animationController) {
     _menuAnimationController = animationController;
-  }
-
-  void onToPageByChapter(Chapter chapter) {
-    final index = chapters.indexOf(chapter);
-    onToPageByIndex(index);
-  }
-
-  void onToPageByIndex(int index) {
-    pageController?.jumpToPage(index);
   }
 
   bool get _isShowMenu =>
@@ -171,144 +200,215 @@ class ReadBookCubit extends Cubit<ReadBookState> {
     }
   }
 
-  void onPageChanged(int index) {
-    indexPageChapter = index;
-    readChapter.value = chapters[index];
-    _logger.log("onPageChanged :: $index");
-    if (book.bookmark) {
-      _databaseService.updateBook(book.copyWith(
-          updateAt: DateTime.now(),
-          readBook: ReadBook(
-              index: readChapter.value!.index,
-              offsetLast: 0.0,
-              titleChapter: readChapter.value!.title,
-              nameExtension: _extension?.metadata.name)));
-    }
-  }
-
   Future<void> onHideCurrentMenu() async {
     if (_menuAnimationController.status == AnimationStatus.completed) {
       await _menuAnimationController.reverse();
     }
   }
 
-  void onEnableAutoScroll() async {
-    await onHideCurrentMenu();
-    emit(AutoScrollReadBook(
-      totalChapters: chapters.length,
-      timerScroll: 10,
-      scrollStatus: AutoScrollStatus.start,
-    ));
-  }
-
-  void onCloseAutoScroll() async {
-    final state = this.state;
-    if (state is AutoScrollReadBook) {
-      emit(state.copyWith(scrollStatus: AutoScrollStatus.stop));
-    }
-    await onHideCurrentMenu();
-    emit(BaseReadBook(totalChapters: chapters.length));
-  }
-
-  void onChangeTimerScroll(double value) {
-    final state = this.state;
-    if (state is AutoScrollReadBook) {
-      emit(state.copyWith(timerScroll: value));
-    }
-  }
-
-  void onPauseAutoScroll() {
-    final state = this.state;
-    if (state is AutoScrollReadBook) {
-      emit(state.copyWith(scrollStatus: AutoScrollStatus.pause));
-    }
-  }
-
-  void onPlayAutoScroll() {
-    final state = this.state;
-    if (state is AutoScrollReadBook) {
-      emit(state.copyWith(scrollStatus: AutoScrollStatus.start));
-    }
-  }
-
-  void onAutoScrollNexPage() {
-    final state = this.state;
-    if (state is AutoScrollReadBook) {
-      emit(state.copyWith(scrollStatus: AutoScrollStatus.stop));
-      if (indexPageChapter + 1 < chapters.length) {
-        pageController?.jumpToPage(indexPageChapter + 1);
-        emit(state.copyWith(scrollStatus: AutoScrollStatus.start));
-      } else {
-        onCloseAutoScroll();
-      }
-    }
-  }
-
-  void onNextPage() {
-    if (indexPageChapter == chapters.length - 1) return;
-    pageController?.nextPage(
-        duration: const Duration(milliseconds: 100), curve: Curves.linear);
-  }
-
-  void onPreviousPage() {
-    if (indexPageChapter == 0) return;
-    pageController?.previousPage(
-        duration: const Duration(milliseconds: 100), curve: Curves.linear);
-  }
-
   void onChangeChaptersSlider(int value) {
     if (chaptersSliderTime != null) {
       chaptersSliderTime?.cancel();
     }
-    readChapter.value = chapters[value];
+
     chaptersSliderTime = Timer(const Duration(milliseconds: 500), () {
-      pageController?.jumpToPage(value);
+      final chapter = state.chapters[value];
+      emit(state.copyWith(
+          readChapter: ReadChapter(chapter: chapter, status: StatusType.init)));
     });
   }
 
-  ScrollPhysics? getPhysicsScroll() {
-    if (state is BaseReadBook || state is ReadBookInitial) {
-      return const ClampingScrollPhysics();
+  Future<void> getContentsChapter() async {
+    _logger.log("getContentsChapter");
+    calculateChapter();
+    ReadChapter readChapter =
+        state.readChapter!.copyWith(status: StatusType.loading);
+    try {
+      if (readChapter.chapter.content.isNotEmpty) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        emit(state.copyWith(
+            readChapter: readChapter.copyWith(status: StatusType.loaded)));
+      } else {
+        emit(state.copyWith(readChapter: readChapter));
+        List<String> result = await _jsRuntime.chapter(
+            url: readChapter.chapter.url,
+            jsScript:
+                DirectoryUtils.getJsScriptByPath(_extension!.script.chapter));
+        readChapter = readChapter.copyWith(
+            chapter: readChapter.chapter.copyWith(
+              content: result,
+            ),
+            status: StatusType.loaded);
+        List<Chapter> chapters = state.chapters;
+        chapters.removeAt(readChapter.chapter.index);
+        chapters.insert(readChapter.chapter.index, readChapter.chapter);
+        emit(state.copyWith(readChapter: readChapter));
+      }
+    } catch (error) {
+      _logger.log(error, name: "getChapterContent");
+      emit(state.copyWith(
+          readChapter: readChapter.copyWith(status: StatusType.error)));
+    }
+  }
+
+  void calculateChapter() {
+    ReadChapter readChapter = state.readChapter!;
+    if (readChapter.chapter.index == 0) {
+      previousChapter = null;
+    } else {
+      previousChapter = state.chapters[readChapter.chapter.index - 1];
+    }
+    if (readChapter.chapter.index == state.chapters.length - 1) {
+      nextChapter = null;
+    } else {
+      nextChapter = state.chapters[readChapter.chapter.index + 1];
+    }
+  }
+
+  Future<void> onPreviousChapter() async {
+    calculateChapter();
+    if (previousChapter == null) return;
+    emit(state.copyWith(
+        readChapter:
+            ReadChapter(chapter: previousChapter!, status: StatusType.init)));
+  }
+
+  Future<void> onNextChapter() async {
+    calculateChapter();
+    if (nextChapter == null) {
+      if (state.menuType == MenuType.autoScroll) {
+        onCloseAutoScroll();
+      }
+      return;
+    }
+    emit(state.copyWith(
+        readChapter:
+            ReadChapter(chapter: nextChapter!, status: StatusType.init)));
+  }
+
+  Future<void> onRefreshChapters() async {
+    fToast.showToast(
+      child: ToastWidget(msg: "book.start_update_chapters".tr()),
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: const Duration(seconds: 2),
+    );
+    final lstChapter = await _jsRuntime.getChapters(
+        url: book.bookUrl,
+        jsScript:
+            DirectoryUtils.getJsScriptByPath(_extension!.script.chapters));
+    if (lstChapter.length > state.chapters.length) {
+      if (book.bookmark && book.id != null) {
+        List<Chapter> newChapters = lstChapter
+            .getRange(state.chapters.length, lstChapter.length)
+            .toList();
+        newChapters =
+            newChapters.map((e) => e.copyWith(bookId: book.id)).toList();
+        await _databaseService.insertChapters(newChapters);
+
+        final chapters = await _databaseService.getChaptersByBookId(book.id!);
+        setBook = book.copyWith(totalChapters: chapters.length);
+        await _databaseService.updateBook(book);
+        emit(state.copyWith(chapters: chapters));
+      } else {
+        final chapters = lstChapter;
+        emit(state.copyWith(chapters: chapters));
+      }
+
+      final totalNewChapter = lstChapter.length - state.chapters.length;
+      fToast.showToast(
+        child: ToastWidget(
+            msg: "book.update_new_chapters"
+                .tr(args: [totalNewChapter.toString()])),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: const Duration(seconds: 2),
+      );
+    } else {
+      fToast.showToast(
+        child: ToastWidget(msg: "book.update_no_new_chapters".tr()),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: const Duration(seconds: 2),
+      );
+    }
+  }
+
+  void onChangeReadChapter(Chapter chapter) {
+    emit(state.copyWith(
+        readChapter: ReadChapter(chapter: chapter, status: StatusType.init)));
+  }
+
+  // autoScroll
+  void onEnableAutoScroll() async {
+    await onHideCurrentMenu();
+    emit(state.copyWith(
+        controlStatus: ControlStatus.init, menuType: MenuType.autoScroll));
+  }
+
+  void onCloseAutoScroll() async {
+    await onHideCurrentMenu();
+    emit(state.copyWith(
+        controlStatus: ControlStatus.none, menuType: MenuType.base));
+  }
+
+  void onUnpauseAutoScroll() async {
+    emit(state.copyWith(controlStatus: ControlStatus.start));
+  }
+
+  void onPauseAutoScroll() async {
+    emit(state.copyWith(controlStatus: ControlStatus.pause));
+  }
+
+  ScrollPhysics? get getPhysicsScroll {
+    if (state.menuType != MenuType.autoScroll) {
+      return null;
     }
     return const NeverScrollableScrollPhysics();
   }
 
-  void setContentPagination(ContentPagination contentPagination) {
-    contentPaginationValue.value = contentPagination;
+  void onChangeTimerAutoScroll(double value) {
+    if (sliderTimeAutoScroll != null) {
+      sliderTimeAutoScroll?.cancel();
+    }
+    sliderTimeAutoScroll = Timer(const Duration(milliseconds: 300), () {
+      handlerAutoScroll?.call();
+    });
+    timeAutoScroll.value = value;
   }
 
-  void downloadBook() {}
-
-  void addBookmark() async {
-    _readBookArgs.book = book.copyWith(
-        bookmark: true,
-        updateAt: DateTime.now(),
-        readBook: ReadBook(
-            index: readChapter.value!.index,
-            titleChapter: readChapter.value!.title,
-            nameExtension: _extension!.metadata.name));
-    final bookId = await _databaseService.onInsertBook(_readBookArgs.book);
-    if (bookId != null) {
-      chapters = chapters.map((e) => e.copyWith(bookId: bookId)).toList();
-      await _databaseService.insertChapters(chapters);
-      _readBookArgs.book = book.copyWith(id: bookId);
+  void onAddToBookmark() async {
+    if (!book.bookmark) {
+      try {
+        final bookId =
+            await _databaseService.onInsertBook(book.copyWith(bookmark: true));
+        setBook = book.copyWith(id: bookId, bookmark: true);
+        List<Chapter> chapters =
+            state.chapters.map((e) => e.copyWith(bookId: bookId)).toList();
+        await _databaseService.insertChapters(chapters);
+        chapters = await _databaseService.getChaptersByBookId(bookId);
+        emit(state.copyWith(chapters: chapters));
+        fToast.showToast(
+          child: ToastWidget(msg: "bookmark.add_complete".tr()),
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: const Duration(seconds: 2),
+        );
+      } catch (error) {
+        _logger.error(error, name: "addToBookmark");
+      }
     }
   }
 
-  Future<void> onRefreshChapters() async {
-    final lstChapter = await _jsRuntime.getChapters(
-        url: book.bookUrl,
-        jsScript: DirectoryUtils.getJsScriptByPath(extension.script.chapters));
-    if (lstChapter.length > chapters.length) {
-      if (book.bookmark && book.id != null) {
-        List<Chapter> newChapters =
-            lstChapter.getRange(chapters.length, lstChapter.length).toList();
-        newChapters =
-            newChapters.map((e) => e.copyWith(bookId: book.id)).toList();
-        await _databaseService.insertChapters(newChapters);
-        chapters = await _databaseService.getChaptersByBookId(book.id!);
-      } else {
-        chapters = lstChapter;
+  void onDeleteToBookmark() async {
+    if (book.bookmark) {
+      try {
+        await _databaseService.onDeleteBook(book.id!);
+        await _databaseService.deleteChaptersByBookId(book.id!);
+        setBook = book.deleteBookmark();
+        fToast.showToast(
+          child: ToastWidget(msg: "bookmark.delete_complete".tr()),
+          gravity: ToastGravity.BOTTOM,
+          toastDuration: const Duration(seconds: 2),
+        );
+      } catch (error) {
+        _logger.error(error, name: "deleteBookmark");
       }
     }
   }
@@ -316,39 +416,10 @@ class ReadBookCubit extends Cubit<ReadBookState> {
   @override
   Future<void> close() {
     SystemUtils.setEnabledSystemUIModeDefault();
-    _menuAnimationController.dispose();
-    readChapter.dispose();
-    pageController?.dispose();
-    contentPaginationValue.dispose();
+    timeAutoScroll.dispose();
+    sliderTimeAutoScroll?.cancel();
+    chaptersSliderTime?.cancel();
+    DeviceUtils.disableWakelock();
     return super.close();
   }
-}
-
-class ContentPagination {
-  final int totalPage;
-  final int currentPage;
-  final double sliderValue;
-  ContentPagination(
-      {required this.totalPage,
-      required this.currentPage,
-      required this.sliderValue});
-
-  String get formatText => "$currentPage/$totalPage";
-
-  int get remainingPages => totalPage - currentPage;
-
-  ContentPagination copyWith({
-    int? totalPage,
-    int? currentPage,
-    double? sliderValue,
-  }) {
-    return ContentPagination(
-        totalPage: totalPage ?? this.totalPage,
-        currentPage: currentPage ?? this.currentPage,
-        sliderValue: sliderValue ?? this.sliderValue);
-  }
-
-  @override
-  String toString() =>
-      'ContentPagination(totalPage: $totalPage, currentPage: $currentPage)';
 }

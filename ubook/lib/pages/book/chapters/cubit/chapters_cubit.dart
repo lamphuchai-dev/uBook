@@ -33,10 +33,10 @@ class ChaptersCubit extends Cubit<ChaptersState> {
           url: book.bookUrl,
           jsScript:
               DirectoryUtils.getJsScriptByPath(extensionModel.script.chapters));
-      chapters = sort(chapters, SortChapterType.newChapter);
+      // chapters = sort(chapters, SortChapterType.newChapter);
       emit(state.copyWith(
           chapters: chapters,
-          sortType: SortChapterType.newChapter,
+          sortType: SortChapterType.lastChapter,
           statusType: StatusType.loaded));
     } catch (error) {
       emit(state.copyWith(statusType: StatusType.error));

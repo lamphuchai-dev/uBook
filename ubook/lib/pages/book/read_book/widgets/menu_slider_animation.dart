@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ubook/utils/system_utils.dart';
 
-enum Menu { base, media, autoScroll }
+import '../cubit/read_book_cubit.dart';
+
+
 
 class MenuSliderAnimation extends StatefulWidget {
   const MenuSliderAnimation(
@@ -12,7 +14,7 @@ class MenuSliderAnimation extends StatefulWidget {
       required this.autoScrollMenu,
       required this.mediaMenu,
       required this.controller});
-  final Menu menu;
+  final MenuType menu;
   final Widget bottomMenu;
   final Widget topMenu;
   final Widget autoScrollMenu;
@@ -33,7 +35,7 @@ class _MenuSliderAnimationState extends State<MenuSliderAnimation> {
     _controller.addStatusListener((status) {
       switch (status) {
         case AnimationStatus.forward:
-          if (widget.menu == Menu.media) {
+          if (widget.menu == MenuType.media) {
             SystemUtils.setSystemUIOverlayStyle();
           }
           break;
@@ -57,7 +59,7 @@ class _MenuSliderAnimationState extends State<MenuSliderAnimation> {
   @override
   Widget build(BuildContext context) {
     return switch (widget.menu) {
-      Menu.base => Column(
+      MenuType.base => Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
@@ -92,7 +94,7 @@ class _MenuSliderAnimationState extends State<MenuSliderAnimation> {
             )
           ],
         ),
-      Menu.autoScroll => Align(
+      MenuType.autoScroll => Align(
           alignment: Alignment.centerRight,
           child: AnimatedBuilder(
             animation: _controller,
@@ -106,7 +108,7 @@ class _MenuSliderAnimationState extends State<MenuSliderAnimation> {
             child: widget.autoScrollMenu,
           ),
         ),
-      Menu.media => Align(
+      MenuType.media => Align(
           alignment: Alignment.bottomCenter,
           child: AnimatedBuilder(
             animation: _controller,

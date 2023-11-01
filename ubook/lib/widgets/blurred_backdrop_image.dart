@@ -17,7 +17,9 @@ class BlurredBackdropImage extends StatelessWidget {
           bottom: 1,
           right: 1,
           left: 1,
-          child: CacheNetWorkImage(url),
+          child: CacheNetWorkImage(
+            url,
+          ),
         ),
         Positioned.fill(
           child: ClipRect(
@@ -26,7 +28,7 @@ class BlurredBackdropImage extends StatelessWidget {
               child: const SizedBox(),
             ),
           ),
-        )
+        ),
       ],
     );
   }

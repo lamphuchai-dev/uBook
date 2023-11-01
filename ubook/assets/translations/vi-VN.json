@@ -8,6 +8,15 @@
   "search": {
     "noSearchResults": "Không tìm thấy kết quả với từ khóa {}"
   },
+  "discovery": {
+    "title": "Khám phá"
+  },
+  "bookmark": {
+    "title": "Đánh dấu",
+    "add_complete": "Thêm vào thành công",
+    "delete_complete": "Xóa thành công",
+    "add_failed": "Thêm thất bại"
+  },
   "date": {
     "now": "Vừa xong",
     "minute": "phút trước",
@@ -28,6 +37,11 @@
     "downloadBookChapters": "Tải truyện {} chương",
     "downloadBook": "Tải truyện",
     "export": "Xuất file",
-    "menu_book": "Mục lục"
+    "menu_book": "Mục lục",
+    "start_update_chapters": "Bắt đầu kiểm tra chương",
+    "update_no_new_chapters": "Không có chương nào mới",
+    "update_new_chapters": "Cập nhập {} chương nào mới",
+    "new_chapter": "Chương mới",
+    "last_chapter": "Chương củ"
   }
 }

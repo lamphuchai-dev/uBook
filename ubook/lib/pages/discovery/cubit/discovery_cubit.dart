@@ -11,16 +11,16 @@ import 'package:ubook/services/storage_service.dart';
 import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 
-part 'home_state.dart';
+part 'discovery_state.dart';
 
-class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(
+class DiscoveryCubit extends Cubit<DiscoveryState> {
+  DiscoveryCubit(
       {required StorageService storageService,
       required this.extensionManager,
       required JsRuntime jsRuntime})
       : _storageService = storageService,
         _jsRuntime = jsRuntime,
-        super(HomeStateInitial()) {
+        super(DiscoveryStateInitial()) {
     _streamSubscription =
         extensionManager.extensionsChange.listen((exts) async {
       final state = this.state;

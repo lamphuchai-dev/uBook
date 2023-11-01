@@ -54,7 +54,7 @@ class DownloadService {
     if (book == null) return;
     final chapters = await _databaseService.getChaptersDownload(book.id!);
     final extensionBook =
-        _extensionsService.getExtensionBySource(book.getSourceByBookUrl());
+        _extensionsService.getExtensionBySource(book.getSourceByBookUrl);
     if (extensionBook == null) return;
     final dowTask = DownloadBook(
       extension: extensionBook,

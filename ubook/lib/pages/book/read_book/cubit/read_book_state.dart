@@ -1,63 +1,76 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'read_book_cubit.dart';
 
-abstract class ReadBookState extends Equatable {
-  const ReadBookState({required this.totalChapters});
-  final int totalChapters;
+enum ExtensionStatus { init, ready, noInstall }
 
-  @override
-  List<Object> get props => [totalChapters];
-}
+enum ControlStatus { none, init, start, pause, complete, stop, error }
 
-class ReadBookInitial extends ReadBookState {
-  const ReadBookInitial(
-      {required super.totalChapters, required this.extensionStatus});
+enum MenuType { base, media, autoScroll }
+
+class ReadBookState extends Equatable {
+  const ReadBookState(
+      {required this.chapters,
+      required this.statusType,
+      required this.extensionStatus,
+      required this.controlStatus,
+      required this.menuType,
+      required this.book,
+      this.readChapter});
+  final List<Chapter> chapters;
+  final StatusType statusType;
   final ExtensionStatus extensionStatus;
+  final ReadChapter? readChapter;
+  final ControlStatus controlStatus;
+  final MenuType menuType;
+  final Book book;
+  @override
+  List<Object?> get props => [
+        chapters,
+        statusType,
+        extensionStatus,
+        readChapter,
+        menuType,
+        controlStatus,
+        book
+      ];
 
-  ReadBookInitial copyWith({
-    ExtensionStatus? extensionStatus,
-  }) {
-    return ReadBookInitial(
+  ReadBookState copyWith(
+      {List<Chapter>? chapters,
+      StatusType? statusType,
+      ExtensionStatus? extensionStatus,
+      ReadChapter? readChapter,
+      ControlStatus? controlStatus,
+      MenuType? menuType,
+      Book? book}) {
+    return ReadBookState(
+        book: book ?? this.book,
+        chapters: chapters ?? this.chapters,
+        statusType: statusType ?? this.statusType,
         extensionStatus: extensionStatus ?? this.extensionStatus,
-        totalChapters: totalChapters);
+        readChapter: readChapter ?? this.readChapter,
+        menuType: menuType ?? this.menuType,
+        controlStatus: controlStatus ?? this.controlStatus);
   }
 }
 
-class BaseReadBook extends ReadBookState {
-  const BaseReadBook({required super.totalChapters});
-
-  BaseReadBook copyWith({int? totalChapters}) {
-    return BaseReadBook(totalChapters: totalChapters ?? this.totalChapters);
-  }
-
-  @override
-  List<Object> get props => [totalChapters];
-}
-
-class AutoScrollReadBook extends ReadBookState {
-  const AutoScrollReadBook({
-    required super.totalChapters,
-    required this.timerScroll,
-    required this.scrollStatus,
+class ReadChapter extends Equatable {
+  final Chapter chapter;
+  final StatusType status;
+  const ReadChapter({
+    required this.chapter,
+    required this.status,
   });
-  final double timerScroll;
-  final AutoScrollStatus scrollStatus;
 
-  AutoScrollReadBook copyWith(
-      {double? timerScroll,
-      int? totalChapters,
-      AutoScrollStatus? scrollStatus,
-      bool? isShowMenu}) {
-    return AutoScrollReadBook(
-        totalChapters: totalChapters ?? this.totalChapters,
-        timerScroll: timerScroll ?? this.timerScroll,
-        scrollStatus: scrollStatus ?? this.scrollStatus);
+  ReadChapter copyWith({
+    Chapter? chapter,
+    StatusType? status,
+  }) {
+    return ReadChapter(
+      chapter: chapter ?? this.chapter,
+      status: status ?? this.status,
+    );
   }
 
   @override
-  List<Object> get props => [totalChapters, timerScroll, scrollStatus];
-}
-
-class ErrorReadBook extends ReadBookState {
-  const ErrorReadBook({required super.totalChapters});
+  List<Object?> get props => [chapter, status];
 }

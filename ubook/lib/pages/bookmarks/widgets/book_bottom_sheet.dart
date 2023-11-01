@@ -23,7 +23,7 @@ class BookBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final texTheme = context.appTextTheme;
     final colorScheme = context.colorScheme;
-    final extBook = bookmarksCubit.getExtension(book.getSourceByBookUrl());
+    final extBook = bookmarksCubit.getExtension(book.getSourceByBookUrl);
     return Container(
       decoration: BoxDecoration(
         borderRadius: Constants.bottomSheetShape.borderRadius,

@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:ubook/app/constants/assets.dart';
 
 class CacheNetWorkImage extends StatelessWidget {
-  const CacheNetWorkImage(this.url,
-      {Key? key,
-      this.fit = BoxFit.cover,
-      this.width,
-      this.height,
-      this.fallback,
-      this.headers,
-      this.placeholder})
-      : super(key: key);
+  const CacheNetWorkImage(
+    this.url, {
+    Key? key,
+    this.fit = BoxFit.cover,
+    this.width,
+    this.height,
+    this.fallback,
+    this.headers,
+    this.placeholder,
+  }) : super(key: key);
   final String url;
   final BoxFit fit;
   final double? width;

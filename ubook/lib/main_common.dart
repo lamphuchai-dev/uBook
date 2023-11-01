@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/bloc/debug/bloc_observer.dart';
 import 'package:ubook/di/components/service_locator.dart';
+import 'package:ubook/utils/device_utils.dart';
 import 'package:ubook/utils/system_utils.dart';
 import 'app.dart';
 import 'app/constants/constants.dart';
@@ -14,6 +15,8 @@ FutureOr<void> mainCommon() async {
   await EasyLocalization.ensureInitialized();
 
   await setupLocator();
+
+  await DeviceUtils.initWakelock();
 
   Bloc.observer = const AppBlocObserver();
 

@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ubook/app/config/app_type.dart';
 import 'package:ubook/data/models/book.dart';
 import 'package:ubook/data/models/extension.dart';
@@ -8,6 +11,7 @@ import 'package:ubook/services/js_runtime.dart';
 import 'package:ubook/services/database_service.dart';
 import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
+import 'package:ubook/widgets/widgets.dart';
 
 part 'detail_book_state.dart';
 
@@ -29,8 +33,14 @@ class DetailBookCubit extends Cubit<DetailBookState> {
   final Extension extension;
   final JsRuntime _jsRuntime;
   int? _idBook;
+
+  final FToast fToast = FToast();
+
+  void onInitFToat(BuildContext context) {
+    fToast.init(context);
+  }
+
   void onInit() async {
-    // await Future.wait([getDetailBook(), getBookInBookmarks()]);
     await getDetailBook();
     await getBookInBookmarks();
   }
@@ -61,22 +71,9 @@ class DetailBookCubit extends Cubit<DetailBookState> {
     }
   }
 
-  void actionBookmark() async {
-    if (state.isBookmark) {
-      final isDelete = await _databaseService.onDeleteBook(_idBook!);
-      if (isDelete) {
-        await _databaseService.deleteChaptersByBookId(_idBook!);
-        emit(state.copyWith(isBookmark: false));
-      }
-    } else {
-      await add();
-    }
-  }
-
   Future<bool> add() async {
     try {
       final bookId = await _databaseService.onInsertBook(state.book);
-      if (bookId == null) return false;
       final chapters = await _jsRuntime.getChapters(
         url: state.book.bookUrl,
         bookId: bookId,
@@ -88,6 +85,12 @@ class DetailBookCubit extends Cubit<DetailBookState> {
 
       emit(state.copyWith(
           isBookmark: true, book: state.book.copyWith(id: bookId)));
+
+      fToast.showToast(
+        child: ToastWidget(msg: "bookmark.add_complete".tr()),
+        gravity: ToastGravity.BOTTOM,
+        toastDuration: const Duration(seconds: 2),
+      );
       return listId.length == chapters.length;
     } catch (error) {
       return false;

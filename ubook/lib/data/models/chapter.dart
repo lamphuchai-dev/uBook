@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
+
 part 'chapter.g.dart';
 
 @Collection()
@@ -74,4 +76,28 @@ class Chapter {
 
   factory Chapter.fromJson(String source) =>
       Chapter.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  bool operator ==(covariant Chapter other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.bookId == bookId &&
+        other.title == title &&
+        other.url == url &&
+        other.bookUrl == bookUrl &&
+        other.index == index &&
+        listEquals(other.content, content);
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        bookId.hashCode ^
+        title.hashCode ^
+        url.hashCode ^
+        bookUrl.hashCode ^
+        index.hashCode ^
+        content.hashCode;
+  }
 }

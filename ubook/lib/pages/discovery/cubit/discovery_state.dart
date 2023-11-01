@@ -1,20 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-part of 'home_cubit.dart';
+part of 'discovery_cubit.dart';
 
 enum ExtensionStatus { init, loading, loaded, noInstall, error }
 
-abstract class HomeState extends Equatable {
-  const HomeState();
+abstract class DiscoveryState extends Equatable {
+  const DiscoveryState();
 
   @override
   List<Object> get props => [];
 }
 
-class HomeStateInitial extends HomeState {}
+class DiscoveryStateInitial extends DiscoveryState {}
 
-class LoadingExtensionState extends HomeState {}
+class LoadingExtensionState extends DiscoveryState {}
 
-class LoadedExtensionState extends HomeState {
+class LoadedExtensionState extends DiscoveryState {
   const LoadedExtensionState({required this.extension});
   final Extension extension;
 
@@ -22,4 +22,4 @@ class LoadedExtensionState extends HomeState {
   List<Object> get props => [extension];
 }
 
-class ExtensionNoInstallState extends HomeState {}
+class ExtensionNoInstallState extends DiscoveryState {}

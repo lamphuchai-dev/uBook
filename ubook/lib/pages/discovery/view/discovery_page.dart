@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,35 +8,36 @@ import 'package:ubook/app/constants/gaps.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/pages/book/detail_book/detail_book.dart';
-import 'package:ubook/pages/home/widgets/genre_widget.dart';
-import 'package:ubook/pages/home/widgets/widgets.dart';
+
 import 'package:ubook/widgets/widgets.dart';
 
-import '../cubit/home_cubit.dart';
+import '../cubit/discovery_cubit.dart';
+import '../widgets/genre_widget.dart';
+import '../widgets/widgets.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class DiscoveryPage extends StatefulWidget {
+  const DiscoveryPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<DiscoveryPage> createState() => _DiscoveryPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late HomeCubit _homeCubit;
+class _DiscoveryPageState extends State<DiscoveryPage> {
+  late DiscoveryCubit _discoveryCubit;
   @override
   void initState() {
-    _homeCubit = context.read<HomeCubit>();
+    _discoveryCubit = context.read<DiscoveryCubit>();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeCubit, HomeState>(
+    return BlocBuilder<DiscoveryCubit, DiscoveryState>(
       builder: (context, state) {
         Widget body = const SizedBox();
         Widget title = const SizedBox();
         List<Widget>? actions = [];
-        if (state is LoadingExtensionState || state is HomeStateInitial) {
+        if (state is LoadingExtensionState || state is DiscoveryStateInitial) {
           body = const LoadingWidget();
         } else if (state is ExtensionNoInstallState) {
           body = SizedBox(
@@ -67,12 +70,27 @@ class _HomePageState extends State<HomePage> {
                     showSearch(
                         context: context,
                         delegate: SearchBookDelegate(
-                            onSearchBook: _homeCubit.onSearchBook,
+                            onSearchBook: _discoveryCubit.onSearchBook,
                             extensionModel: state.extension));
                   },
                   icon: const Icon(Icons.search_rounded))
             ];
           }
+          Widget leadingIcon() {
+            if (state.extension.metadata.icon == "") {
+              return const SizedBox();
+            }
+            try {
+              final file = File(state.extension.metadata.icon);
+              return Container(
+                  width: 40,
+                  alignment: Alignment.center,
+                  child: Image.file(file));
+            } catch (e) {
+              return const SizedBox();
+            }
+          }
+
           title = GestureDetector(
             onTap: () {
               showModalBottomSheet(
@@ -81,17 +99,19 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: Colors.transparent,
                 clipBehavior: Clip.hardEdge,
                 builder: (context) => SelectExtensionBottomSheet(
-                  extensions: _homeCubit.extensionManager.getExtensions,
+                  extensions: _discoveryCubit.extensionManager.getExtensions,
                   exceptionPrimary: state.extension,
                   onSelected: (ext) {
-                    _homeCubit.onChangeExtensions(ext);
+                    _discoveryCubit.onChangeExtensions(ext);
                   },
                 ),
               );
             },
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                leadingIcon(),
+                Gaps.wGap8,
                 Flexible(child: Text(state.extension.metadata.name)),
                 Gaps.wGap8,
                 const Icon(
@@ -127,7 +147,7 @@ class _HomePageState extends State<HomePage> {
           (tabHome) => KeepAliveWidget(
             child: BooksGridWidget(
               onFetchListBook: (page) {
-                return _homeCubit.onGetListBook(tabHome.url, page);
+                return _discoveryCubit.onGetListBook(tabHome.url, page);
               },
               onTap: (book) {
                 Navigator.pushNamed(context, RoutesName.detailBook,
@@ -144,7 +164,7 @@ class _HomePageState extends State<HomePage> {
       ));
       tabChildren.add(KeepAliveWidget(
           child: GenreWidget(
-        onFetch: _homeCubit.onGetListGenre,
+        onFetch: _discoveryCubit.onGetListGenre,
         extension: extension,
       )));
     }

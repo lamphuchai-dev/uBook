@@ -1,15 +1,11 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:ubook/data/models/book.dart';
-import 'package:ubook/data/models/chapter.dart';
+import 'package:ubook/data/models/models.dart';
 import 'package:ubook/di/components/service_locator.dart';
-import 'package:ubook/services/extensions_service.dart';
 import 'package:ubook/services/database_service.dart';
+import 'package:ubook/services/extensions_service.dart';
 import 'package:ubook/services/js_runtime.dart';
-
 import '../cubit/read_book_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'read_book_page.dart';
 
 class ReadBookView extends StatelessWidget {
@@ -21,11 +17,13 @@ class ReadBookView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ReadBookCubit(
+          book: readBookArgs.book,
           jsRuntime: getIt<JsRuntime>(),
-          extensionManager: getIt<ExtensionsService>(),
-          readBookArgs: readBookArgs,
-          databaseService: getIt<DatabaseService>())
-        ..onInit(),
+          databaseService: getIt<DatabaseService>(),
+          extensionsService: getIt<ExtensionsService>())
+        ..onInit(
+            chapters: readBookArgs.chapters,
+            initReadChapter: readBookArgs.readChapter),
       child: const ReadBookPage(),
     );
   }

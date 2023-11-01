@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/config/app_type.dart';
@@ -33,12 +34,12 @@ class _ChaptersPageState extends State<ChaptersPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_book.name),
-        actions: [
-          IconButton(
-              onPressed: () {
-                // _chaptersCubit.sortChapterType();
-              },
-              icon: const Icon(Icons.search))
+        actions: const [
+          // IconButton(
+          //     onPressed: () {
+          //       // _chaptersCubit.sortChapterType();
+          //     },
+          //     icon: const Icon(Icons.search))
         ],
       ),
       body: Padding(
@@ -59,17 +60,24 @@ class _ChaptersPageState extends State<ChaptersPage> {
                 ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                   title: Text(
-                    "${chapters.length} chương",
+                    "${chapters.length} ${"book.chapter".tr()}",
                     style: textTheme.bodyMedium,
                   ),
                   trailing: PopupMenuButton<SortChapterType>(
                     position: PopupMenuPosition.under,
-                    // initialValue: state.sortType,
                     itemBuilder: (context) {
                       return [
                         PopupMenuItem(
                           value: SortChapterType.newChapter,
-                          child: const Text("Mới nhất"),
+                          child: Text(
+                            "book.new_chapter".tr(),
+                            style: TextStyle(
+                                fontSize: 14,
+                                color:
+                                    state.sortType == SortChapterType.newChapter
+                                        ? colorScheme.primary
+                                        : null),
+                          ),
                           onTap: () {
                             _chaptersCubit
                                 .sortChapterType(SortChapterType.newChapter);
@@ -77,7 +85,15 @@ class _ChaptersPageState extends State<ChaptersPage> {
                         ),
                         PopupMenuItem(
                           value: SortChapterType.lastChapter,
-                          child: const Text("Củ nhất"),
+                          child: Text(
+                            "book.last_chapter".tr(),
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: state.sortType ==
+                                        SortChapterType.lastChapter
+                                    ? colorScheme.primary
+                                    : null),
+                          ),
                           onTap: () {
                             _chaptersCubit
                                 .sortChapterType(SortChapterType.lastChapter);
@@ -90,7 +106,9 @@ class _ChaptersPageState extends State<ChaptersPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(state.sortType.name),
+                          Text(state.sortType == SortChapterType.newChapter
+                              ? "book.new_chapter".tr()
+                              : "book.last_chapter".tr()),
                           const Icon(Icons.expand_more)
                         ],
                       ),

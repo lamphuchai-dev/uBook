@@ -32,6 +32,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
   @override
   void initState() {
     _detailBookCubit = context.read<DetailBookCubit>();
+    _detailBookCubit.onInitFToat(context);
 
     super.initState();
   }
@@ -84,9 +85,6 @@ class _DetailBookPageState extends State<DetailBookPage> {
                   child: Text(book.name),
                 ),
               ),
-              actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.search))
-              ],
               elevation: 0,
               leading: const BackButton(
                 color: Colors.white,
@@ -207,9 +205,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
                     return Row(
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            _detailBookCubit.actionBookmark();
-                          },
+                          onTap: () {},
                           child: Container(
                             width: 100,
                             decoration: BoxDecoration(
@@ -234,8 +230,8 @@ class _DetailBookPageState extends State<DetailBookPage> {
                             child:
                                 _listChapters(colorScheme.primary, state.book)),
                         Gaps.wGap8,
-                        _tradingWidget(
-                            state.isBookmark, colorScheme, state.book)
+                        _tradingWidget(state.isBookmark, colorScheme,
+                            state.book, textTheme.titleSmall!)
                       ],
                     );
                   },
@@ -248,7 +244,8 @@ class _DetailBookPageState extends State<DetailBookPage> {
     );
   }
 
-  Widget _tradingWidget(bool isBookmark, ColorScheme colorScheme, Book book) {
+  Widget _tradingWidget(bool isBookmark, ColorScheme colorScheme, Book book,
+      TextStyle textStyle) {
     if (isBookmark) {
       return GestureDetector(
         onTap: () {
@@ -266,9 +263,22 @@ class _DetailBookPageState extends State<DetailBookPage> {
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(Dimens.radius)),
           alignment: Alignment.center,
-          child: const Icon(
-            Icons.reply,
-            size: 30,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const RotatedBox(
+                quarterTurns: -2,
+                child: Icon(
+                  Icons.reply,
+                  size: 30,
+                ),
+              ),
+              Text(
+                "Đọc tiếp",
+                style: textStyle,
+              )
+            ],
           ),
         ),
       );
@@ -283,9 +293,19 @@ class _DetailBookPageState extends State<DetailBookPage> {
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(Dimens.radius)),
           alignment: Alignment.center,
-          child: const Icon(
-            Icons.bookmark_add_rounded,
-            size: 30,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.bookmark_add_rounded,
+                size: 30,
+              ),
+              Text(
+                "Thêm vào kệ",
+                style: textStyle,
+              )
+            ],
           ),
         ),
       );

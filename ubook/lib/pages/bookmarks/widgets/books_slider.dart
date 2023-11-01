@@ -134,7 +134,7 @@ class _ItemBookSlider extends StatelessWidget {
                                       style: textTheme.bodySmall,
                                     ),
                                     Text(
-                                      "${book.readBook?.index ?? 1}/${book.totalChapters}",
+                                      "${book.readBook?.index != null ? book.readBook!.index! + 1 : 1}/${book.totalChapters}",
                                       style: textTheme.titleSmall
                                           ?.copyWith(fontSize: 12),
                                     ),

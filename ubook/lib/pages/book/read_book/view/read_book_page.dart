@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:ubook/app/config/app_type.dart';
 import 'package:ubook/app/extensions/extensions.dart';
-import 'package:ubook/pages/book/read_book/widgets/book_drawer.dart';
-import 'package:ubook/pages/home/cubit/home_cubit.dart';
-import 'package:ubook/utils/system_utils.dart';
+import 'package:ubook/data/models/book.dart';
 import 'package:ubook/widgets/widgets.dart';
-
 import '../cubit/read_book_cubit.dart';
 import '../widgets/widgets.dart';
 
@@ -23,14 +19,14 @@ class _ReadBookPageState extends State<ReadBookPage>
   late ReadBookCubit _readBookCubit;
   late AnimationController _animationController;
   late ColorScheme colorScheme;
-
   @override
   void initState() {
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200));
     _readBookCubit = context.read<ReadBookCubit>();
     _readBookCubit.setMenuAnimationController(_animationController);
-    SystemUtils.setEnabledSystemUIModeReadBookPage();
+    _readBookCubit.onInitFToat(context);
+    // SystemUtils.setEnabledSystemUIModeReadBookPage();
     super.initState();
   }
 
@@ -39,145 +35,115 @@ class _ReadBookPageState extends State<ReadBookPage>
     colorScheme = context.colorScheme;
     return Scaffold(
       drawer: const BookDrawer(),
-      drawerEnableOpenDragGesture: false,
       body: BlocBuilder<ReadBookCubit, ReadBookState>(
+        buildWhen: (previous, current) =>
+            previous.statusType != current.statusType,
         builder: (context, state) {
-          if (state is ReadBookInitial) {
-            if (state.extensionStatus == ExtensionStatus.error) {
-              return Scaffold(
-                appBar: AppBar(),
-                body: const Center(
-                  child: Text("Chưa cài extension"),
-                ),
-              );
-            }
-            return const LoadingWidget();
-          } else if (state is ErrorReadBook) {
-            return Scaffold(
-              appBar: AppBar(),
-              body: const Center(
-                child: Text("ERROR"),
-              ),
-            );
-          }
-          final chapters = _readBookCubit.chapters;
-
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: GestureDetector(
-                  onTap: _readBookCubit.onTapScreen,
-                  onPanDown: (_) => _readBookCubit.onTouchScreen(),
-                  child: BlocBuilder<ReadBookCubit, ReadBookState>(
-                    buildWhen: (previous, current) =>
-                        previous.totalChapters != current.totalChapters ||
-                        previous.runtimeType != current.runtimeType,
-                    builder: (context, state) {
-                      return PageView.builder(
-                        allowImplicitScrolling: false,
-                        controller: _readBookCubit.pageController,
-                        scrollDirection: Axis.vertical,
-                        itemCount: chapters.length,
-                        onPageChanged: _readBookCubit.onPageChanged,
-                        physics: _readBookCubit.getPhysicsScroll(),
-                        itemBuilder: (context, index) {
-                          return NotificationListener<ScrollNotification>(
-                            onNotification: (notification) {
-                              if (notification is! OverscrollNotification) {
-                                return false;
-                              }
-                              if (_readBookCubit.pageController?.page == 0.0 &&
-                                  notification.overscroll < 0) {
-                                return false;
-                              }
-                              _readBookCubit.pageController?.jumpTo(
-                                  _readBookCubit.pageController!.offset +
-                                      notification.overscroll * 1.2);
-                              return false;
-                            },
-                            child: ReadComicContent(
-                              chapter: chapters[index],
-                              pageController: _readBookCubit.pageController!,
-                              getChapterContent: () => _readBookCubit
-                                  .getChapterContent(chapters[index]),
-                            ),
-                          );
-                        },
-                      );
-                    },
+          return switch (state.statusType) {
+            StatusType.loaded => switch (state.extensionStatus) {
+                ExtensionStatus.init => const SizedBox(),
+                ExtensionStatus.noInstall => Scaffold(
+                    appBar: AppBar(),
+                    body: const Center(
+                      child: Text("Chưa cài extension"),
+                    ),
                   ),
+                ExtensionStatus.ready => Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Positioned.fill(
+                          child: GestureDetector(
+                              onTap: _readBookCubit.onTapScreen,
+                              onPanDown: (_) => _readBookCubit.onTouchScreen(),
+                              child: _ReadChapter(
+                                readBookCubit: _readBookCubit,
+                              ))),
+                      Positioned.fill(
+                        child: BlocSelector<ReadBookCubit, ReadBookState,
+                            MenuType>(
+                          selector: (state) {
+                            return state.menuType;
+                          },
+                          builder: (context, menuType) {
+                            return MenuSliderAnimation(
+                                menu: menuType,
+                                bottomMenu: BottomBaseMenuWidget(
+                                    readBookCubit: _readBookCubit),
+                                topMenu: TopBaseMenuWidget(
+                                  readBookCubit: _readBookCubit,
+                                ),
+                                autoScrollMenu: AutoScrollMenu(
+                                    readBookCubit: _readBookCubit),
+                                mediaMenu: const SizedBox(),
+                                controller: _animationController);
+                          },
+                        ),
+                      )
+                    ],
+                  )
+              },
+            StatusType.error => const Center(
+                child: Text(
+                  "ERROR",
+                  style: TextStyle(fontSize: 27, color: Colors.red),
                 ),
               ),
-              Positioned(
-                  height: 20,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: _buildFooterWidget()),
-              BlocBuilder<ReadBookCubit, ReadBookState>(
-                buildWhen: (previous, current) =>
-                    previous.runtimeType != current.runtimeType,
-                builder: (context, state) {
-                  Menu menu = Menu.base;
-                  if (state is AutoScrollReadBook) {
-                    menu = Menu.autoScroll;
-                  }
-                  return MenuSliderAnimation(
-                      menu: menu,
-                      bottomMenu: const BottomBaseMenuWidget(),
-                      topMenu: TopBaseMenuWidget(
-                        book: _readBookCubit.book,
-                      ),
-                      autoScrollMenu: const AutoScrollMenuWidget(),
-                      mediaMenu: const SizedBox(),
-                      controller: _animationController);
-                },
-              ),
-            ],
-          );
+            _ => const LoadingWidget(),
+          };
         },
       ),
     );
   }
 
-  Widget _buildFooterWidget() {
-    const textStyle = TextStyle(fontSize: 11, color: Colors.white);
-    return ValueListenableBuilder(
-      valueListenable: _readBookCubit.readChapter,
-      builder: (context, value, child) {
-        if (value != null) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 34, vertical: 4),
-            color: Colors.black54,
-            child: Row(
-              children: [
-                Text(
-                  "${value.index + 1}/${_readBookCubit.chapters.length}",
-                  style: textStyle,
-                ),
-                ValueListenableBuilder(
-                  valueListenable: _readBookCubit.contentPaginationValue,
-                  builder: (context, value, child) {
-                    final text = value == null ? "1/1" : value.formatText;
-                    return Text(
-                      text,
-                      style: textStyle,
-                      textAlign: TextAlign.right,
-                    );
-                  },
-                )
-              ].expandedEqually().toList(),
+  @override
+  void dispose() {
+    // SystemUtils.setSystemNavigationBarColor(colorScheme.background);
+    super.dispose();
+  }
+}
+
+class _ReadChapter extends StatelessWidget {
+  const _ReadChapter({required this.readBookCubit});
+  final ReadBookCubit readBookCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<ReadBookCubit, ReadBookState>(
+      listenWhen: (previous, current) =>
+          previous.readChapter != current.readChapter,
+      listener: (context, state) {
+        if (state.readChapter?.status == StatusType.init) {
+          readBookCubit.getContentsChapter();
+        }
+      },
+      buildWhen: (previous, current) =>
+          previous.readChapter != current.readChapter,
+      builder: (context, state) {
+        if (state.readChapter == null) {
+          return const Center(
+            child: Text(
+              "ERROR",
+              style: TextStyle(fontSize: 27, color: Colors.red),
             ),
           );
         }
-        return const SizedBox();
+        return switch (state.readChapter!.status) {
+          StatusType.loading => const LoadingWidget(),
+          StatusType.error => const Center(
+              child: Text(
+                "ERROR",
+                style: TextStyle(fontSize: 27, color: Colors.red),
+              ),
+            ),
+          StatusType.loaded => switch (readBookCubit.book.type) {
+              BookType.comic => ReadChapterWidget(
+                  chapter: state.readChapter!.chapter,
+                ),
+              _ => const SizedBox(),
+            },
+          _ => const LoadingWidget()
+        };
       },
     );
-  }
-
-  @override
-  void dispose() {
-    SystemUtils.setSystemNavigationBarColor(colorScheme.background);
-    super.dispose();
   }
 }

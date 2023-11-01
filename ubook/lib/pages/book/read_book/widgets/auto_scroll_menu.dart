@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ubook/app/config/app_type.dart';
 import 'package:ubook/app/extensions/extensions.dart';
 
 import '../cubit/read_book_cubit.dart';
 
-class AutoScrollMenuWidget extends StatelessWidget {
-  const AutoScrollMenuWidget({super.key});
+class AutoScrollMenu extends StatelessWidget {
+  const AutoScrollMenu({super.key, required this.readBookCubit});
+  final ReadBookCubit readBookCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +18,6 @@ class AutoScrollMenuWidget extends StatelessWidget {
       width: 30,
       child: Column(
         children: [
-          // Container(
-          //   padding: const EdgeInsets.all(4),
-          //   decoration: BoxDecoration(
-          //       color: colorScheme.background,
-          //       borderRadius: BorderRadius.circular(4)),
-          //   child: const Text(
-          //     "269",
-          //     style: TextStyle(fontSize: 12),
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 12,
-          // ),
           Expanded(
               child: Container(
             decoration: BoxDecoration(
@@ -39,19 +26,16 @@ class AutoScrollMenuWidget extends StatelessWidget {
                     top: Radius.circular(20), bottom: Radius.circular(20))),
             child: RotatedBox(
                 quarterTurns: 1,
-                child: BlocBuilder<ReadBookCubit, ReadBookState>(
-                  builder: (context, state) {
-                    if (state is AutoScrollReadBook) {
-                      return Slider(
-                        min: 2,
-                        max: 40,
-                        onChanged:
-                            context.read<ReadBookCubit>().onChangeTimerScroll,
-                        value: state.timerScroll,
-                      );
-                    }
-                    return const SizedBox();
-                  },
+                child: ValueListenableBuilder(
+                  valueListenable: readBookCubit.timeAutoScroll,
+                  builder: (context, value, child) => Slider(
+                    min: 0.2,
+                    max: 30,
+                    onChanged: (value) {
+                      readBookCubit.onChangeTimerAutoScroll(value);
+                    },
+                    value: value,
+                  ),
                 )),
           )),
           const SizedBox(
@@ -62,15 +46,12 @@ class AutoScrollMenuWidget extends StatelessWidget {
               return true;
             },
             builder: (context, state) {
-              if (state is! AutoScrollReadBook) {
-                return const SizedBox();
-              }
               return GestureDetector(
                 onTap: () {
-                  if (state.scrollStatus == AutoScrollStatus.pause) {
-                    context.read<ReadBookCubit>().onPlayAutoScroll();
+                  if (state.controlStatus == ControlStatus.pause) {
+                    readBookCubit.onUnpauseAutoScroll();
                   } else {
-                    context.read<ReadBookCubit>().onPauseAutoScroll();
+                    readBookCubit.onPauseAutoScroll();
                   }
                 },
                 child: Container(
@@ -79,7 +60,7 @@ class AutoScrollMenuWidget extends StatelessWidget {
                       color: colorScheme.background,
                       borderRadius: BorderRadius.circular(4)),
                   alignment: Alignment.center,
-                  child: Icon(state.scrollStatus == AutoScrollStatus.pause
+                  child: Icon(state.controlStatus == ControlStatus.pause
                       ? Icons.play_arrow
                       : Icons.pause),
                 ),
@@ -91,7 +72,7 @@ class AutoScrollMenuWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              context.read<ReadBookCubit>().onCloseAutoScroll();
+              readBookCubit.onCloseAutoScroll();
             },
             child: Container(
               height: 30,

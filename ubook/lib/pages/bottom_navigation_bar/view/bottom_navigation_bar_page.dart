@@ -1,8 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/pages/bookmarks/bookmarks.dart';
-import 'package:ubook/pages/home/view/home_view.dart';
+import 'package:ubook/pages/discovery/discovery.dart';
 import '../cubit/bottom_navigation_bar_cubit.dart';
 
 class BottomNavigationBarPage extends StatefulWidget {
@@ -24,7 +25,7 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = [const BookmarksView(), const HomeView()];
+    final tabs = [const BookmarksView(), const DiscoveryView()];
     return BlocBuilder<BottomNavigationBarCubit, BottomNavigationBarState>(
       buildWhen: (previous, current) =>
           previous.indexSelected != current.indexSelected,
@@ -41,16 +42,16 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
                   _bottomNavigationBarCubit.onChangeIndexSelected,
               selectedIndex: state.indexSelected,
               backgroundColor: context.colorScheme.background,
-              destinations: const <NavigationDestination>[
+              destinations: <NavigationDestination>[
                 NavigationDestination(
-                  selectedIcon: Icon(Icons.bookmark),
-                  icon: Icon(Icons.bookmark_border),
-                  label: 'Unlearn',
+                  selectedIcon: const Icon(Icons.bookmark),
+                  icon: const Icon(Icons.bookmark_border),
+                  label: 'bookmark.title'.tr(),
                 ),
                 NavigationDestination(
-                  selectedIcon: Icon(Icons.home_rounded),
-                  icon: Icon(Icons.home_outlined),
-                  label: 'Home',
+                  selectedIcon: const Icon(Icons.widgets_rounded),
+                  icon: const Icon(Icons.widgets_outlined),
+                  label: "discovery.title".tr(),
                 ),
               ],
             ),

@@ -64,7 +64,7 @@ class SelectExtensionBottomSheet extends StatelessWidget {
                           Row(
                             children: [
                               const Expanded(child: SizedBox()),
-                              Text("Các tiện ích đã cài đặt",
+                              Text("Tiện ích sẵn có",
                                   style: textTheme.titleMedium),
                               Expanded(
                                   child: Align(

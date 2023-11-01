@@ -3,20 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/extensions/extensions.dart';
 import 'package:ubook/pages/book/read_book/cubit/read_book_cubit.dart';
 
-class BottomBaseMenuWidget extends StatefulWidget {
-  const BottomBaseMenuWidget({super.key});
-
-  @override
-  State<BottomBaseMenuWidget> createState() => _BottomBaseMenuWidgetState();
-}
-
-class _BottomBaseMenuWidgetState extends State<BottomBaseMenuWidget> {
-  late ReadBookCubit _readBookCubit;
-  @override
-  void initState() {
-    _readBookCubit = context.read<ReadBookCubit>();
-    super.initState();
-  }
+class BottomBaseMenuWidget extends StatelessWidget {
+  const BottomBaseMenuWidget({super.key, required this.readBookCubit});
+  final ReadBookCubit readBookCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -28,90 +17,98 @@ class _BottomBaseMenuWidgetState extends State<BottomBaseMenuWidget> {
       decoration: BoxDecoration(
           color: colorScheme.background,
           border: Border(top: BorderSide(color: colorScheme.background))),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(
-            height: 16,
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: ValueListenableBuilder(
-                valueListenable: _readBookCubit.readChapter,
-                builder: (context, value, child) {
-                  if (value == null) const SizedBox();
-                  return Text(
-                    value!.title,
-                    textAlign: TextAlign.center,
-                  );
-                },
-              )),
-            ],
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          Row(
+      child: BlocBuilder<ReadBookCubit, ReadBookState>(
+        buildWhen: (previous, current) =>
+            previous.readChapter != current.readChapter,
+        builder: (context, state) {
+          final chapter = state.readChapter!.chapter;
+          double valueSlider = chapter.index.toDouble();
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(
-                width: 12,
+                height: 16,
               ),
-              IconButton(
-                  onPressed: () {
-                    context.read<ReadBookCubit>().onPreviousPage();
-                  },
-                  icon: const Icon(Icons.skip_previous)),
-              Expanded(
-                  child: ValueListenableBuilder(
-                valueListenable: _readBookCubit.readChapter,
-                builder: (context, value, child) => Slider(
-                  min: 0,
-                  value: value?.index == null ? 0 : value!.index.toDouble(),
-                  max: (_readBookCubit.chapters.length - 1).toDouble(),
-                  onChanged: (value) => context
-                      .read<ReadBookCubit>()
-                      .onChangeChaptersSlider(value.toInt()),
+              StatefulBuilder(
+                builder: (context, setState) => Column(
+                  children: [
+                    Row(
+                      children: [
+                        // Text("3/33"),
+                        Expanded(
+                            child: Text(
+                          state.chapters[valueSlider.toInt()].title,
+                          textAlign: TextAlign.center,
+                        )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 12,
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              readBookCubit.onPreviousChapter();
+                            },
+                            icon: const Icon(Icons.skip_previous)),
+                        Expanded(
+                          child: Slider(
+                            min: 0,
+                            value: valueSlider,
+                            label: "3",
+                            max: (state.chapters.length - 1).toDouble(),
+                            onChanged: (value) {
+                              setState(() {
+                                valueSlider = value;
+                              });
+                              readBookCubit
+                                  .onChangeChaptersSlider(valueSlider.toInt());
+                            },
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              readBookCubit.onNextChapter();
+                            },
+                            icon: const Icon(Icons.skip_next)),
+                        const SizedBox(
+                          width: 12,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              )),
-              IconButton(
-                  onPressed: () {
-                    context.read<ReadBookCubit>().onNextPage();
-                  },
-                  icon: const Icon(Icons.skip_next)),
+              ),
               const SizedBox(
-                width: 12,
+                height: 8,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          readBookCubit.onHideCurrentMenu();
+                          Scaffold.of(context).openDrawer();
+                        },
+                        icon: const Icon(Icons.format_list_bulleted)),
+                    IconButton(
+                        onPressed: () {}, icon: const Icon(Icons.headphones)),
+                    IconButton(
+                        onPressed: () async {},
+                        icon: const Icon(Icons.settings))
+                  ].expandedEqually().toList(),
+                ),
               ),
             ],
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      context.read<ReadBookCubit>().onHideCurrentMenu();
-                      Scaffold.of(context).openDrawer();
-                    },
-                    icon: const Icon(Icons.format_list_bulleted)),
-                IconButton(
-                    onPressed: () {
-                      // context.read<ReadBookCubit>().onEnableMedia();
-                    },
-                    icon: const Icon(Icons.headphones)),
-                IconButton(
-                    onPressed: () async {
-                      // Navigator.pushNamed(context, NameRoutes.mediaSettings);
-                    },
-                    icon: const Icon(Icons.settings))
-              ].expandedEqually().toList(),
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
