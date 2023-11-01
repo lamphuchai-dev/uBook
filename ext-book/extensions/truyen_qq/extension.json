@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "name": "Truyện QQ",
+    "author": "uBook",
+    "slug": "truyen_qq",
+    "version": 1,
+    "source": "https://truyenqqvn.com",
+    "regexp": "(truyenqqvn).(com)",
+    "description": "Đọc truyện trên trang Truyện QQ",
+    "locale": "vi_VN",
+    "language": "javascript",
+    "type": "comic",
+    "tabsHome": [
+      {
+        "title": "Truyện Mới cập nhật",
+        "url": "/truyen-moi-cap-nhat.html"
+      },
+      { "title": "Top Ngày", "url": "/top-ngay.html" },
+      { "title": "Top Tuần", "url": "/top-tuan.html" },
+      { "title": "Top Tháng", "url": "/top-thang.html" },
+      { "title": "Truyện Yêu Thích", "url": "/truyen-yeu-thich.html" },
+      { "title": "Truyện Tranh Mới", "url": "/truyen-tranh-moi.html" },
+      { "title": "Truyện Hoàn Thành", "url": "/truyen-hoan-thanh.html" },
+      { "title": "Truyện Ngẫu Nhiên", "url": "/truyen-ngau-nhien.html" }
+    ],
+    "search": "true",
+    "genre": "true"
+  },
+  "script": {
+    "home": "src/home.js",
+    "detail": "src/detail.js",
+    "chapters": "src/chapters.js",
+    "chapter": "src/chapter.js",
+    "search": "src/search.js",
+    "genre": "src/genre.js"
+  }
+}
