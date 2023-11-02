@@ -122,7 +122,6 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
   }
 
   Widget get _leadingCardWidget {
-    print(widget.metadataExt.path);
     if (widget.metadataExt.icon == "") {
       return const SizedBox();
     }

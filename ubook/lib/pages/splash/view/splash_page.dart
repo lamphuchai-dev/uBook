@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/widgets/widgets.dart';
+
 import '../cubit/splash_cubit.dart';
 
 class SplashPage extends StatefulWidget {
@@ -29,6 +30,7 @@ class _SplashPageState extends State<SplashPage> {
             Navigator.pushReplacementNamed(context, RoutesName.installExt);
           }
         },
+
         // child: const ListTest(),
         // child: Center(
         //   child:

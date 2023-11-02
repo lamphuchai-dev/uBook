@@ -139,6 +139,9 @@ class _ReadChapter extends StatelessWidget {
               BookType.comic => ReadChapterWidget(
                   chapter: state.readChapter!.chapter,
                 ),
+              BookType.video => ReadVideoChapter(
+                  chapter: state.readChapter!.chapter,
+                ),
               _ => const SizedBox(),
             },
           _ => const LoadingWidget()

@@ -150,11 +150,16 @@ class Book {
     return Book.fromMap({...map, "type": "novel"});
   }
 
+  factory Book.fromMapVideo(Map<String, dynamic> map) {
+    return Book.fromMap({...map, "type": "video"});
+  }
+
   factory Book.fromExtensionType(
       ExtensionType extType, Map<String, dynamic> map) {
     return switch (extType) {
       ExtensionType.comic => Book.fromMapComic(map),
       ExtensionType.novel => Book.fromMapNovel(map),
+      ExtensionType.video => Book.fromMapVideo(map),
     };
   }
   String toJson() => json.encode(toMap());

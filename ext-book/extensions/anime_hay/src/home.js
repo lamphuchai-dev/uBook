@@ -24,5 +24,3 @@ async function home(url, page) {
   }
   return result;
 }
-
-runFn(() => home("https://animehay.city"));

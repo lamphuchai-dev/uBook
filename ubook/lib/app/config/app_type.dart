@@ -6,6 +6,6 @@ enum MediaStatus { init, start, pause, complete, stop, error }
 
 enum AutoScrollStatus { init, start, pause, complete, stop, error }
 
-enum ExtensionType { comic, novel }
+enum ExtensionType { comic, novel, video }
 
 enum SortChapterType { newChapter, lastChapter }
