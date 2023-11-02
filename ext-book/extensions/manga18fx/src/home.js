@@ -3,7 +3,11 @@ async function home(url, page) {
     if (page == 0) {
       page = 1;
     }
-    url = url + `/page/${page}`;
+    if (url.includes("manga-genre")) {
+      url = url + `/${page}`;
+    } else {
+      url = url + `/page/${page}`;
+    }
   }
   const res = await Extension.request(url);
   const lstEl = await Extension.querySelectorAll(res, "div.page-item");
@@ -18,7 +22,7 @@ async function home(url, page) {
     );
     var description = await await Extension.querySelector(
       html,
-      "div.bsx-item div.bigor-manga div.list-chapter div"
+      "div.bsx-item div.bigor-manga div.list-chapter div span.chapter a"
     ).text;
 
     var name = await Extension.querySelector(

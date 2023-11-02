@@ -177,7 +177,7 @@
         "name": "Manga18fx",
         "author": "uBook",
         "slug": "manga18fx",
-        "version": 2,
+        "version": 3,
         "source": "https://manga18fx.com",
         "regexp": "(manga18fx).(com)",
         "description": "Đọc truyện 18+ trên trang Manga18fx",
