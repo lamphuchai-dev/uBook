@@ -190,6 +190,7 @@
                 "url": "/latest-release"
             }
         ],
+        "tag": "18+",
         "search": "true",
         "genre": "true",
         "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18_club/extension.zip",

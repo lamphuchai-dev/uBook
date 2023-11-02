@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/models.dart';
 import 'package:ubook/pages/book/read_book/cubit/read_book_cubit.dart';
 import 'package:ubook/widgets/cache_network_image.dart';
@@ -25,7 +25,7 @@ class _ReadChapterWidgetState extends State<ReadChapterWidget> {
   late final ReadBookCubit _readBookCubit;
   late ScrollController _scrollController;
 
-  ValueNotifier<ContentsPage> _contentsPage = ValueNotifier(const ContentsPage(
+  final ValueNotifier<ContentsPage> _contentsPage = ValueNotifier(const ContentsPage(
       maxScrollExtent: 0, pages: 0, currentPage: 0, show: false));
 
   double? _heightScreen;

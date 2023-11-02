@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:ubook/data/models/script.dart';
+import 'package:ubook/utils/directory_utils.dart';
 
 import 'metadata.dart';
 
@@ -58,4 +59,16 @@ class Extension {
 
 extension ExtExtension on Extension {
   String get source => metadata.source;
+  String get getHomeScript =>
+      DirectoryUtils.fileToString("${metadata.localPath}/${script.home}");
+  String get getDetailScript =>
+      DirectoryUtils.fileToString("${metadata.localPath}/${script.detail}");
+  String get getChaptersScript =>
+      DirectoryUtils.fileToString("${metadata.localPath}/${script.chapters}");
+  String get getChapterScript =>
+      DirectoryUtils.fileToString("${metadata.localPath}/${script.chapter}");
+  String get getGenreScript =>
+      DirectoryUtils.fileToString("${metadata.localPath}/${script.genre}");
+  String get getSearchScript =>
+      DirectoryUtils.fileToString("${metadata.localPath}/${script.search}");
 }

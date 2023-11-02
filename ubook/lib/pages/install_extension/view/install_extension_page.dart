@@ -1,7 +1,7 @@
 // ignore_for_file: unused_element, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/widgets/widgets.dart';
 import '../widgets/widgets.dart';
 

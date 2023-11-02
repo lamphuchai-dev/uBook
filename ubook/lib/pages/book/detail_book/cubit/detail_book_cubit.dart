@@ -9,7 +9,6 @@ import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/services/extensions_service.dart';
 import 'package:ubook/services/js_runtime.dart';
 import 'package:ubook/services/database_service.dart';
-import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 import 'package:ubook/widgets/widgets.dart';
 
@@ -50,7 +49,7 @@ class DetailBookCubit extends Cubit<DetailBookState> {
       emit(state.copyWith(statusType: StatusType.loading));
       final result = await _jsRuntime.detail(
           url: state.book.bookUrl,
-          jsScript: DirectoryUtils.getJsScriptByPath(extension.script.detail),
+          jsScript: extension.getDetailScript,
           extType: extension.metadata.type);
       emit(state.copyWith(book: result, statusType: StatusType.loaded));
     } catch (error) {
@@ -77,7 +76,7 @@ class DetailBookCubit extends Cubit<DetailBookState> {
       final chapters = await _jsRuntime.getChapters(
         url: state.book.bookUrl,
         bookId: bookId,
-        jsScript: DirectoryUtils.getJsScriptByPath(extension.script.chapters),
+        jsScript: extension.getChaptersScript,
       );
 
       if (chapters.isEmpty) return false;

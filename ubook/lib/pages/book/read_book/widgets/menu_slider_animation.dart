@@ -3,8 +3,6 @@ import 'package:ubook/utils/system_utils.dart';
 
 import '../cubit/read_book_cubit.dart';
 
-
-
 class MenuSliderAnimation extends StatefulWidget {
   const MenuSliderAnimation(
       {super.key,

@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:isar/isar.dart';
 
-
 class Genre {
   Id? id;
   final String? title;

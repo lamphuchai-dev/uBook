@@ -13,6 +13,7 @@ class SplashCubit extends Cubit<SplashState> {
   void onInit() async {
     emit(const LoadingLocalExts());
     await _extensionsService.loadLocalExtension();
+    // DirectoryUtils.loadExtensionByAppDir();
     emit(const LoadedLocalExts());
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ubook/app/constants/dimens.dart';
 import 'package:ubook/app/constants/gaps.dart';
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/book.dart';
 import 'package:ubook/widgets/cache_network_image.dart';
 

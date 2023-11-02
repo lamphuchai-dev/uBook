@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 
 class BaseBottomSheetUi extends StatelessWidget {
   const BaseBottomSheetUi({super.key, required this.child});

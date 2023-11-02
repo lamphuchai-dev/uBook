@@ -12,7 +12,6 @@ import 'package:ubook/services/database_service.dart';
 import 'package:ubook/services/extensions_service.dart';
 import 'package:ubook/services/js_runtime.dart';
 import 'package:ubook/utils/device_utils.dart';
-import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 import 'package:ubook/utils/system_utils.dart';
 import 'package:ubook/widgets/widgets.dart';
@@ -232,8 +231,7 @@ class ReadBookCubit extends Cubit<ReadBookState> {
         emit(state.copyWith(readChapter: readChapter));
         List<String> result = await _jsRuntime.chapter(
             url: readChapter.chapter.url,
-            jsScript:
-                DirectoryUtils.getJsScriptByPath(_extension!.script.chapter));
+            jsScript: _extension!.getChapterScript);
         readChapter = readChapter.copyWith(
             chapter: readChapter.chapter.copyWith(
               content: result,
@@ -293,9 +291,7 @@ class ReadBookCubit extends Cubit<ReadBookState> {
       toastDuration: const Duration(seconds: 2),
     );
     final lstChapter = await _jsRuntime.getChapters(
-        url: book.bookUrl,
-        jsScript:
-            DirectoryUtils.getJsScriptByPath(_extension!.script.chapters));
+        url: book.bookUrl, jsScript: _extension!.getChaptersScript);
     if (lstChapter.length > state.chapters.length) {
       if (book.bookmark && book.id != null) {
         List<Chapter> newChapters = lstChapter

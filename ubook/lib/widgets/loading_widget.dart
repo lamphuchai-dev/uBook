@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 
 class LoadingWidget extends StatefulWidget {
   const LoadingWidget({

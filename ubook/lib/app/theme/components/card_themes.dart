@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/constants.dart';
+
 class CardThemes {
   static CardTheme light = CardTheme(
       color: AppColors.light.cardBackground,

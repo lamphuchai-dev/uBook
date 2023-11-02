@@ -8,7 +8,6 @@ import 'package:ubook/data/models/genre.dart';
 import 'package:ubook/services/extensions_service.dart';
 import 'package:ubook/services/js_runtime.dart';
 import 'package:ubook/services/storage_service.dart';
-import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 
 part 'discovery_state.dart';
@@ -45,7 +44,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       }
     });
   }
-  final _logger = Logger("HomeCubit");
+  final _logger = Logger("DiscoveryCubit");
 
   late StreamSubscription _streamSubscription;
   final StorageService _storageService;
@@ -84,12 +83,10 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
     try {
       url = "${state.extension.source}$url";
-      final jsScript =
-          DirectoryUtils.getJsScriptByPath(state.extension.script.home);
       final result = await _jsRuntime.listBook(
           url: url,
           page: page,
-          jsScript: jsScript,
+          jsScript: state.extension.getHomeScript,
           extType: state.extension.metadata.type);
       return result;
     } catch (error) {
@@ -103,10 +100,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     if (state is! LoadedExtensionState) return [];
 
     try {
-      final jsScript =
-          DirectoryUtils.getJsScriptByPath(state.extension.script.genre!);
       final result = await _jsRuntime.genre(
-          url: state.extension.source, jsScript: jsScript);
+          url: state.extension.source,
+          jsScript: state.extension.getGenreScript);
       return result;
     } catch (error) {
       _logger.error(error, name: "onGetListGenre");
@@ -123,8 +119,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           keyWord: keyWord,
           page: page,
           extType: state.extension.metadata.type,
-          jsScript:
-              DirectoryUtils.getJsScriptByPath(state.extension.script.search!));
+          jsScript: state.extension.getSearchScript);
     } catch (error) {
       _logger.error(error, name: "onGetListBook");
     }

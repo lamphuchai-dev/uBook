@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/chapter.dart';
 import 'package:ubook/widgets/widgets.dart';
 

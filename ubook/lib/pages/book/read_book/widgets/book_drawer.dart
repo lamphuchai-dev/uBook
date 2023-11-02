@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/constants/gaps.dart';
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/data/models/book.dart';
 import 'package:ubook/pages/book/detail_book/detail_book.dart';

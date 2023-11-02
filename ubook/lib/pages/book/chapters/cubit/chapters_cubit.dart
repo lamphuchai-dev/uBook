@@ -5,7 +5,6 @@ import 'package:ubook/data/models/book.dart';
 import 'package:ubook/data/models/chapter.dart';
 import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/services/js_runtime.dart';
-import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 
 part 'chapters_state.dart';
@@ -30,10 +29,7 @@ class ChaptersCubit extends Cubit<ChaptersState> {
     emit(state.copyWith(statusType: StatusType.loading));
     try {
       List<Chapter> chapters = await _jsRuntime.getChapters(
-          url: book.bookUrl,
-          jsScript:
-              DirectoryUtils.getJsScriptByPath(extensionModel.script.chapters));
-      // chapters = sort(chapters, SortChapterType.newChapter);
+          url: book.bookUrl, jsScript: extensionModel.getChaptersScript);
       emit(state.copyWith(
           chapters: chapters,
           sortType: SortChapterType.lastChapter,

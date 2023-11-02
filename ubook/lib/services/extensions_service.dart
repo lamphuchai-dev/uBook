@@ -6,10 +6,9 @@ import 'package:archive/archive_io.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_client/index.dart';
 import 'package:ubook/app/config/app_config.dart';
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/extension.dart';
 import 'package:ubook/data/models/metadata.dart';
-import 'package:ubook/data/models/script.dart';
 import 'package:ubook/utils/directory_utils.dart';
 import 'package:ubook/utils/logger.dart';
 
@@ -32,7 +31,8 @@ class ExtensionsService {
     for (var item in dir) {
       final extFile = File("${item.path}/extension.json");
       final ext = Extension.fromJson(extFile.readAsStringSync());
-      exts.add(ext);
+      exts.add(
+          ext.copyWith(metadata: ext.metadata.copyWith(localPath: item.path)));
     }
     _logger.log("exts = ${exts.length}", name: "loadLocalExtension");
     _exts = exts;
@@ -51,7 +51,6 @@ class ExtensionsService {
           final contentString = utf8.decode(fileExt.content as List<int>);
           Extension ext = Extension.fromJson(contentString);
           final path = await DirectoryUtils.getDirectoryExtensions;
-          Script script = ext.script;
           final pathExt = "$path/${ext.metadata.slug}";
           for (final file in archive) {
             final filename = file.name;
@@ -61,25 +60,11 @@ class ExtensionsService {
               File(pathFile)
                 ..createSync(recursive: true)
                 ..writeAsBytesSync(data);
-              if (ext.script.home == filename) {
-                script.home = pathFile;
-              } else if (ext.script.detail == filename) {
-                script.detail = pathFile;
-              } else if (ext.script.chapters == filename) {
-                script.chapters = pathFile;
-              } else if (ext.script.chapter == filename) {
-                script.chapter = pathFile;
-              } else if (ext.script.search == filename) {
-                script.search = pathFile;
-              } else if (ext.script.genre == filename) {
-                script.genre = pathFile;
-              }
             } else {
               Directory(pathFile).create(recursive: true);
             }
           }
           ext = ext.copyWith(
-              script: script,
               metadata: ext.metadata.copyWith(
                   localPath: pathExt, path: url, icon: "$pathExt/icon.png"));
           File("$pathExt/$fileExt")

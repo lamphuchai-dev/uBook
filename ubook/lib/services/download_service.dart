@@ -142,8 +142,8 @@ class DownloadBook {
   late final StreamSubscription<dynamic> _subscription;
 
   Future<List<String>> getContentsChapter(String chapterUrl) async {
-    final jsScript = DirectoryUtils.getJsScriptByPath(extension.script.chapter);
-    return await jsRuntime.chapter(url: chapterUrl, jsScript: jsScript);
+    return await jsRuntime.chapter(
+        url: chapterUrl, jsScript: extension.getChaptersScript);
   }
 
   void onStartDownload(List<Chapter> chapters) async {

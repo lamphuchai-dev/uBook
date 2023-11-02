@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/config/app_type.dart';
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/book.dart';
 import 'package:ubook/widgets/widgets.dart';
 import '../cubit/read_book_cubit.dart';

@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ubook/app/constants/dimens.dart';
 import 'package:ubook/app/constants/gaps.dart';
-import 'package:ubook/app/extensions/extensions.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/models.dart';
 import 'package:ubook/widgets/widgets.dart';
 
@@ -73,6 +73,21 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
                 Text(
                   uri.host,
                   style: textTheme.bodySmall,
+                ),
+                Gaps.hGap4,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  decoration: BoxDecoration(
+                      color: colorScheme.primary.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: colorScheme.primary,
+                      )),
+                  child: Text(
+                    widget.metadataExt.type.name.toTitleCase(),
+                    style: textTheme.labelSmall?.copyWith(fontSize: 8),
+                  ),
                 )
               ],
             ),

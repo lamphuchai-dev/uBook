@@ -48,9 +48,18 @@ class DirectoryUtils {
     return Directory(path);
   }
 
-  static String getJsScriptByPath(String path) {
+  // static String getJsScriptByPath(String path) {
+  //   try {
+  //     final file = File(path);
+  //     return file.readAsStringSync();
+  //   } catch (error) {
+  //     rethrow;
+  //   }
+  // }
+
+  static String fileToString(String filePath) {
     try {
-      final file = File(path);
+      final file = File(filePath);
       return file.readAsStringSync();
     } catch (error) {
       rethrow;

@@ -19,24 +19,25 @@ class Metadata {
   String path;
   String icon;
   String localPath;
+  String? tag;
 
   List<TabsHome> tabsHome;
-  Metadata({
-    required this.name,
-    required this.author,
-    required this.slug,
-    required this.version,
-    required this.source,
-    required this.regexp,
-    required this.description,
-    required this.locale,
-    required this.language,
-    required this.type,
-    required this.path,
-    required this.icon,
-    required this.localPath,
-    required this.tabsHome,
-  });
+  Metadata(
+      {required this.name,
+      required this.author,
+      required this.slug,
+      required this.version,
+      required this.source,
+      required this.regexp,
+      required this.description,
+      required this.locale,
+      required this.language,
+      required this.type,
+      required this.path,
+      required this.icon,
+      required this.localPath,
+      required this.tabsHome,
+      this.tag});
 
   Metadata copyWith({
     String? name,
@@ -53,23 +54,24 @@ class Metadata {
     String? icon,
     String? localPath,
     List<TabsHome>? tabsHome,
+    String? tag,
   }) {
     return Metadata(
-      name: name ?? this.name,
-      author: author ?? this.author,
-      slug: slug ?? this.slug,
-      version: version ?? this.version,
-      source: source ?? this.source,
-      regexp: regexp ?? this.regexp,
-      description: description ?? this.description,
-      locale: locale ?? this.locale,
-      language: language ?? this.language,
-      type: type ?? this.type,
-      path: path ?? this.path,
-      localPath: localPath ?? this.localPath,
-      icon: icon ?? this.icon,
-      tabsHome: tabsHome ?? this.tabsHome,
-    );
+        name: name ?? this.name,
+        author: author ?? this.author,
+        slug: slug ?? this.slug,
+        version: version ?? this.version,
+        source: source ?? this.source,
+        regexp: regexp ?? this.regexp,
+        description: description ?? this.description,
+        locale: locale ?? this.locale,
+        language: language ?? this.language,
+        type: type ?? this.type,
+        path: path ?? this.path,
+        localPath: localPath ?? this.localPath,
+        icon: icon ?? this.icon,
+        tabsHome: tabsHome ?? this.tabsHome,
+        tag: tag ?? this.tag);
   }
 
   Map<String, dynamic> toMap() {
@@ -88,6 +90,7 @@ class Metadata {
       'localPath': localPath,
       'icon': icon,
       'tabsHome': tabsHome.map((x) => x.toMap()).toList(),
+      'tag': tag,
     };
   }
 
@@ -116,6 +119,7 @@ class Metadata {
               ),
             )
           : [],
+      tag: map['tag'],
     );
   }
 
@@ -141,6 +145,7 @@ class Metadata {
         other.path == path &&
         other.icon == icon &&
         other.localPath == localPath &&
+        other.tag == tag &&
         listEquals(other.tabsHome, tabsHome);
   }
 
@@ -159,12 +164,13 @@ class Metadata {
         path.hashCode ^
         icon.hashCode ^
         localPath.hashCode ^
+        tag.hashCode ^
         tabsHome.hashCode;
   }
 
   @override
   String toString() {
-    return 'Metadata(name: $name, author: $author, slug: $slug, version: $version, source: $source, regexp: $regexp, description: $description, locale: $locale, language: $language, type: $type, path: $path, icon: $icon, localPath: $localPath, tabsHome: $tabsHome)';
+    return 'Metadata(name: $name, author: $author, slug: $slug, version: $version, source: $source, regexp: $regexp, description: $description, locale: $locale, language: $language, type: $type, path: $path, icon: $icon, localPath: $localPath, tag: $tag, tabsHome: $tabsHome)';
   }
 }
 
