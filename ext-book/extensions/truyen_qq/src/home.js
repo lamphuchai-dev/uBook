@@ -5,7 +5,7 @@ async function home(url, page) {
     }
     url = url.replace(".html", `/trang-${page}.html`);
   }
-  console.log(url);
+
 
   const res = await Extension.request(url);
   const lstEl = await Extension.querySelectorAll(res, "ul.list_grid.grid li");
