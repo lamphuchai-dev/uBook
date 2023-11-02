@@ -42,11 +42,13 @@ class _EmptyListDataWidgetState extends State<EmptyListDataWidget> {
         physics: const AlwaysScrollableScrollPhysics(),
         child: SizedBox(
           height: constraints.maxHeight,
+          width: constraints.maxWidth,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 height: constraints.maxHeight * 0.3,
+                width: constraints.maxWidth,
                 child: FutureBuilder(
                   future: _future,
                   builder: (context, snapshot) {

@@ -9,7 +9,7 @@ import 'package:ubook/data/models/genre.dart';
 
 part 'book.g.dart';
 
-enum BookType { novel, comic }
+enum BookType { novel, comic, video }
 
 // flutter clean && flutter pub get && flutter pub run build_runner build
 @Collection()

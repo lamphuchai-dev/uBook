@@ -230,5 +230,27 @@
         "genre": "true",
         "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18_club/extension.zip",
         "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18_club/icon.png"
+    },
+    {
+        "name": "Anime Hay",
+        "author": "uBook",
+        "slug": "anime_hay",
+        "version": 1,
+        "source": "https://animehay.city",
+        "regexp": "(animehay).(city)",
+        "description": "Xem anime trang Animehay",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "video",
+        "tabsHome": [
+            {
+                "title": "Truyện Mới cập nhật",
+                "url": "/phim-moi-cap-nhap.html"
+            }
+        ],
+        "search": "false",
+        "genre": "false",
+        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/anime_hay/extension.zip",
+        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/anime_hay/icon.png"
     }
 ]

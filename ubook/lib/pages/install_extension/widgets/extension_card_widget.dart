@@ -7,6 +7,7 @@ import 'package:ubook/app/constants/gaps.dart';
 import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/models.dart';
 import 'package:ubook/pages/install_extension/widgets/info_extension_bottom_sheet.dart';
+import 'package:ubook/widgets/cache_network_image.dart';
 import 'package:ubook/widgets/widgets.dart';
 
 class ExtensionCardWidget extends StatefulWidget {
@@ -121,6 +122,7 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
   }
 
   Widget get _leadingCardWidget {
+    print(widget.metadataExt.path);
     if (widget.metadataExt.icon == "") {
       return const SizedBox();
     }
@@ -133,7 +135,9 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
         if (file.existsSync()) {
           return Image.file(file);
         }
-        return const SizedBox();
+        final icon =
+            widget.metadataExt.path.replaceAll("extension.zip", "icon.png");
+        return CacheNetWorkImage(icon);
       } catch (e) {
         return const SizedBox();
       }
