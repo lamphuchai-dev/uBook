@@ -6,6 +6,7 @@ import 'package:ubook/app/constants/dimens.dart';
 import 'package:ubook/app/constants/gaps.dart';
 import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/models.dart';
+import 'package:ubook/pages/install_extension/widgets/info_extension_bottom_sheet.dart';
 import 'package:ubook/widgets/widgets.dart';
 
 class ExtensionCardWidget extends StatefulWidget {
@@ -43,57 +44,78 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
     final textTheme = context.appTextTheme;
     final uri = Uri.parse(widget.metadataExt.source);
 
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-          color: colorScheme.surface.withOpacity(0.5),
-          border: Border.all(color: colorScheme.surface),
-          borderRadius: BorderRadius.circular(Dimens.radius)),
-      child: Row(
-        children: [
-          Gaps.wGap8,
-          Container(
-            width: 40,
-            height: 40,
-            alignment: Alignment.center,
-            child: _leadingCardWidget,
-          ),
-          Gaps.wGap8,
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.metadataExt.name,
-                  style: textTheme.titleMedium,
-                ),
-                Text(
-                  uri.host,
-                  style: textTheme.bodySmall,
-                ),
-                Gaps.hGap4,
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  decoration: BoxDecoration(
-                      color: colorScheme.primary.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(
-                        color: colorScheme.primary,
-                      )),
-                  child: Text(
-                    widget.metadataExt.type.name.toTitleCase(),
-                    style: textTheme.labelSmall?.copyWith(fontSize: 8),
-                  ),
-                )
-              ],
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: (_) => InfoExtensionBottomSheet(
+                  metadata: widget.metadataExt,
+                ));
+      },
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+            color: colorScheme.surface.withOpacity(0.5),
+            border: Border.all(color: colorScheme.surface),
+            borderRadius: BorderRadius.circular(Dimens.radius)),
+        child: Row(
+          children: [
+            Gaps.wGap8,
+            Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              child: _leadingCardWidget,
             ),
-          ),
-          _tradingCardWidget(colorScheme),
-        ],
+            Gaps.wGap8,
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.metadataExt.name,
+                    style: textTheme.titleMedium,
+                  ),
+                  Text(
+                    uri.host,
+                    style: textTheme.bodySmall,
+                    maxLines: 2,
+                  ),
+                  Gaps.hGap4,
+                  Row(
+                    children: [
+                      TagExtension(
+                        text: "V${widget.metadataExt.version}",
+                        color: Colors.orange,
+                      ),
+                      Gaps.wGap8,
+                      TagExtension(
+                        text: widget.metadataExt.locale.split("_").last,
+                        color: Colors.teal,
+                      ),
+                      Gaps.wGap8,
+                      TagExtension(
+                        text: widget.metadataExt.type.name.toTitleCase(),
+                        color: colorScheme.primary,
+                      ),
+                      Gaps.wGap8,
+                      if (widget.metadataExt.tag != null)
+                        TagExtension(
+                          text: widget.metadataExt.tag!,
+                          color: colorScheme.error,
+                        ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            _tradingCardWidget(colorScheme),
+          ],
+        ),
       ),
     );
   }
@@ -108,7 +130,10 @@ class _ExtensionCardWidgetState extends State<ExtensionCardWidget> {
     } else {
       try {
         final file = File(widget.metadataExt.icon);
-        return Image.file(file);
+        if (file.existsSync()) {
+          return Image.file(file);
+        }
+        return const SizedBox();
       } catch (e) {
         return const SizedBox();
       }

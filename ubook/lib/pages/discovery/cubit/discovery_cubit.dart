@@ -32,14 +32,16 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         if (exts.isEmpty) {
           emit(ExtensionNoInstallState());
         } else {
-          emit(LoadedExtensionState(extension: exts.first));
+          // emit(LoadedExtensionState(extension: exts.first));
+          onInit();
         }
       } else if (state is ExtensionNoInstallState) {
         final exts = extensionManager.getExtensions;
         if (exts.isEmpty) {
           emit(ExtensionNoInstallState());
         } else {
-          emit(LoadedExtensionState(extension: exts.first));
+          // emit(LoadedExtensionState(extension: exts.first));
+          onInit();
         }
       }
     });

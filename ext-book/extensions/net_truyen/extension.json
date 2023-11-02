@@ -20,6 +20,15 @@
         "url": "/tim-truyen?status=-1&sort=15"
       },
       {
+        "title": "Top all",
+        "url": "/tim-truyen?status=-1&sort=10"
+      },
+      { "title": "Top tháng", "url": "/tim-truyen?status=-1&sort=11" },
+      { "title": "Top tuần", "url": "/tim-truyen?status=-1&sort=12" },
+      { "title": "Top ngày", "url": "/tim-truyen?status=-1&sort=13" },
+      { "title": "Theo dõi", "url": "/tim-truyen?status=-1&sort=20" },
+      { "title": "Bình luận", "url": "/tim-truyen?status=-1&sort=25" },
+      {
         "title": "Truyện Full",
         "url": "/truyen-full"
       },
@@ -34,16 +43,7 @@
       {
         "title": "Truyện con gái",
         "url": "/truyen-con-gai"
-      },
-      {
-        "title": "Top all",
-        "url": "/tim-truyen?status=-1&sort=10"
-      },
-      { "title": "Top tháng", "url": "/tim-truyen?status=-1&sort=11" },
-      { "title": "Top tuần", "url": "/tim-truyen?status=-1&sort=12" },
-      { "title": "Top ngày", "url": "/tim-truyen?status=-1&sort=13" },
-      { "title": "Theo dõi", "url": "/tim-truyen?status=-1&sort=20" },
-      { "title": "Bình luận", "url": "/tim-truyen?status=-1&sort=25" }
+      }
     ]
   },
   "script": {

@@ -41,10 +41,6 @@ async function detail(bookUrl) {
       lstElm[4].content,
       "div.summary-content"
     ).text;
-    statusBook = statusBook
-      .replace("                        ", "")
-      .replace("                    ", "")
-      .replace(/\n/g, "");
   }
 
   const description = await Extension.querySelector(
@@ -60,7 +56,7 @@ async function detail(bookUrl) {
     name,
     cover,
     bookUrl,
-    statusBook,
+    statusBook: statusBook.trim(),
     author,
     description,
     genres,

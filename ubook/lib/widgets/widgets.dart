@@ -11,3 +11,4 @@ export 'blurred_backdrop_image.dart';
 export 'genre_card_widget.dart';
 export 'toast_widget.dart';
 export 'animated_fade.dart';
+export './extension/tag_extension.dart';

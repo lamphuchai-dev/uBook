@@ -130,22 +130,6 @@
                 "url": "/tim-truyen?status=-1&sort=15"
             },
             {
-                "title": "Truyện Full",
-                "url": "/truyen-full"
-            },
-            {
-                "title": "Tất cả - Số chapter",
-                "url": "/tim-truyen?status=-1&sort=30"
-            },
-            {
-                "title": "Truyện con trai",
-                "url": "/truyen-con-trai"
-            },
-            {
-                "title": "Truyện con gái",
-                "url": "/truyen-con-gai"
-            },
-            {
                 "title": "Top all",
                 "url": "/tim-truyen?status=-1&sort=10"
             },
@@ -168,10 +152,49 @@
             {
                 "title": "Bình luận",
                 "url": "/tim-truyen?status=-1&sort=25"
+            },
+            {
+                "title": "Truyện Full",
+                "url": "/truyen-full"
+            },
+            {
+                "title": "Tất cả - Số chapter",
+                "url": "/tim-truyen?status=-1&sort=30"
+            },
+            {
+                "title": "Truyện con trai",
+                "url": "/truyen-con-trai"
+            },
+            {
+                "title": "Truyện con gái",
+                "url": "/truyen-con-gai"
             }
         ],
         "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/net_truyen/extension.zip",
         "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/net_truyen/icon.png"
+    },
+    {
+        "name": "Manga18fx",
+        "author": "uBook",
+        "slug": "manga18fx",
+        "version": 1,
+        "source": "https://manga18fx.com",
+        "regexp": "(manga18fx).(com)",
+        "description": "Đọc truyện 18+ trên trang Manga18fx",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "comic",
+        "tabsHome": [
+            {
+                "title": "Latest Release",
+                "url": "/"
+            }
+        ],
+        "tag": "18+",
+        "search": "true",
+        "genre": "true",
+        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18fx/extension.zip",
+        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18fx/icon.png"
     },
     {
         "name": "Manga18 Club",

@@ -89,9 +89,9 @@ class SelectExtensionBottomSheet extends StatelessWidget {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
-                                crossAxisSpacing: 12,
-                                mainAxisExtent: 58,
-                                mainAxisSpacing: 12),
+                                crossAxisSpacing: 8,
+                                mainAxisExtent: 60,
+                                mainAxisSpacing: 8),
                         itemBuilder: (context, index) {
                           final ext = extensions[index];
                           return ExtensionCard(
@@ -138,44 +138,88 @@ class ExtensionCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5),
-        decoration: BoxDecoration(
-            color: isPrimary
-                ? colorScheme.primary.withOpacity(0.7)
-                : colorScheme.surface,
-            borderRadius: Dimens.cardBookBorderRadius),
-        child: Row(
-          children: [
-            Gaps.wGap8,
-            SizedBox(
-              width: 40,
-              height: 40,
-              child: _leadingIcon,
-            ),
-            Gaps.wGap8,
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Positioned.fill(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              decoration: BoxDecoration(
+                  color: isPrimary
+                      ? colorScheme.primary.withOpacity(0.7)
+                      : colorScheme.surface,
+                  borderRadius: Dimens.cardBookBorderRadius),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    extension.metadata.name,
-                    style: textTheme.titleMedium,
+                  Gaps.wGap8,
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: _leadingIcon,
                   ),
+                  Gaps.wGap8,
                   Expanded(
-                    child: Text(
-                      uri.host,
-                      style: textTheme.labelSmall?.copyWith(
-                          fontWeight: FontWeight.normal, fontSize: 11),
-                      maxLines: 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          extension.metadata.name,
+                          style: textTheme.titleMedium,
+                        ),
+                        Gaps.hGap4,
+                        Text(
+                          uri.host,
+                          style: textTheme.labelSmall?.copyWith(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 10,
+                              height: 1),
+                          maxLines: 2,
+                        ),
+                      ],
                     ),
                   ),
+                  Gaps.wGap4,
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                decoration: BoxDecoration(
+                    color: colorScheme.primary.withOpacity(0.5),
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(8),
+                      bottomLeft: Radius.circular(8),
+                    )),
+                child: Text(
+                  extension.metadata.type.name.toTitleCase(),
+                  style: textTheme.labelSmall?.copyWith(fontSize: 8),
+                ),
+              )),
+          if (extension.metadata.tag != null)
+            Positioned(
+                bottom: 0,
+                left: 0,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                  decoration: BoxDecoration(
+                      color: colorScheme.error.withOpacity(0.5),
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                      )),
+                  child: Text(
+                    extension.metadata.tag!,
+                    style: textTheme.labelSmall?.copyWith(fontSize: 8),
+                  ),
+                ))
+        ],
       ),
     );
   }
