@@ -177,7 +177,7 @@
         "name": "Manga18fx",
         "author": "uBook",
         "slug": "manga18fx",
-        "version": 1,
+        "version": 2,
         "source": "https://manga18fx.com",
         "regexp": "(manga18fx).(com)",
         "description": "Đọc truyện 18+ trên trang Manga18fx",
@@ -188,6 +188,18 @@
             {
                 "title": "Latest Release",
                 "url": "/"
+            },
+            {
+                "title": "Manhwa Online",
+                "url": "/manga-genre/manhwa"
+            },
+            {
+                "title": "Manhua Online",
+                "url": "/manga-genre/manhua"
+            },
+            {
+                "title": "Manhwa Raw",
+                "url": "/manga-genre/raw"
             }
         ],
         "tag": "18+",

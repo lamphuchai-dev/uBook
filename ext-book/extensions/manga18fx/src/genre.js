@@ -1,7 +1,9 @@
 async function genre(url) {
   const res = await Extension.request(url);
-  const listEl = await Extension.querySelectorAll(res, "div.genre-menu ui li");
-
+  const listEl = await Extension.querySelectorAll(
+    res,
+    'div[class = "sub-menu genre-menu"] ul li'
+  );
   let result = [];
   for (const element of listEl) {
     result.push({
