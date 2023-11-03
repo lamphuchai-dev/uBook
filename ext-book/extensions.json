@@ -46,8 +46,8 @@
         ],
         "search": "true",
         "genre": "true",
-        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/truyen_qq/extension.zip",
-        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/truyen_qq/icon.png"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/truyen_qq/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/truyen_qq/icon.png"
     },
     {
         "name": "Say Truyện",
@@ -78,8 +78,8 @@
                 "url": "/genre/romance"
             }
         ],
-        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/say_truyen/extension.zip",
-        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/say_truyen/icon.png"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/say_truyen/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/say_truyen/icon.png"
     },
     {
         "name": "Phê truyện",
@@ -106,8 +106,8 @@
                 "url": "/completed"
             }
         ],
-        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/phe_truyen/extension.zip",
-        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/phe_truyen/icon.png"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/phe_truyen/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/phe_truyen/icon.png"
     },
     {
         "name": "Net Truyện",
@@ -170,8 +170,8 @@
                 "url": "/truyen-con-gai"
             }
         ],
-        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/net_truyen/extension.zip",
-        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/net_truyen/icon.png"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/net_truyen/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/net_truyen/icon.png"
     },
     {
         "name": "Manga18fx",
@@ -205,8 +205,8 @@
         "tag": "18+",
         "search": "true",
         "genre": "true",
-        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18fx/extension.zip",
-        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18fx/icon.png"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/manga18fx/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/manga18fx/icon.png"
     },
     {
         "name": "Manga18 Club",
@@ -228,13 +228,13 @@
         "tag": "18+",
         "search": "true",
         "genre": "true",
-        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18_club/extension.zip",
-        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18_club/icon.png"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/manga18_club/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/manga18_club/icon.png"
     },
     {
         "name": "HHTQ",
         "author": "uBook",
-        "slug": "hhtp",
+        "slug": "hhtq",
         "version": 1,
         "source": "https://hhhtq.net",
         "regexp": "(hhhtq).(net)",
@@ -269,8 +269,8 @@
             }
         ],
         "search": true,
-        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/hhtp/extension.zip",
-        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/hhtp/icon.png"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/hhtq/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/hhtq/icon.png"
     },
     {
         "name": "Anime Hay",
@@ -295,7 +295,7 @@
         ],
         "search": true,
         "genre": true,
-        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/anime_hay/extension.zip",
-        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/anime_hay/icon.png"
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/anime_hay/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/anime_hay/icon.png"
     }
 ]
