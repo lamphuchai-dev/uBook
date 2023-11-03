@@ -56,10 +56,10 @@ flutter_native_splash:
     # 768 pixels in diameter.
     # image: assets/icons/app_icon_android_12.png
     # icon_background_color_dark: "#FF9800"
-    icon_background_color: "#FF9800"
+    # icon_background_color: "#FF9800"
 
     # Splash screen background color.
-    color: "#FF9800"
+    # color: "#FF9800"
 
     # App icon background color.
     # icon_background_color: "#FF9800"

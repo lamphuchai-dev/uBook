@@ -16,13 +16,6 @@ class SystemUtils {
   }
 
   static Future<void> setPreferredOrientations() {
-    return SystemChrome.setPreferredOrientations([
-      // DeviceOrientation.portraitUp,
-      // DeviceOrientation.landscapeRight,
-    ]);
-  }
-
-  static Future<void> setDefaultPreferredOrientations() {
     return SystemChrome.setPreferredOrientations([]);
   }
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -146,6 +147,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
         .map(
           (tabHome) => KeepAliveWidget(
             child: BooksGridWidget(
+              key: ValueKey(tabHome.title),
               onFetchListBook: (page) {
                 return _discoveryCubit.onGetListBook(tabHome.url, page);
               },
@@ -159,8 +161,8 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
         )
         .toList();
     if (extension.script.genre != null) {
-      tabItems.add(const Tab(
-        text: "Thể loại",
+      tabItems.add(Tab(
+        text: "common.genre".tr(),
       ));
       tabChildren.add(KeepAliveWidget(
           child: GenreWidget(

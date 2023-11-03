@@ -415,6 +415,7 @@ class ReadBookCubit extends Cubit<ReadBookState> {
     timeAutoScroll.dispose();
     sliderTimeAutoScroll?.cancel();
     chaptersSliderTime?.cancel();
+    _menuAnimationController.dispose();
     DeviceUtils.disableWakelock();
     return super.close();
   }

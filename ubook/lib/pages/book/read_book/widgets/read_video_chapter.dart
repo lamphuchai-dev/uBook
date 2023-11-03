@@ -11,9 +11,8 @@ import 'package:ubook/utils/system_utils.dart';
 import '../cubit/read_book_cubit.dart';
 
 class ReadVideoChapter extends StatefulWidget {
-  const ReadVideoChapter({super.key, required this.chapter,required this.widthScreen});
+  const ReadVideoChapter({super.key, required this.chapter});
   final Chapter chapter;
-  final double widthScreen;
 
   @override
   State<ReadVideoChapter> createState() => _ReadVideoChapterState();
@@ -21,23 +20,14 @@ class ReadVideoChapter extends StatefulWidget {
 
 class _ReadVideoChapterState extends State<ReadVideoChapter> {
   late final player = Player();
-  // Create a [VideoController] to handle video output from [Player].
   late final controller = VideoController(player);
   late ReadBookCubit _readBookCubit;
 
   bool _videoMedia = true;
-  Widget? _iframeHtml;
   @override
   void initState() {
     if (widget.chapter.content.length == 2) {
       _videoMedia = false;
-      _iframeHtml = Html(
-        data:
-            '<iframe  src="${widget.chapter.content.first}" width="${widget.widthScreen}" height="${(widget.widthScreen / 16) * 9}"></iframe>',
-        extensions: const [
-          IframeHtmlExtension(),
-        ],
-      );
     } else {
       _videoMedia = true;
       player.open(Media(widget.chapter.content.first));
@@ -49,7 +39,6 @@ class _ReadVideoChapterState extends State<ReadVideoChapter> {
   @override
   void dispose() {
     player.dispose();
-    SystemUtils.setPreferredOrientations();
     super.dispose();
   }
 
@@ -116,9 +105,34 @@ class _ReadVideoChapterState extends State<ReadVideoChapter> {
       );
     }
 
-    return Container(
-      alignment: Alignment.center,
-      child: _iframeHtml,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(widget.chapter.title),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: const Icon(Icons.list_rounded),
+          )
+        ],
+      ),
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          final width = context.width;
+          final html = Html(
+            data:
+                '<iframe  src="${widget.chapter.content.first}" width="$width" height="${(width / 16) * 9}"></iframe>',
+            extensions: const [
+              IframeHtmlExtension(),
+            ],
+          );
+          return Center(
+            child: html,
+          );
+        },
+      ),
     );
   }
 }

@@ -96,11 +96,6 @@ class _ReadBookPageState extends State<ReadBookPage>
     );
   }
 
-  @override
-  void dispose() {
-    // SystemUtils.setSystemNavigationBarColor(colorScheme.background);
-    super.dispose();
-  }
 }
 
 class _ReadChapter extends StatelessWidget {
@@ -130,19 +125,13 @@ class _ReadChapter extends StatelessWidget {
         }
         return switch (state.readChapter!.status) {
           StatusType.loading => const LoadingWidget(),
-          StatusType.error => const Center(
-              child: Text(
-                "ERROR",
-                style: TextStyle(fontSize: 27, color: Colors.red),
-              ),
-            ),
+          StatusType.error => const ChapterLoadingError(),
           StatusType.loaded => switch (readBookCubit.book.type) {
               BookType.comic => ReadChapterWidget(
                   chapter: state.readChapter!.chapter,
                 ),
               BookType.video => ReadVideoChapter(
                   chapter: state.readChapter!.chapter,
-                  widthScreen: context.width,
                 ),
               _ => const SizedBox(),
             },

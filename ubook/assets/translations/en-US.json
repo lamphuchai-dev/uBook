@@ -1,6 +1,8 @@
 {
   "common": {
-    "delete": "Delete"
+    "delete": "Delete",
+    "genre": "Genre"
+
   },
   "discovery": {
     "title": "Discovery"

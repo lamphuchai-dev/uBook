@@ -776,7 +776,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B70CC25B071F7B30C07FA8ED /* Pods-Runner.release-product.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = 4QL5KK8TA7;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lph.ubook;
 				PRODUCT_NAME = Runner;
 			};
 			name = "Release-product";

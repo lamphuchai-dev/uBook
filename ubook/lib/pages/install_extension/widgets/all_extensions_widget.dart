@@ -63,11 +63,11 @@ class AllExtensionsWidget extends StatelessWidget {
                             ],
                           );
                         }),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimens.horizontalPadding),
-                      child: SizedBox(
-                        height: constraints.maxHeight,
+                    child: SizedBox(
+                      height: constraints.maxHeight,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Dimens.horizontalPadding),
                         child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: state.notInstalledExts

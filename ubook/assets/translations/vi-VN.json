@@ -1,6 +1,7 @@
 {
   "common": {
-    "delete": "Xóa"
+    "delete": "Xóa",
+    "genre": "Thể loại"
   },
   "home": {
     "title": "Trang chu"
