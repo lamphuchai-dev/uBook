@@ -18,8 +18,12 @@ class SystemUtils {
   static Future<void> setPreferredOrientations() {
     return SystemChrome.setPreferredOrientations([
       // DeviceOrientation.portraitUp,
-      // DeviceOrientation.portraitDown,
+      // DeviceOrientation.landscapeRight,
     ]);
+  }
+
+  static Future<void> setDefaultPreferredOrientations() {
+    return SystemChrome.setPreferredOrientations([]);
   }
 
   static void setSystemNavigationBarColor(Color color) {

@@ -3,7 +3,7 @@
     "name": "Anime Hay",
     "author": "uBook",
     "slug": "anime_hay",
-    "version": 1,
+    "version": 2,
     "source": "https://animehay.city",
     "regexp": "(animehay).(city)",
     "description": "Xem anime trang Animehay",
@@ -12,17 +12,23 @@
     "type": "video",
     "tabsHome": [
       {
-        "title": "Truyện Mới cập nhật",
-        "url": "/phim-moi-cap-nhap.html"
+        "title": "Phim mới cập nhật",
+        "url": "/phim-moi-cap-nhap"
+      },
+      {
+        "title": "Phim lẻ",
+        "url": "/loc-phim/W1tdLFtdLFs5OTk5XSxbXV0="
       }
     ],
-    "search": "false",
-    "genre": "false"
+    "search": true,
+    "genre": true
   },
   "script": {
     "home": "src/home.js",
     "detail": "src/detail.js",
     "chapters": "src/chapters.js",
-    "chapter": "src/chapter.js"
+    "chapter": "src/chapter.js",
+    "search": "src/search.js",
+    "genre": "src/genre.js"
   }
 }

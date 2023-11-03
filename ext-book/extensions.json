@@ -232,10 +232,51 @@
         "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/manga18_club/icon.png"
     },
     {
+        "name": "HHTQ",
+        "author": "uBook",
+        "slug": "hhtp",
+        "version": 1,
+        "source": "https://hhhtq.net",
+        "regexp": "(hhhtq).(net)",
+        "description": "Xem anime trang HHTQ",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "video",
+        "tabsHome": [
+            {
+                "title": "Cổ Trang",
+                "url": "/show/Cổ+Trang--------page---/"
+            },
+            {
+                "title": "Hiện Đại",
+                "url": "/type/Hi%E1%BB%87n+%C4%90%E1%BA%A1i/"
+            },
+            {
+                "title": "Đam Mỹ",
+                "url": "/type/Đam+Mỹ/"
+            },
+            {
+                "title": "Huyền Huyễn",
+                "url": "https://hhhtq.net/type/Huye%CC%82%CC%80n+Huye%CC%82%CC%83n/"
+            },
+            {
+                "title": "Viễn Tưởng",
+                "url": "/type/Viễn+Tưởng/"
+            },
+            {
+                "title": "Chiếu Rạp",
+                "url": "/type/Chiếu+Rạp/"
+            }
+        ],
+        "search": true,
+        "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/hhtp/extension.zip",
+        "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/hhtp/icon.png"
+    },
+    {
         "name": "Anime Hay",
         "author": "uBook",
         "slug": "anime_hay",
-        "version": 1,
+        "version": 2,
         "source": "https://animehay.city",
         "regexp": "(animehay).(city)",
         "description": "Xem anime trang Animehay",
@@ -244,12 +285,16 @@
         "type": "video",
         "tabsHome": [
             {
-                "title": "Truyện Mới cập nhật",
-                "url": "/phim-moi-cap-nhap.html"
+                "title": "Phim mới cập nhật",
+                "url": "/phim-moi-cap-nhap"
+            },
+            {
+                "title": "Phim lẻ",
+                "url": "/loc-phim/W1tdLFtdLFs5OTk5XSxbXV0="
             }
         ],
-        "search": "false",
-        "genre": "false",
+        "search": true,
+        "genre": true,
         "path": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/anime_hay/extension.zip",
         "icon": "https://github.com/lamphuchai-dev/uBook/raw/main/ext-book/extensions/anime_hay/icon.png"
     }

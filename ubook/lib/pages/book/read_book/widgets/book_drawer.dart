@@ -56,35 +56,36 @@ class _BookDrawerState extends State<BookDrawer> {
             },
           ),
         ),
-        ColoredBox(
-          color: colorScheme.background,
-          child: SafeArea(
-            top: false,
-            bottom: true,
-            child: Container(
-              height: 56,
-              decoration: BoxDecoration(color: colorScheme.background),
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  const Expanded(
-                      child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.download_rounded),
-                  )),
-                  Gaps.wGap8,
-                  Text(
-                    "book.downloadBookChapters".tr(args: [
-                      _readBookCubit.state.chapters.length.toString()
-                    ]),
-                    style: textTheme.titleMedium,
-                  ),
-                  const Expanded(child: SizedBox()),
-                ],
+        if (_book.type != BookType.video)
+          ColoredBox(
+            color: colorScheme.background,
+            child: SafeArea(
+              top: false,
+              bottom: true,
+              child: Container(
+                height: 56,
+                decoration: BoxDecoration(color: colorScheme.background),
+                alignment: Alignment.center,
+                child: Row(
+                  children: [
+                    const Expanded(
+                        child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.download_rounded),
+                    )),
+                    Gaps.wGap8,
+                    Text(
+                      "book.downloadBookChapters".tr(args: [
+                        _readBookCubit.state.chapters.length.toString()
+                      ]),
+                      style: textTheme.titleMedium,
+                    ),
+                    const Expanded(child: SizedBox()),
+                  ],
+                ),
               ),
             ),
-          ),
-        )
+          )
       ]),
     );
   }

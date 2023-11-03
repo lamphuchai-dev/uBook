@@ -228,10 +228,12 @@ P _bookDeserializeProp<P>(
 const _BooktypeEnumValueMap = {
   'novel': 0,
   'comic': 1,
+  'video': 2,
 };
 const _BooktypeValueEnumMap = {
   0: BookType.novel,
   1: BookType.comic,
+  2: BookType.video,
 };
 
 Id _bookGetId(Book object) {

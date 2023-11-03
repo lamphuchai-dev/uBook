@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:ubook/app/bloc/debug/bloc_observer.dart';
 import 'package:ubook/di/components/service_locator.dart';
 import 'package:ubook/utils/device_utils.dart';
@@ -17,6 +18,8 @@ FutureOr<void> mainCommon() async {
   await setupLocator();
 
   await DeviceUtils.initWakelock();
+  SystemUtils.setDefaultPreferredOrientations();
+  MediaKit.ensureInitialized();
 
   Bloc.observer = const AppBlocObserver();
 

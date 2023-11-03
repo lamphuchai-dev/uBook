@@ -4,6 +4,7 @@ import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/widgets/widgets.dart';
 
 import '../cubit/splash_cubit.dart';
+import 'video_widget.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -30,7 +31,7 @@ class _SplashPageState extends State<SplashPage> {
             Navigator.pushReplacementNamed(context, RoutesName.installExt);
           }
         },
-
+        // child: VideoWidget(),
         // child: const ListTest(),
         // child: Center(
         //   child:

@@ -1,9 +1,18 @@
-async function home(url, page) {
-  if (!page) page = 1;
-  url = url.replace(".html", "");
-  url = url + `/trang-${page}.html`;
+async function search(url, kw, page) {
+  if (page != null) {
+    if (page == 0) {
+      page = 1;
+    }
+    url = url + `/tim-kiem/${kw}/trang-${page}.html`;
+  } else {
+    url = url + `/tim-kiem/${kw}.html`;
+  }
+  const res = await Extension.request(url, {
+    queryParameters: {
+      q: kw,
+    },
+  });
 
-  const res = await Extension.request(url);
   const lstEl = await Extension.querySelectorAll(res, "div.movie-item");
   const result = [];
   for (const item of lstEl) {
