@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html_iframe/flutter_html_iframe.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
 import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/chapter.dart';
-import 'package:ubook/utils/system_utils.dart';
 
 import '../cubit/read_book_cubit.dart';
 
@@ -22,7 +20,6 @@ class _ReadVideoChapterState extends State<ReadVideoChapter> {
   late final player = Player();
   late final controller = VideoController(player);
   late ReadBookCubit _readBookCubit;
-
   bool _videoMedia = true;
   @override
   void initState() {
@@ -121,18 +118,75 @@ class _ReadVideoChapterState extends State<ReadVideoChapter> {
       body: OrientationBuilder(
         builder: (context, orientation) {
           final width = context.width;
-          final html = Html(
-            data:
-                '<iframe  src="${widget.chapter.content.first}" width="$width" height="${(width / 16) * 9}"></iframe>',
-            extensions: const [
-              IframeHtmlExtension(),
-            ],
-          );
-          return Center(
-            child: html,
+          // final html = Html(
+          //   data:
+          //       '<iframe  src="https://playhydrax.com/?v=2HlXkvf5f" width="$width" height="${(width / 16) * 9}"></iframe>',
+          //   extensions: const [
+          //     IframeHtmlExtension(),
+          //   ],
+          // );
+          // return Center(
+          //   child: html,
+          // );
+
+          return ReadVideoWebView(
+            url: widget.chapter.content.first,
           );
         },
       ),
     );
+  }
+}
+
+class ReadVideoWebView extends StatefulWidget {
+  const ReadVideoWebView({super.key, required this.url});
+  final String url;
+
+  @override
+  State<ReadVideoWebView> createState() => _ReadVideoWebViewState();
+}
+
+class _ReadVideoWebViewState extends State<ReadVideoWebView> {
+  final GlobalKey webViewKey = GlobalKey();
+
+  InAppWebViewController? webViewController;
+  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
+      crossPlatform: InAppWebViewOptions(
+        useShouldOverrideUrlLoading: true,
+        mediaPlaybackRequiresUserGesture: false,
+      ),
+      android: AndroidInAppWebViewOptions(
+        useHybridComposition: true,
+      ),
+      ios: IOSInAppWebViewOptions(
+        allowsInlineMediaPlayback: true,
+      ));
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      // width: double.infinity,
+      // height: 300,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: InAppWebView(
+          key: webViewKey,
+          initialData: InAppWebViewInitialData(
+              data:
+                  '''<iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;overflow:hidden;" frameborder="0" src="${widget.url}" frameborder="0" scrolling="0" allowfullscreen></iframe>'''),
+          initialOptions: options,
+          onWebViewCreated: (controller) {
+            webViewController = controller;
+          },
+          shouldOverrideUrlLoading: (controller, navigationAction) async {
+            return NavigationActionPolicy.CANCEL;
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

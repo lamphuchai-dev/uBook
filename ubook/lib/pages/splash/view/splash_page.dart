@@ -4,6 +4,7 @@ import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/widgets/widgets.dart';
 
 import '../cubit/splash_cubit.dart';
+import 'web_view.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -20,6 +21,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    // return MyApp();
     return Scaffold(
       body: BlocListener<SplashCubit, SplashState>(
         listenWhen: (previous, current) => previous != current,

@@ -1,15 +1,15 @@
 async function chapter(url, page) {
   var res = await Extension.request(url);
-  var data = res.match(/source_fbo: \[(.*?)\]/);
-  var urlVideo = extractAllText(data[1])[1];
-  if (!urlVideo) {
-    data = res.match(/https:\/\/\playhydrax.com\/\?v=[^&"\s]+/g);
-    if (!data) {
-      return null;
-    }
-    return [data[0], "iframe"];
+  // var data = res.match(/https:\/\/suckplayer\.xyz\/video\/[a-zA-Z0-9_-]+/g);
+  var data = res.match(/https:\/\/\playhydrax.com\/\?v=[^&"\s]+/g);
+
+  if (!data) {
+    var data = res.match(/source_fbo: \[(.*?)\]/);
+    var urlVideo = extractAllText(data[1])[1];
+    if (!urlVideo) return null;
+    return [urlVideo];
   }
-  return [urlVideo];
+  return [data[0], "iframe"];
 }
 
 function extractAllText(str) {
