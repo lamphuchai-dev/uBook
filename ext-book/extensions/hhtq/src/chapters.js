@@ -9,7 +9,7 @@ async function chapters(bookUrl) {
     const title = await Extension.querySelector(el, "a").text;
     chapters.push({
       title: title.trim(),
-      url: url,
+      url: host + url,
       bookUrl,
       index: index,
     });
