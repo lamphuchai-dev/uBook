@@ -4,14 +4,16 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html_iframe/flutter_html_iframe.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/data/models/chapter.dart';
 import 'package:ubook/utils/system_utils.dart';
 
 import '../cubit/read_book_cubit.dart';
 
 class ReadVideoChapter extends StatefulWidget {
-  const ReadVideoChapter({super.key, required this.chapter});
+  const ReadVideoChapter({super.key, required this.chapter,required this.widthScreen});
   final Chapter chapter;
+  final double widthScreen;
 
   @override
   State<ReadVideoChapter> createState() => _ReadVideoChapterState();
@@ -24,11 +26,18 @@ class _ReadVideoChapterState extends State<ReadVideoChapter> {
   late ReadBookCubit _readBookCubit;
 
   bool _videoMedia = true;
-
+  Widget? _iframeHtml;
   @override
   void initState() {
     if (widget.chapter.content.length == 2) {
       _videoMedia = false;
+      _iframeHtml = Html(
+        data:
+            '<iframe  src="${widget.chapter.content.first}" width="${widget.widthScreen}" height="${(widget.widthScreen / 16) * 9}"></iframe>',
+        extensions: const [
+          IframeHtmlExtension(),
+        ],
+      );
     } else {
       _videoMedia = true;
       player.open(Media(widget.chapter.content.first));
@@ -107,17 +116,9 @@ class _ReadVideoChapterState extends State<ReadVideoChapter> {
       );
     }
 
-    Widget html = Html(
-      data:
-          '<iframe width="100%" height="100%" src="${widget.chapter.content.first}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
-      extensions: const [
-        IframeHtmlExtension(),
-      ],
-    );
     return Container(
-      // width: context.width,
-      // height: 400,
-      child: html,
+      alignment: Alignment.center,
+      child: _iframeHtml,
     );
   }
 }

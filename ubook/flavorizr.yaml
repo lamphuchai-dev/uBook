@@ -9,7 +9,7 @@ app:
 flavors:
   dev:
     app:
-      name: "uBook DEV"
+      name: "UBook DEV"
     android:
       applicationId: "com.lph.u_book_dev"
       icon: "assets/icons/app_icon.png"
@@ -20,22 +20,9 @@ flavors:
       bundleId: "com.lph.u_book_dev"
       icon: "assets/icons/app_icon.png"
 
-  staging:
-    app:
-      name: "uBook Stag"
-    android:
-      applicationId: "com.lph.u_book_stag"
-      icon: "assets/icons/app_icon.png"
-    ios:
-      bundleId: "com.lph.u_book_stag"
-      icon: "assets/icons/app_icon.png"
-    macos:
-      bundleId: "com.lph.u_book_stag"
-      icon: "assets/icons/app_icon.png"
-
   product:
     app:
-      name: "uBook"
+      name: "UBook"
     android:
       applicationId: "com.lph.u_book"
       icon: "assets/icons/app_icon.png"

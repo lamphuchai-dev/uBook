@@ -142,6 +142,7 @@ class _ReadChapter extends StatelessWidget {
                 ),
               BookType.video => ReadVideoChapter(
                   chapter: state.readChapter!.chapter,
+                  widthScreen: context.width,
                 ),
               _ => const SizedBox(),
             },

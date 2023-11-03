@@ -31,17 +31,12 @@ android {
         dev {
             dimension "ubook-type"
             applicationId "com.lph.u_book_dev"
-            resValue "string", "app_name", "uBook DEV"
-        }
-        staging {
-            dimension "ubook-type"
-            applicationId "com.lph.u_book_stag"
-            resValue "string", "app_name", "uBook Stag"
+            resValue "string", "app_name", "UBook DEV"
         }
         product {
             dimension "ubook-type"
             applicationId "com.lph.u_book"
-            resValue "string", "app_name", "uBook"
+            resValue "string", "app_name", "UBook"
         }
     }
 
@@ -87,6 +82,4 @@ flutter {
     source '../..'
 }
 
-dependencies {
-    // implementation "androidx.startup:startup-runtime:1.1.1"
-}
+dependencies {}

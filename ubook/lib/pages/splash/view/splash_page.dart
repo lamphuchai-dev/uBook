@@ -4,7 +4,6 @@ import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/widgets/widgets.dart';
 
 import '../cubit/splash_cubit.dart';
-import 'video_widget.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
