@@ -58,28 +58,28 @@ class _ReadBookPageState extends State<ReadBookPage>
                               child: _ReadChapter(
                                 readBookCubit: _readBookCubit,
                               ))),
-                      if (state.book.type != BookType.video)
-                        Positioned.fill(
-                          child: BlocSelector<ReadBookCubit, ReadBookState,
-                              MenuType>(
-                            selector: (state) {
-                              return state.menuType;
-                            },
-                            builder: (context, menuType) {
-                              return MenuSliderAnimation(
-                                  menu: menuType,
-                                  bottomMenu: BottomBaseMenuWidget(
-                                      readBookCubit: _readBookCubit),
-                                  topMenu: TopBaseMenuWidget(
-                                    readBookCubit: _readBookCubit,
-                                  ),
-                                  autoScrollMenu: AutoScrollMenu(
-                                      readBookCubit: _readBookCubit),
-                                  mediaMenu: const SizedBox(),
-                                  controller: _animationController);
-                            },
-                          ),
-                        )
+                      // if (state.book.type != BookType.video)
+                      Positioned.fill(
+                        child: BlocSelector<ReadBookCubit, ReadBookState,
+                            MenuType>(
+                          selector: (state) {
+                            return state.menuType;
+                          },
+                          builder: (context, menuType) {
+                            return MenuSliderAnimation(
+                                menu: menuType,
+                                bottomMenu: BottomBaseMenuWidget(
+                                    readBookCubit: _readBookCubit),
+                                topMenu: TopBaseMenuWidget(
+                                  readBookCubit: _readBookCubit,
+                                ),
+                                autoScrollMenu: AutoScrollMenu(
+                                    readBookCubit: _readBookCubit),
+                                mediaMenu: const SizedBox(),
+                                controller: _animationController);
+                          },
+                        ),
+                      )
                     ],
                   )
               },
@@ -95,7 +95,6 @@ class _ReadBookPageState extends State<ReadBookPage>
       ),
     );
   }
-
 }
 
 class _ReadChapter extends StatelessWidget {
@@ -130,7 +129,7 @@ class _ReadChapter extends StatelessWidget {
               BookType.comic => ReadChapterWidget(
                   chapter: state.readChapter!.chapter,
                 ),
-              BookType.video => ReadVideoChapter(
+              BookType.video => ReadChapterVideo(
                   chapter: state.readChapter!.chapter,
                 ),
               _ => const SizedBox(),

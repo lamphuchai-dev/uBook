@@ -229,21 +229,31 @@ class ReadBookCubit extends Cubit<ReadBookState> {
             readChapter: readChapter.copyWith(status: StatusType.loaded)));
       } else {
         emit(state.copyWith(readChapter: readChapter));
-        final result = await _jsRuntime.chapter(
+        List result = await _jsRuntime.chapter(
             url: readChapter.chapter.url,
             jsScript: _extension!.getChapterScript);
-        if (result is List<String>) {
-          readChapter = readChapter.copyWith(
-              chapter: readChapter.chapter.copyWith(
-                content: result,
-              ),
-              status: StatusType.loaded);
-        } else if (result is List<Map<String, dynamic>>) {
-          readChapter = readChapter.copyWith(
-              chapter: readChapter.chapter.copyWith(
-                contentVideo: result,
-              ),
-              status: StatusType.loaded);
+        if (result.isNotEmpty) {
+          if (result.first is String) {
+            readChapter = readChapter.copyWith(
+                chapter: readChapter.chapter.copyWith(
+                  content: List<String>.from(result),
+                ),
+                status: StatusType.loaded);
+          } else {
+            try {
+              final list = List<Map<String, dynamic>>.from(result);
+              readChapter = readChapter.copyWith(
+                  chapter: readChapter.chapter.copyWith(
+                    contentVideo: list,
+                  ),
+                  status: StatusType.loaded);
+            } catch (error) {
+              readChapter = readChapter.copyWith(
+                  chapter: readChapter.chapter, status: StatusType.error);
+            }
+          }
+        } else {
+          readChapter = readChapter.copyWith(status: StatusType.error);
         }
 
         List<Chapter> chapters = state.chapters;
@@ -418,9 +428,12 @@ class ReadBookCubit extends Cubit<ReadBookState> {
     }
   }
 
+  bool get isHideAction => book.type == BookType.video;
+
   @override
   Future<void> close() {
     SystemUtils.setEnabledSystemUIModeDefault();
+    SystemUtils.setPreferredOrientations();
     timeAutoScroll.dispose();
     sliderTimeAutoScroll?.cancel();
     chaptersSliderTime?.cancel();

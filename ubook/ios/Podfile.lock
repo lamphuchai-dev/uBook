@@ -1,6 +1,13 @@
 PODS:
   - auto_orientation (0.0.1):
     - Flutter
+  - better_player (0.0.1):
+    - Cache (~> 6.0.0)
+    - Flutter
+    - GCDWebServer
+    - HLSCachingReverseProxyServer
+    - PINCache
+  - Cache (6.0.0)
   - Flutter (1.0.0)
   - flutter_inappwebview (0.0.1):
     - Flutter
@@ -21,6 +28,12 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - GCDWebServer (3.5.4):
+    - GCDWebServer/Core (= 3.5.4)
+  - GCDWebServer/Core (3.5.4)
+  - HLSCachingReverseProxyServer (0.1.0):
+    - GCDWebServer (~> 3.5)
+    - PINCache (>= 3.0.1-beta.3)
   - isar_flutter_libs (1.0.0):
     - Flutter
   - media_kit_libs_ios_video (1.0.4):
@@ -37,6 +50,14 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.1.1):
     - Flutter
+  - PINCache (3.0.3):
+    - PINCache/Arc-exception-safe (= 3.0.3)
+    - PINCache/Core (= 3.0.3)
+  - PINCache/Arc-exception-safe (3.0.3):
+    - PINCache/Core
+  - PINCache/Core (3.0.3):
+    - PINOperation (~> 1.2.1)
+  - PINOperation (1.2.2)
   - screen_brightness_ios (0.1.0):
     - Flutter
   - share_plus (0.0.1):
@@ -64,6 +85,7 @@ PODS:
 
 DEPENDENCIES:
   - auto_orientation (from `.symlinks/plugins/auto_orientation/ios`)
+  - better_player (from `.symlinks/plugins/better_player/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_js (from `.symlinks/plugins/flutter_js/ios`)
@@ -90,13 +112,20 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Cache
     - FMDB
+    - GCDWebServer
+    - HLSCachingReverseProxyServer
     - OrderedSet
+    - PINCache
+    - PINOperation
     - Toast
 
 EXTERNAL SOURCES:
   auto_orientation:
     :path: ".symlinks/plugins/auto_orientation/ios"
+  better_player:
+    :path: ".symlinks/plugins/better_player/ios"
   Flutter:
     :path: Flutter
   flutter_inappwebview:
@@ -146,6 +175,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   auto_orientation: 102ed811a5938d52c86520ddd7ecd3a126b5d39d
+  better_player: 2406bfe8175203c7a46fa15f9d778d73b12e1646
+  Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_js: 95929d4e146e8ceb1c8e1889d8c2065c5d840076
@@ -153,6 +184,8 @@ SPEC CHECKSUMS:
   flutter_screen_wake: 4d3c2b43943ea81bd5e591fd4e639ea537f4ca5e
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
+  HLSCachingReverseProxyServer: 59935e1e0244ad7f3375d75b5ef46e8eb26ab181
   isar_flutter_libs: b69f437aeab9c521821c3f376198c4371fa21073
   media_kit_libs_ios_video: a5fe24bc7875ccd6378a0978c13185e1344651c1
   media_kit_native_event_loop: e6b2ab20cf0746eb1c33be961fcf79667304fa2a
@@ -161,6 +194,8 @@ SPEC CHECKSUMS:
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
+  PINCache: 7a8fc1a691173d21dbddbf86cd515de6efa55086
+  PINOperation: daa34d4aa1d8449089be7d405b9d974abc4724c6
   screen_brightness_ios: 715ca807df953bf676d339f11464e438143ee625
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126

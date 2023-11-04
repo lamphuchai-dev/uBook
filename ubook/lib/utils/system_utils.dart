@@ -19,6 +19,11 @@ class SystemUtils {
     return SystemChrome.setPreferredOrientations([]);
   }
 
+  static Future<void> setRotationDevice() {
+    return SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  }
+
   static void setSystemNavigationBarColor(Color color) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(

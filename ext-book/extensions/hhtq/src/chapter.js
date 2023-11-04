@@ -4,7 +4,14 @@ async function chapter(url) {
   var slides_p_path = res.match(/var player_aaaa=\{(.*?)\}/);
   if (extractAllText(slides_p_path[1]).length > 12) {
     const content = extractAllText(slides_p_path[1])[12];
-    return [content, "iframe"];
+
+    return [
+      {
+        url: content,
+        type: "iframe",
+        regex: "",
+      },
+    ];
   }
 
   return [];

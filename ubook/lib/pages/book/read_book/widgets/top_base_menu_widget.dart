@@ -30,14 +30,15 @@ class TopBaseMenuWidget extends StatelessWidget {
                       },
                       icon: const Icon(Icons.arrow_back)),
                   Expanded(child: Text(book.name)),
-                  IconButton(
-                      onPressed: () {
-                        readBookCubit.onEnableAutoScroll();
-                      },
-                      icon: const Icon(
-                        Icons.swipe_down_alt_rounded,
-                        size: 28,
-                      )),
+                  if (!readBookCubit.isHideAction)
+                    IconButton(
+                        onPressed: () {
+                          readBookCubit.onEnableAutoScroll();
+                        },
+                        icon: const Icon(
+                          Icons.swipe_down_alt_rounded,
+                          size: 28,
+                        )),
                   BlocSelector<ReadBookCubit, ReadBookState, bool>(
                     selector: (state) => state.book.bookmark,
                     builder: (context, bookmark) {

@@ -3,7 +3,7 @@
     "name": "HHTQ",
     "author": "uBook",
     "slug": "hhtq",
-    "version": 2,
+    "version": 3,
     "source": "https://hhhtq.net",
     "regexp": "(hhhtq).(net)",
     "description": "Xem anime trang HHTQ",

@@ -270,7 +270,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
               const RotatedBox(
                 quarterTurns: -2,
                 child: Icon(
-                  Icons.reply,
+                  Icons.bolt_rounded,
                   size: 30,
                 ),
               ),

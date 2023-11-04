@@ -13,6 +13,7 @@ async function chapter(url, page) {
     {
       url: data[0],
       type: "iframe",
+      regex: "playhydrax|player",
     },
   ];
 }

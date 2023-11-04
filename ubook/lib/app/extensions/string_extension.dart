@@ -18,4 +18,9 @@ extension AppString on String {
   String? get stringOrNull => this == "" ? null : this;
   Color get hexColor =>
       Color(int.parse(toUpperCase().replaceAll("#", "FF"), radix: 16));
+
+  bool checkByRegExp(String regexp) {
+    RegExp regex = RegExp(regexp);
+    return regex.hasMatch(this);
+  }
 }

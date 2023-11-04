@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/pages/book/read_book/cubit/read_book_cubit.dart';
+import 'package:ubook/utils/system_utils.dart';
 
 class BottomBaseMenuWidget extends StatelessWidget {
   const BottomBaseMenuWidget({super.key, required this.readBookCubit});
@@ -99,10 +100,22 @@ class BottomBaseMenuWidget extends StatelessWidget {
                         },
                         icon: const Icon(Icons.format_list_bulleted)),
                     IconButton(
+                        onPressed: () {
+                          var isPortrait = MediaQuery.of(context).orientation ==
+                              Orientation.portrait;
+                          if (isPortrait) {
+                            SystemUtils.setRotationDevice();
+                          } else {
+                            SystemUtils.setPreferredOrientations();
+                          }
+                        },
+                        icon: const Icon(Icons.screen_rotation_rounded)),
+                    IconButton(
                         onPressed: () {}, icon: const Icon(Icons.headphones)),
                     IconButton(
-                        onPressed: () async {},
-                        icon: const Icon(Icons.settings))
+                      onPressed: () async {},
+                      icon: const Icon(Icons.settings),
+                    )
                   ].expandedEqually().toList(),
                 ),
               ),
