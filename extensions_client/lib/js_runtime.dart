@@ -32,7 +32,9 @@ class JsRuntime {
 
       final dataResponse = await _dioClient.request<String>(
         args[0],
-        data: args[1]['data'],
+        data: args[1]['formData'] != null
+            ? FormData.fromMap(args[1]['formData'])
+            : args[1]['data'],
         queryParameters: args[1]['queryParameters'] ?? {},
         options: Options(
           headers: args[1]['headers'] ?? {},
@@ -156,6 +158,23 @@ class JsRuntime {
       final attr = args[2];
       final doc = parse(content).querySelector(selector);
       return doc?.attributes[attr];
+    });
+
+    runtime.onMessage('base64', (args) {
+      try {
+        final content = args[0];
+        final type = args[1];
+        switch (type) {
+          case "decode":
+            return utf8.decode(base64.decode(content));
+          case "encode":
+            return base64.encode(utf8.encode(content));
+          default:
+            return null;
+        }
+      } catch (error) {
+        return null;
+      }
     });
 
     final result = runtime.evaluate(_baseJs());
@@ -414,6 +433,12 @@ class Extension {
       JSON.stringify([content, selector, attr])
     );
   }
+
+
+  // base64("value","decode|encode")
+  static async base64(content, type) {
+    return await sendMessage("base64", JSON.stringify([content, type]));
+  }
 }
 
 console.log = function (message) {
@@ -432,6 +457,11 @@ async function runFn(callback) {
   const data = await callback();
   return typeof data === "object" ? JSON.stringify(data) : data;
 }
+
+
+
+
+
 
 ''';
   }

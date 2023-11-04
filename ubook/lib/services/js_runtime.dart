@@ -38,7 +38,9 @@ class JsRuntime {
 
       final dataResponse = await _dioClient.request<String>(
         args[0],
-        data: args[1]['data'],
+        data: args[1]['formData'] != null
+            ? FormData.fromMap(args[1]['formData'])
+            : args[1]['data'],
         queryParameters: args[1]['queryParameters'] ?? {},
         options: Options(
           headers: args[1]['headers'] ?? {},
@@ -162,6 +164,23 @@ class JsRuntime {
       return doc?.attributes[attr];
     });
 
+    runtime.onMessage('base64', (args) {
+      try {
+        final content = args[0];
+        final type = args[1];
+        switch (type) {
+          case "decode":
+            return base64.decode(content);
+          case "encode":
+            return base64.encode(content);
+          default:
+            return null;
+        }
+      } catch (error) {
+        return null;
+      }
+    });
+
     final result = runtime.evaluate(jsExtension);
     return result.isError;
   }
@@ -216,13 +235,13 @@ class JsRuntime {
     });
   }
 
-  Future<List<String>> chapter(
+  Future<List<dynamic>> chapter(
       {required String url, required String jsScript}) async {
     return _runExtension(() async {
       evaluateJsScript(jsScript);
       final jsResult = await runtime.handlePromise(
           await runtime.evaluateAsync('stringify(()=>chapter("$url"))'));
-      return List<String>.from(jsResult.toJson);
+      return List<dynamic>.from(jsResult.toJson);
     });
   }
 

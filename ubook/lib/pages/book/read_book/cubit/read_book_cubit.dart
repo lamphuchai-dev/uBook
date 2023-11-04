@@ -229,14 +229,23 @@ class ReadBookCubit extends Cubit<ReadBookState> {
             readChapter: readChapter.copyWith(status: StatusType.loaded)));
       } else {
         emit(state.copyWith(readChapter: readChapter));
-        List<String> result = await _jsRuntime.chapter(
+        final result = await _jsRuntime.chapter(
             url: readChapter.chapter.url,
             jsScript: _extension!.getChapterScript);
-        readChapter = readChapter.copyWith(
-            chapter: readChapter.chapter.copyWith(
-              content: result,
-            ),
-            status: StatusType.loaded);
+        if (result is List<String>) {
+          readChapter = readChapter.copyWith(
+              chapter: readChapter.chapter.copyWith(
+                content: result,
+              ),
+              status: StatusType.loaded);
+        } else if (result is List<Map<String, dynamic>>) {
+          readChapter = readChapter.copyWith(
+              chapter: readChapter.chapter.copyWith(
+                contentVideo: result,
+              ),
+              status: StatusType.loaded);
+        }
+
         List<Chapter> chapters = state.chapters;
         chapters.removeAt(readChapter.chapter.index);
         chapters.insert(readChapter.chapter.index, readChapter.chapter);

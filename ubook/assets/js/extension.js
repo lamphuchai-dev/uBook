@@ -141,6 +141,11 @@ class Extension {
       JSON.stringify([content, selector, attr])
     );
   }
+
+  // base64("value","decode|encode")
+  static async base64(content, type) {
+    return await sendMessage("base64", JSON.stringify([content, type]));
+  }
 }
 
 console.log = function (message) {

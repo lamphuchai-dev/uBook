@@ -15,15 +15,18 @@ class Chapter {
   final String bookUrl;
   final int index;
   final List<String> content;
-  const Chapter({
-    this.id,
-    this.bookId,
-    required this.title,
-    required this.url,
-    required this.bookUrl,
-    required this.index,
-    required this.content,
-  });
+  @ignore
+  final List<Map<String, dynamic>>? contentVideo;
+
+  const Chapter(
+      {this.id,
+      this.bookId,
+      required this.title,
+      required this.url,
+      required this.bookUrl,
+      required this.index,
+      required this.content,
+      this.contentVideo});
 
   Chapter copyWith({
     Id? id,
@@ -33,16 +36,17 @@ class Chapter {
     String? bookUrl,
     int? index,
     List<String>? content,
+    List<Map<String, dynamic>>? contentVideo,
   }) {
     return Chapter(
-      id: id ?? this.id,
-      bookId: bookId ?? this.bookId,
-      title: title ?? this.title,
-      url: url ?? this.url,
-      bookUrl: bookUrl ?? this.bookUrl,
-      index: index ?? this.index,
-      content: content ?? this.content,
-    );
+        id: id ?? this.id,
+        bookId: bookId ?? this.bookId,
+        title: title ?? this.title,
+        url: url ?? this.url,
+        bookUrl: bookUrl ?? this.bookUrl,
+        index: index ?? this.index,
+        content: content ?? this.content,
+        contentVideo: contentVideo ?? this.contentVideo);
   }
 
   Map<String, dynamic> toMap() {
@@ -68,6 +72,11 @@ class Chapter {
         content: map['content'] != null
             ? List<String>.from(
                 (map['content']),
+              )
+            : [],
+        contentVideo: map['contentVideo'] != null
+            ? List<Map<String, dynamic>>.from(
+                (map['contentVideo']),
               )
             : []);
   }

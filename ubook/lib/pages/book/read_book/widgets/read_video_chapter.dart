@@ -159,15 +159,15 @@ class _ReadVideoWebViewState extends State<ReadVideoWebView> {
         useHybridComposition: true,
       ),
       ios: IOSInAppWebViewOptions(
-        allowsInlineMediaPlayback: true,
-      ));
+          // allowsInlineMediaPlayback: true,
+          ));
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       // width: double.infinity,
       // height: 300,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 16),
         child: InAppWebView(
           key: webViewKey,
           initialData: InAppWebViewInitialData(
@@ -178,7 +178,18 @@ class _ReadVideoWebViewState extends State<ReadVideoWebView> {
             webViewController = controller;
           },
           shouldOverrideUrlLoading: (controller, navigationAction) async {
-            return NavigationActionPolicy.CANCEL;
+            var uri = navigationAction.request.url!;
+
+            if (uri.toString().contains("playhydrax") ||
+                uri.toString() == "about:blank" ||
+                uri.toString().contains("player")) {
+              return NavigationActionPolicy.ALLOW;
+            } else {
+              return NavigationActionPolicy.CANCEL;
+            }
+          },
+          onCreateWindow: (controller, createWindowAction) async {
+            return true;
           },
         ),
       ),

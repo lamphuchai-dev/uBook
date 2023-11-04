@@ -142,8 +142,10 @@ class DownloadBook {
   late final StreamSubscription<dynamic> _subscription;
 
   Future<List<String>> getContentsChapter(String chapterUrl) async {
-    return await jsRuntime.chapter(
+    final list = await jsRuntime.chapter(
         url: chapterUrl, jsScript: extension.getChaptersScript);
+    if (list is List<String>) return list;
+    return [];
   }
 
   void onStartDownload(List<Chapter> chapters) async {

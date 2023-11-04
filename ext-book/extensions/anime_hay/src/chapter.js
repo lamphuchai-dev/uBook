@@ -9,7 +9,12 @@ async function chapter(url, page) {
     if (!urlVideo) return null;
     return [urlVideo];
   }
-  return [data[0], "iframe"];
+  return [
+    {
+      url: data[0],
+      type: "iframe",
+    },
+  ];
 }
 
 function extractAllText(str) {
