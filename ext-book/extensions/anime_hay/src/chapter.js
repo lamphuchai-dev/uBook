@@ -5,18 +5,18 @@ async function chapter(url, page) {
   var link1 = res.match(/https:\/\/\playhydrax.com\/\?v=[^&"\s]+/g);
   if (link1) {
     result.push({
-      url: data[0],
+      url: link1[0],
       type: "iframe",
       regex: "playhydrax|player",
     });
   }
-  var link2 = res.match(/source_fbo: \[(.*?)\]/);
+  var matchs = res.match(/source_fbo: \[(.*?)\]/);
 
-  if (link2) {
-    var urlVideo = extractAllText(data[1])[1];
-    if (urlVideo) {
+  if (matchs) {
+    var link2 = extractAllText(matchs[1])[1];
+    if (link2) {
       result.push({
-        url: urlVideo,
+        url: link2,
         type: "video",
       });
     }
