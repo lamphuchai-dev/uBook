@@ -102,67 +102,61 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
         child: Text("ERROR"),
       );
     }
-    return switch (_currentVideo!.type) {
-      "video" => _videoWidget(),
-      "iframe" => _webViewVideo(),
-      _ => const SizedBox()
-    };
+    return SafeArea(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          const SizedBox(
+            height: 56,
+          ),
+          // ElevatedButton(
+          //     onPressed: () {
+          //       initPlayVideo(_listVideo.last);
+          //     },
+          //     child: const Text("Change")),
+
+          const Positioned.fill(
+              child: ColoredBox(
+            color: Colors.transparent,
+          )),
+          Align(
+            alignment: Alignment.center,
+            child: OrientationBuilder(
+              builder: (context, orientation) => AspectRatio(
+                aspectRatio: 16 / 9,
+                child: switch (_currentVideo!.type) {
+                  "video" => _videoWidget(),
+                  "iframe" => _webViewVideo(),
+                  _ => const SizedBox()
+                },
+              ),
+            ),
+          ),
+          Positioned.fill(
+              child: _loading
+                  ? Container(
+                      color: context.colorScheme.background,
+                      child: const LoadingWidget())
+                  : const SizedBox()),
+        ],
+      ),
+    );
   }
 
   Widget _videoWidget() {
     return MaterialVideoControlsTheme(
-      normal: MaterialVideoControlsThemeData(
+      normal: const MaterialVideoControlsThemeData(
           volumeGesture: true,
-          seekBarMargin: const EdgeInsets.only(bottom: 60, left: 16, right: 16),
           brightnessGesture: true,
           buttonBarButtonSize: 24.0,
           buttonBarButtonColor: Colors.white,
-          topButtonBarMargin: const EdgeInsets.only(top: 30),
-          topButtonBar: [
-            Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: Text(widget.chapter.title)),
-            const Spacer(),
-            MaterialCustomButton(
-              icon: const Icon(
-                Icons.keyboard_arrow_down,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-          bottomButtonBar: [
-            if (widget.chapter.index > 0)
-              MaterialCustomButton(
-                icon: const Icon(Icons.skip_previous_rounded),
-                onPressed: () {
-                  _readBookCubit.onPreviousChapter();
-                },
-              ),
-            const MaterialPlayOrPauseButton(),
-            if (widget.chapter.index > 0)
-              MaterialCustomButton(
-                icon: const Icon(Icons.skip_next_rounded),
-                onPressed: () {
-                  _readBookCubit.onNextChapter();
-                },
-              ),
-            const MaterialPositionIndicator(),
-            const Spacer(),
-            MaterialCustomButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Icon(Icons.list),
-            ),
-            const MaterialFullscreenButton()
-          ]),
+          topButtonBarMargin: EdgeInsets.only(top: 30),
+          bottomButtonBar: []),
       fullscreen: const MaterialVideoControlsThemeData(
         seekBarMargin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
       ),
       child: Video(
+        aspectRatio: 16 / 9,
         controller: _videoController!,
       ),
     );
@@ -171,69 +165,40 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
   Widget _webViewVideo() {
     final data =
         '''<iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;" frameborder="0" src="${_currentVideo!.url}" frameborder="0" scrolling="0" allowfullscreen></iframe>''';
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return Stack(
-          children: [
-            const Positioned.fill(
-                child: ColoredBox(
-              color: Colors.transparent,
-            )),
-            SafeArea(
-              child: Align(
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: InAppWebView(
-                    key: _webViewKey,
-                    initialData: InAppWebViewInitialData(data: data),
-                    initialOptions: _optionsWebView,
-                    onWebViewCreated: (controller) {
-                      _webViewController = controller;
-                      setState(() {
-                        _loading = true;
-                      });
-                    },
-                    shouldOverrideUrlLoading:
-                        (controller, navigationAction) async {
-                      var uri = navigationAction.request.url!;
-                      if (["about"].contains(uri.scheme)) {
-                        return NavigationActionPolicy.ALLOW;
-                      }
-                      final tmp =
-                          uri.toString().checkByRegExp(r'playhydrax|player');
-                      print(tmp);
-                      if (uri.toString().contains("playhydrax") ||
-                          uri.toString() == "about:blank" ||
-                          uri.toString().contains("player")) {
-                        return NavigationActionPolicy.ALLOW;
-                      }
-                      return NavigationActionPolicy.CANCEL;
-                    },
-                    onCreateWindow: (controller, createWindowAction) async {
-                      return true;
-                    },
-                    onLoadStart: (controller, url) {
-                      setState(() {
-                        _loading = true;
-                      });
-                    },
-                    onLoadStop: (controller, url) {
-                      setState(() {
-                        _loading = false;
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
-            Positioned.fill(
-                child: _loading
-                    ? Container(
-                        color: context.colorScheme.background,
-                        child: const LoadingWidget())
-                    : const SizedBox())
-          ],
-        );
+    return InAppWebView(
+      key: _webViewKey,
+      initialData: InAppWebViewInitialData(data: data),
+      initialOptions: _optionsWebView,
+      onWebViewCreated: (controller) {
+        _webViewController = controller;
+        setState(() {
+          _loading = true;
+        });
+      },
+      shouldOverrideUrlLoading: (controller, navigationAction) async {
+        var uri = navigationAction.request.url!;
+        if (["about"].contains(uri.scheme)) {
+          return NavigationActionPolicy.ALLOW;
+        }
+        if (_currentVideo!.regex != null &&
+            uri.toString().checkByRegExp(_currentVideo!.regex!)) {
+          return NavigationActionPolicy.ALLOW;
+        }
+
+        return NavigationActionPolicy.CANCEL;
+      },
+      onCreateWindow: (controller, createWindowAction) async {
+        return true;
+      },
+      onLoadStart: (controller, url) {
+        setState(() {
+          _loading = true;
+        });
+      },
+      onLoadStop: (controller, url) {
+        setState(() {
+          _loading = false;
+        });
       },
     );
   }
