@@ -9,6 +9,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:ubook/app/extensions/index.dart';
 
 import 'package:ubook/data/models/chapter.dart';
+import 'package:ubook/pages/splash/view/video_widget.dart';
 import 'package:ubook/widgets/loading_widget.dart';
 
 import '../cubit/read_book_cubit.dart';
@@ -121,14 +122,19 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
           )),
           Align(
             alignment: Alignment.center,
-            child: OrientationBuilder(
-              builder: (context, orientation) => AspectRatio(
-                aspectRatio: 16 / 9,
-                child: switch (_currentVideo!.type) {
-                  "video" => _videoWidget(),
-                  "iframe" => _webViewVideo(),
-                  _ => const SizedBox()
-                },
+            child: GestureDetector(
+              onTap: () {},
+              onPanDown: (_) {},
+              behavior: HitTestBehavior.deferToChild,
+              child: OrientationBuilder(
+                builder: (context, orientation) => AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: switch (_currentVideo!.type) {
+                    "video" => _videoWidget(),
+                    "iframe" => _webViewVideo(),
+                    _ => const SizedBox()
+                  },
+                ),
               ),
             ),
           ),
@@ -144,14 +150,15 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
   }
 
   Widget _videoWidget() {
+    // return VideoApp();
     return MaterialVideoControlsTheme(
       normal: const MaterialVideoControlsThemeData(
-          volumeGesture: true,
-          brightnessGesture: true,
-          buttonBarButtonSize: 24.0,
-          buttonBarButtonColor: Colors.white,
-          topButtonBarMargin: EdgeInsets.only(top: 30),
-          bottomButtonBar: []),
+        volumeGesture: true,
+        brightnessGesture: true,
+        buttonBarButtonSize: 24.0,
+        buttonBarButtonColor: Colors.white,
+        topButtonBarMargin: EdgeInsets.only(top: 30),
+      ),
       fullscreen: const MaterialVideoControlsThemeData(
         seekBarMargin: EdgeInsets.only(bottom: 60, left: 16, right: 16),
       ),
@@ -206,6 +213,7 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
 
   @override
   void dispose() {
+    _player?.dispose();
     super.dispose();
   }
 }

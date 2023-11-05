@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "name": "Hentai Haven",
+    "author": "uBook",
+    "slug": "hentaihavenb",
+    "version": 1,
+    "source": "https://hentaihaven.xxx/",
+    "regexp": "(hentaihaven).(xxx)",
+    "description": "Đọc truyện 18+ trên trang Hentaihaven",
+    "locale": "vi_VN",
+    "language": "javascript",
+    "type": "comic",
+    "tabsHome": [
+      {
+        "title": "Release",
+        "url": "/release/2023/"
+      }
+    ],
+    "tag": "18+"
+  },
+  "script": {
+    "home": "src/home.js",
+    "detail": "src/detail.js",
+    "chapters": "src/chapters.js",
+    "chapter": "src/chapter.js"
+  }
+}

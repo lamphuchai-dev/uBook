@@ -232,6 +232,27 @@
         "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/manga18_club/icon.png"
     },
     {
+        "name": "Hentai Haven",
+        "author": "uBook",
+        "slug": "hentaihavenb",
+        "version": 1,
+        "source": "https://hentaihaven.xxx/",
+        "regexp": "(hentaihaven).(xxx)",
+        "description": "Đọc truyện 18+ trên trang Hentaihaven",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "comic",
+        "tabsHome": [
+            {
+                "title": "Release",
+                "url": "/release/2023/"
+            }
+        ],
+        "tag": "18+",
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/hentaihavenb/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/hentaihavenb/icon.png"
+    },
+    {
         "name": "Anime Hay",
         "author": "uBook",
         "slug": "anime_hay",

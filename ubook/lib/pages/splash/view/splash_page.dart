@@ -21,7 +21,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    // return VideoWidget();
+    // return VideoApp();
     return Scaffold(
       body: BlocListener<SplashCubit, SplashState>(
         listenWhen: (previous, current) => previous != current,

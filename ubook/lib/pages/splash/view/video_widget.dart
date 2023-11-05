@@ -1,69 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:lecle_yoyo_player/lecle_yoyo_player.dart';
+import 'package:video_player/video_player.dart';
 
-import 'hls_tracks_page.dart';
-
-class VideoWidget extends StatefulWidget {
-  const VideoWidget({super.key});
+/// Stateful widget to fetch and then display video content.
+class VideoApp extends StatefulWidget {
+  const VideoApp({super.key});
 
   @override
-  State<VideoWidget> createState() => _VideoWidgetState();
+  _VideoAppState createState() => _VideoAppState();
 }
 
-class _VideoWidgetState extends State<VideoWidget> {
+class _VideoAppState extends State<VideoApp> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.networkUrl(Uri.parse(
+        'https://scontent-fml20-1.xx.fbcdn.net/v/t39.25447-2/10000000_1724265114745186_8230993226350961511_n.mp4?_nc_cat=103&vs=c568bf9fd386a1f9&_nc_vs=HBksFQAYJEdJQ1dtQUJpdWFuQk5TQUdBR2VqUzgyNlhEcHlibWRqQUFBRhUAAsgBABUAGCRHSUNXbUFCckhmd2FSb1FEQU9MNnNqYTJRT1ZGYnY0R0FBQUYVAgLIAQBLB4gScHJvZ3Jlc3NpdmVfcmVjaXBlATENc3Vic2FtcGxlX2ZwcwAQdm1hZl9lbmFibGVfbnN1YgAgbWVhc3VyZV9vcmlnaW5hbF9yZXNvbHV0aW9uX3NzaW0AKGNvbXB1dGVfc3NpbV9vbmx5X2F0X29yaWdpbmFsX3Jlc29sdXRpb24AHXVzZV9sYW5jem9zX2Zvcl92cW1fdXBzY2FsaW5nABFkaXNhYmxlX3Bvc3RfcHZxcwAVACUAHIwXQAAAAAAAAAAREQAAACa%2Br%2FixjNPOAxUCKAJDMxgLdnRzX3ByZXZpZXccF0CWm3O2RaHLGCFkYXNoX2dlbjJod2Jhc2ljX2hxMl9mcmFnXzJfdmlkZW8SABgYdmlkZW9zLnZ0cy5jYWxsYmFjay5wcm9kOBJWSURFT19WSUVXX1JFUVVFU1QbCogVb2VtX3RhcmdldF9lbmNvZGVfdGFnBm9lcF9oZBNvZW1fcmVxdWVzdF90aW1lX21zATAMb2VtX2NmZ19ydWxlB3VubXV0ZWQTb2VtX3JvaV9yZWFjaF9jb3VudAEwEW9lbV9pc19leHBlcmltZW50AAxvZW1fdmlkZW9faWQPNjcyODAzODg0NjMxMTcxEm9lbV92aWRlb19hc3NldF9pZBAxMjQ3NDkwMDg1OTIwMDA0FW9lbV92aWRlb19yZXNvdXJjZV9pZBAxMDE3Mzc2MzM2MTg2MzM1HG9lbV9zb3VyY2VfdmlkZW9fZW5jb2RpbmdfaWQPOTkzNjMyOTc4NDA4MTU4DnZ0c19yZXF1ZXN0X2lkACUCHAAljgIbCIgBcwQ4MTI5AmNkCjIwMjMtMTEtMDUDcmNiATADYXBwBnVwbG9hZAJjdBlDT05UQUlORURfUE9TVF9BVFRBQ0hNRU5UE29yaWdpbmFsX2R1cmF0aW9uX3MIMTQ0Ni44NjQBZgJhZAJ0cxVwcm9ncmVzc2l2ZV9lbmNvZGluZ3MA&ccb=1-7&_nc_sid=5588c3&efg=eyJ2ZW5jb2RlX3RhZyI6Im9lcF9oZCJ9&_nc_ohc=NYj9edX4uVoAX8uSmKJ&_nc_ht=scontent-fml20-1.xx&edm=APRAPSkEAAAA&oh=00_AfBh_XxoqZc9t3hvOAoSQyDUZ4W8sRy_bkEXwg8d4YnZNw&oe=654CC59C&_nc_rid=034517297149578&_nc_store_type=0'))
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
-    //  https://cdn.animevui.com/file/6e7f0fb5e2a7640a0bd69b3c05975e95
-
-    return HlsTracksPage();
-    return Scaffold(
-      appBar: AppBar(),
-      body: YoYoPlayer(
-          aspectRatio: 16 / 9,
-          // Url (Video streaming links)
-          // 'https://dsqqu7oxq6o1v.cloudfront.net/preview-9650dW8x3YLoZ8.webm',
-          // "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
-          // "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-          url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-          videoStyle: const VideoStyle(
-            qualityStyle: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
-            forwardAndBackwardBtSize: 30.0,
-            playButtonIconSize: 40.0,
-            playIcon: Icon(
-              Icons.add_circle_outline_outlined,
-              size: 40.0,
-              color: Colors.white,
-            ),
-            pauseIcon: Icon(
-              Icons.remove_circle_outline_outlined,
-              size: 40.0,
-              color: Colors.white,
-            ),
-            videoQualityPadding: EdgeInsets.all(5.0),
-          ),
-          videoLoadingStyle: const VideoLoadingStyle(
-            loading: Center(
-              child: Text("Loading video"),
-            ),
-          ),
-          allowCacheFile: true,
-          onCacheFileCompleted: (files) {
-            print('Cached file length ::: ${files?.length}');
-
-            if (files != null && files.isNotEmpty) {
-              for (var file in files) {
-                print('File path ::: ${file.path}');
-              }
-            }
-          },
-          onCacheFileFailed: (error) {
-            print('Cache file error ::: $error');
-          },
-          onFullScreen: (value) {}),
+    return Center(
+      child: _controller.value.isInitialized
+          ? AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
+            )
+          : Container(),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }

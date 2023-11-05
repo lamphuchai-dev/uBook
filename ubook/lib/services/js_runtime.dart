@@ -170,9 +170,9 @@ class JsRuntime {
         final type = args[1];
         switch (type) {
           case "decode":
-            return base64.decode(content);
+            return utf8.decode(base64.decode(content));
           case "encode":
-            return base64.encode(content);
+            return base64.encode(utf8.encode(content));
           default:
             return null;
         }
