@@ -181,6 +181,7 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
           return NavigationActionPolicy.ALLOW;
         }
         if (_currentVideo!.regex != null &&
+            _currentVideo!.regex != "" &&
             uri.toString().checkByRegExp(_currentVideo!.regex!)) {
           return NavigationActionPolicy.ALLOW;
         }

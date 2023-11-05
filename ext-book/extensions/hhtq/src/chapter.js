@@ -1,6 +1,6 @@
 async function chapter(url) {
   var res = await Extension.request(url);
-
+  // load sv fetch moi html theo linh
   var slides_p_path = res.match(/var player_aaaa=\{(.*?)\}/);
   if (extractAllText(slides_p_path[1]).length > 12) {
     const content = extractAllText(slides_p_path[1])[12];

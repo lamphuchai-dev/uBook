@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "name": "Anime47",
+    "author": "uBook",
+    "slug": "anime47",
+    "version": 1,
+    "source": "https://anime47.com",
+    "regexp": "(anime47).(com)",
+    "description": "Xem anime trang Anime47",
+    "locale": "vi_VN",
+    "language": "javascript",
+    "type": "video",
+    "tabsHome": [
+      {
+        "title": "Mới cập nhật",
+        "url": "/"
+      },
+      {
+        "title": "Xem nhiều trong ngày",
+        "url": "/danh-sach/xem-nhieu-trong-ngay.html"
+      }
+    ],
+    "search": false
+  },
+  "script": {
+    "home": "src/home.js",
+    "detail": "src/detail.js",
+    "chapters": "src/chapters.js",
+    "chapter": "src/chapter.js"
+  }
+}

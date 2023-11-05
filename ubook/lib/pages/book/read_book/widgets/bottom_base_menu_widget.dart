@@ -108,6 +108,7 @@ class BottomBaseMenuWidget extends StatelessWidget {
                           } else {
                             SystemUtils.setPreferredOrientations();
                           }
+                          readBookCubit.onHideCurrentMenu();
                         },
                         icon: const Icon(Icons.screen_rotation_rounded)),
                     IconButton(
