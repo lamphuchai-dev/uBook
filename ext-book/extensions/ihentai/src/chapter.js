@@ -8,7 +8,7 @@ async function chapter(url) {
   return [
     {
       url: el,
-      type: "iframe",
+      type: "web_url",
     },
   ];
 }

@@ -170,6 +170,47 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
   }
 
   Widget _webViewVideo() {
+    if (_currentVideo!.type == "url") {
+      return InAppWebView(
+        key: _webViewKey,
+        initialUrlRequest: URLRequest(
+            url: Uri.parse(
+                'https://play.sonar-cdn.com/play/02560e15-fb15-485e-9af1-abb145b68a21')),
+        initialOptions: _optionsWebView,
+        onWebViewCreated: (controller) {
+          _webViewController = controller;
+          setState(() {
+            _loading = true;
+          });
+        },
+        shouldOverrideUrlLoading: (controller, navigationAction) async {
+          var uri = navigationAction.request.url!;
+          if (["about"].contains(uri.scheme)) {
+            return NavigationActionPolicy.ALLOW;
+          }
+          if (_currentVideo!.regex != null &&
+              _currentVideo!.regex != "" &&
+              uri.toString().checkByRegExp(_currentVideo!.regex!)) {
+            return NavigationActionPolicy.ALLOW;
+          }
+
+          return NavigationActionPolicy.CANCEL;
+        },
+        onCreateWindow: (controller, createWindowAction) async {
+          return true;
+        },
+        onLoadStart: (controller, url) {
+          setState(() {
+            _loading = true;
+          });
+        },
+        onLoadStop: (controller, url) {
+          setState(() {
+            _loading = false;
+          });
+        },
+      );
+    } else {}
     final data =
         '''<iframe style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;" frameborder="0" src="${_currentVideo!.url}" frameborder="0" scrolling="0" allowfullscreen></iframe>''';
     return InAppWebView(
@@ -193,7 +234,7 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
           return NavigationActionPolicy.ALLOW;
         }
 
-        return NavigationActionPolicy.CANCEL;
+        return NavigationActionPolicy.ALLOW;
       },
       onCreateWindow: (controller, createWindowAction) async {
         return true;

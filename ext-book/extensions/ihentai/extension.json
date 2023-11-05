@@ -3,7 +3,7 @@
     "name": "IHentai",
     "author": "uBook",
     "slug": "ihentai",
-    "version": 1,
+    "version": 2,
     "source": "https://ihentai.de",
     "regexp": "(ihentai).(de)",
     "description": "Đọc truyện 18+ trên trang IHentai",
