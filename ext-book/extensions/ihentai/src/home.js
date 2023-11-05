@@ -1,7 +1,11 @@
 async function home(url, page) {
   if (!page) page = 1;
   const host = "https://ihentai.de";
-  const res = await Extension.request(url, { page: page ?? 1 });
+  const res = await Extension.request(url, {
+    queryParameters: {
+      page: page ?? 1,
+    },
+  });
 
   const lstEl = await Extension.querySelectorAll(
     res,
