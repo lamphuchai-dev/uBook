@@ -1,11 +1,12 @@
 async function home(url, page) {
   if (!page) page = 1;
   url = url + `/page/${page}/`;
+  const host = "https://ihentai.de";
   const res = await Extension.request(url);
 
   const lstEl = await Extension.querySelectorAll(
     res,
-    "div.page-item-detail.video"
+    "div.v-card--density-default"
   );
   const result = [];
 
@@ -13,8 +14,8 @@ async function home(url, page) {
     const html = item.content;
     var cover = await Extension.getAttributeText(html, "img", "src");
     result.push({
-      name: await Extension.getAttributeText(html, "a", "title"),
-      bookUrl: await Extension.getAttributeText(html, "a", "href"),
+      name: await Extension.getAttributeText(html, "img", "title"),
+      bookUrl: host + (await Extension.getAttributeText(html, "a", "href")),
       description: await await Extension.querySelector(
         html,
         "div.chapter-item a"

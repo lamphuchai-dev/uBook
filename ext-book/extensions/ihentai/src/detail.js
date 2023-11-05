@@ -44,7 +44,7 @@ async function detail(bookUrl) {
     author: await Extension.querySelector(res, "div.author-content a").text,
     description: description ? description.trim() : "",
     genres,
-    totalChapters,
+    totalChapters: 1,
   };
 }
 

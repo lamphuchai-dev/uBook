@@ -2,7 +2,7 @@ async function chapter(url) {
   const res = await Extension.request(url);
   const el = await Extension.getAttributeText(
     res,
-    "div.player_logic_item iframe",
+    'div[class="tw-col-span-3 lg:tw-col-span-2"] iframe',
     "src"
   );
   return [
