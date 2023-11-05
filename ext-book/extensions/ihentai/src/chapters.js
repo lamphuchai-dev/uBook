@@ -1,8 +1,10 @@
 async function chapters(bookUrl) {
-  return {
-    title: "Ep",
-    url: bookUrl,
-    bookUrl,
-    index: 0,
-  };
+  return [
+    {
+      title: "Ep",
+      url: bookUrl,
+      bookUrl,
+      index: 0,
+    },
+  ];
 }
