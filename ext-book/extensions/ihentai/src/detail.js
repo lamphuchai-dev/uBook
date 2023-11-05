@@ -1,12 +1,8 @@
 async function detail(bookUrl) {
-  const host = "https://anime47.com";
+  const host = "https://ihentai.de";
   const res = await Extension.request(bookUrl);
 
-  const name = await Extension.querySelector(res, "div.post-title h1").text;
-  const authorRow = await Extension.querySelectorAll(
-    res,
-    "div.author-content a"
-  );
+  const name = await Extension.querySelector(res, "div.tw-mb-3 h1").text;
 
   let genres = [];
 
@@ -34,20 +30,12 @@ async function detail(bookUrl) {
 
   return {
     name: name.trim(),
-    cover: await Extension.getAttributeText(
-      res,
-      "div.summary_image img",
-      "src"
-    ),
+    cover: await Extension.getAttributeText(res, "div.tw-relative img", "src"),
     bookUrl,
     statusBook: "",
     author: await Extension.querySelector(res, "div.author-content a").text,
     description: description ? description.trim() : "",
     genres,
-    totalChapters: 1,
+    totalChapters,
   };
 }
-
-// runFn(() =>
-//   detail("https://hentaihaven.xxx/watch/ikumonogakari-the-animation/")
-// );
