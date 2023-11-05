@@ -170,12 +170,10 @@ class _ReadChapterVideoState extends State<ReadChapterVideo> {
   }
 
   Widget _webViewVideo() {
-    if (_currentVideo!.type == "url") {
+    if (_currentVideo!.type == "web_url") {
       return InAppWebView(
         key: _webViewKey,
-        initialUrlRequest: URLRequest(
-            url: Uri.parse(
-                'https://play.sonar-cdn.com/play/02560e15-fb15-485e-9af1-abb145b68a21')),
+        initialUrlRequest: URLRequest(url: Uri.parse(_currentVideo!.url)),
         initialOptions: _optionsWebView,
         onWebViewCreated: (controller) {
           _webViewController = controller;

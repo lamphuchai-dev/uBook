@@ -235,7 +235,7 @@
         "name": "IHentai",
         "author": "uBook",
         "slug": "ihentai",
-        "version": 2,
+        "version": 3,
         "source": "https://ihentai.de",
         "regexp": "(ihentai).(de)",
         "description": "Đọc truyện 18+ trên trang IHentai",
@@ -249,6 +249,7 @@
             }
         ],
         "tag": "18+",
+        "genre": "true",
         "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/ihentai/extension.zip",
         "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/ihentai/icon.png"
     },
