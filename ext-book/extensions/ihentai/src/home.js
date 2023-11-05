@@ -1,8 +1,7 @@
 async function home(url, page) {
   if (!page) page = 1;
-  url = url + `/page/${page}/`;
   const host = "https://ihentai.de";
-  const res = await Extension.request(url);
+  const res = await Extension.request(url, { page: page ?? 1 });
 
   const lstEl = await Extension.querySelectorAll(
     res,
@@ -25,5 +24,3 @@ async function home(url, page) {
   }
   return result;
 }
-
-//runFn(() => home("https://hentaihaven.xxx/release/2023/", 2));
