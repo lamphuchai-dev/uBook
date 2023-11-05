@@ -9,7 +9,7 @@
     "description": "Đọc truyện 18+ trên trang IHentai",
     "locale": "vi_VN",
     "language": "javascript",
-    "type": "comic",
+    "type": "video",
     "tabsHome": [
       {
         "title": "Release",
