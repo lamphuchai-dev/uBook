@@ -29,6 +29,24 @@ async function detail(bookUrl) {
     });
   }
 
+  var list = await Extension.querySelectorAll(
+    res,
+    'div[class ="tw-relative tw-grid tw-grid-cols-12 tw-gap-x-2"]'
+  );
+  const recommended = [];
+  for (var item of list) {
+    recommended.push({
+      bookUrl:
+        host + (await Extension.getAttributeText(item.content, "a", "href")),
+      name: await Extension.querySelector(item.content, "a").text,
+      cover: await Extension.getAttributeText(item.content, "img", "src"),
+      description: await Extension.querySelector(
+        item.content,
+        'p[class ="text-medium-emphasis tw-text-sm tw-leading-tight"]'
+      ).text,
+    });
+  }
+
   return {
     name: name.trim(),
     cover: await Extension.getAttributeText(res, "div.tw-relative img", "src"),
@@ -38,5 +56,6 @@ async function detail(bookUrl) {
     description: description ? description.trim() : "",
     genres,
     totalChapters,
+    recommended,
   };
 }
