@@ -52,21 +52,38 @@ async function detail(bookUrl) {
     });
   }
 
-  var list = await Extension.querySelectorAll(res, "div.myui-vodlist__box");
-
-  // const recommended = [];
-  // for (var item of list) {
-  //   recommended.push({
-  //     bookUrl:
-  //       host + (await Extension.getAttributeText(item.content, "a", "href")),
-  //     name: await Extension.querySelector(item.content, "a").text,
-  //     cover: await Extension.getAttributeText(item.content, "img", "src"),
-  //     description: await Extension.querySelector(
-  //       item.content,
-  //       'p[class ="text-medium-emphasis tw-text-sm tw-leading-tight"]'
-  //     ).text,
-  //   });
-  // }
+  var listEl = await Extension.querySelectorAll(
+    res,
+    'ul[id="type"] div.myui-vodlist__box'
+  );
+  const recommended = [];
+  for (var item of listEl) {
+    var cover = await Extension.getAttributeText(
+      item.content,
+      "a.myui-vodlist__thumb",
+      "style"
+    );
+    if (cover) {
+      recommended.push({
+        bookUrl:
+          host +
+          (await Extension.getAttributeText(
+            item.content,
+            "a.myui-vodlist__thumb",
+            "href"
+          )),
+        name: await Extension.querySelector(
+          item.content,
+          'h4[class ="title text-overflow"] b'
+        ).text,
+        cover: cover.replace("background: url(", "").replace(");", ""),
+        description: await Extension.querySelector(
+          item.content,
+          'p[class ="text-medium-emphasis tw-text-sm tw-leading-tight"]'
+        ).text,
+      });
+    }
+  }
 
   return {
     name,
@@ -77,7 +94,6 @@ async function detail(bookUrl) {
     description,
     genres,
     totalChapters,
+    recommended,
   };
 }
-
-runFn(() => detail("https://hhhtq.net/phim/thien+nien+ca+hanh+phan+2+/"));
