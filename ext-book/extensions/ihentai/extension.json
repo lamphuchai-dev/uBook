@@ -3,7 +3,7 @@
     "name": "IHentai",
     "author": "uBook",
     "slug": "ihentai",
-    "version": 1,
+    "version": 2,
     "source": "https://ihentai.de",
     "regexp": "(ihentai).(de)",
     "description": "Đọc truyện 18+ trên trang IHentai",
@@ -14,16 +14,34 @@
       {
         "title": "Mới tải lên",
         "url": "/search"
+      },
+      {
+        "title": "Top lượt xem",
+        "url": "/search?orderby=meta_value_num&order=desc&metaKey=x_post_views_count"
+      },
+      {
+        "title": "Vietsub",
+        "url": "/hentai-vietsub"
+      },
+      {
+        "title": "3D",
+        "url": "/hentai-3d"
+      },
+      {
+        "title": "Không che",
+        "url": "/uncensored"
       }
     ],
     "tag": "18+",
-    "genre": "true"
+    "genre": true,
+    "search": true
   },
   "script": {
     "home": "src/home.js",
     "detail": "src/detail.js",
     "chapters": "src/chapters.js",
     "chapter": "src/chapter.js",
-    "genre": "src/genre.js"
+    "genre": "src/genre.js",
+    "search": "src/search.js"
   }
 }
