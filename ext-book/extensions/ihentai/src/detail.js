@@ -8,7 +8,7 @@ async function detail(bookUrl) {
 
   const description = await Extension.querySelector(
     res,
-    "div.summary__content.show-more p"
+    'p[class ="tw-text-sm"]'
   ).text;
 
   const totalChapters = (
@@ -17,11 +17,12 @@ async function detail(bookUrl) {
 
   const genreEls = await Extension.querySelectorAll(
     res,
-    "div.genres-content a"
+    'div[class="v-chip-group v-chip-group--column v-theme--dark"] a'
   );
 
   for (var el of genreEls) {
-    var title = await Extension.querySelector(el.content, "a").text;
+    var title = await Extension.querySelector(el.content, "div.v-chip__content")
+      .text;
     genres.push({
       url: host + (await Extension.getAttributeText(el.content, "a", "href")),
       title: title.trim(),

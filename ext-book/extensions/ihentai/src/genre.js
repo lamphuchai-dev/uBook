@@ -7,7 +7,7 @@ async function genre(url) {
     "div.v-card--density-default"
   );
   const result = [];
-
+  lstEl.splice(0, 4);
   for (const item of lstEl) {
     const html = item.content;
     result.push({
@@ -17,3 +17,5 @@ async function genre(url) {
   }
   return result;
 }
+
+//runFn(() => genre("https://ihentai.de"));
