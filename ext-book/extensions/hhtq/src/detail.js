@@ -52,6 +52,22 @@ async function detail(bookUrl) {
     });
   }
 
+  var list = await Extension.querySelectorAll(res, "div.myui-vodlist__box");
+
+  // const recommended = [];
+  // for (var item of list) {
+  //   recommended.push({
+  //     bookUrl:
+  //       host + (await Extension.getAttributeText(item.content, "a", "href")),
+  //     name: await Extension.querySelector(item.content, "a").text,
+  //     cover: await Extension.getAttributeText(item.content, "img", "src"),
+  //     description: await Extension.querySelector(
+  //       item.content,
+  //       'p[class ="text-medium-emphasis tw-text-sm tw-leading-tight"]'
+  //     ).text,
+  //   });
+  // }
+
   return {
     name,
     cover,
@@ -63,3 +79,5 @@ async function detail(bookUrl) {
     totalChapters,
   };
 }
+
+runFn(() => detail("https://hhhtq.net/phim/thien+nien+ca+hanh+phan+2+/"));

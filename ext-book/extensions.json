@@ -271,6 +271,47 @@
         "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/ihentai/icon.png"
     },
     {
+        "name": "HHTQ",
+        "author": "uBook",
+        "slug": "hhtq",
+        "version": 3,
+        "source": "https://hhhtq.net",
+        "regexp": "(hhhtq).(net)",
+        "description": "Xem anime trang HHTQ",
+        "locale": "vi_VN",
+        "language": "javascript",
+        "type": "video",
+        "tabsHome": [
+            {
+                "title": "Cổ Trang",
+                "url": "/show/Cổ+Trang--------page---/"
+            },
+            {
+                "title": "Hiện Đại",
+                "url": "/type/Hi%E1%BB%87n+%C4%90%E1%BA%A1i/"
+            },
+            {
+                "title": "Đam Mỹ",
+                "url": "/type/Đam+Mỹ/"
+            },
+            {
+                "title": "Huyền Huyễn",
+                "url": "https://hhhtq.net/type/Huye%CC%82%CC%80n+Huye%CC%82%CC%83n/"
+            },
+            {
+                "title": "Viễn Tưởng",
+                "url": "/type/Viễn+Tưởng/"
+            },
+            {
+                "title": "Chiếu Rạp",
+                "url": "/type/Chiếu+Rạp/"
+            }
+        ],
+        "search": true,
+        "path": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/hhtq/extension.zip",
+        "icon": "https://raw.githubusercontent.com/lamphuchai-dev/uBook/main/ext-book/extensions/hhtq/icon.png"
+    },
+    {
         "name": "Hentai Haven",
         "author": "uBook",
         "slug": "hentaihaven",
