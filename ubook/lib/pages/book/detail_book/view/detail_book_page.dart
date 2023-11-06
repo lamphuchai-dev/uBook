@@ -47,7 +47,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
     final expandedBarHeight =
         (context.height * 0.3) < 250 ? 250.0 : (context.height * 0.3);
     const paddingAppBar = 16.0;
-
+    print(coverUrl);
     return Scaffold(
       body: NotificationListener(
         onNotification: (notification) {

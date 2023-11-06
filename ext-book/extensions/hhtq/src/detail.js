@@ -6,7 +6,7 @@ async function detail(bookUrl) {
 
   var cover = await Extension.getAttributeText(
     detailEl.content,
-    "div.myui-content__thumb img",
+    "div.myui-content__thumb a img",
     "src"
   );
 
@@ -58,12 +58,12 @@ async function detail(bookUrl) {
   );
   const recommended = [];
   for (var item of listEl) {
-    var cover = await Extension.getAttributeText(
+    var coverItem = await Extension.getAttributeText(
       item.content,
       "a.myui-vodlist__thumb",
       "style"
     );
-    if (cover) {
+    if (coverItem) {
       recommended.push({
         bookUrl:
           host +
@@ -76,7 +76,7 @@ async function detail(bookUrl) {
           item.content,
           'h4[class ="title text-overflow"] b'
         ).text,
-        cover: cover.replace("background: url(", "").replace(");", ""),
+        cover: coverItem.replace("background: url(", "").replace(");", ""),
         description: await Extension.querySelector(
           item.content,
           'p[class ="text-medium-emphasis tw-text-sm tw-leading-tight"]'

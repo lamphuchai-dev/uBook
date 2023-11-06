@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
-import 'package:ubook/data/models/book.dart';
 
 part 'chapter.g.dart';
 
@@ -16,34 +15,29 @@ class Chapter {
   final String bookUrl;
   final int index;
   final List<String> content;
-
   @ignore
   final List<Map<String, dynamic>>? contentVideo;
-  @ignore
-  final List<Book>? recommended;
 
-  const Chapter({
-    this.id,
-    this.bookId,
-    required this.title,
-    required this.url,
-    required this.bookUrl,
-    required this.index,
-    required this.content,
-    this.contentVideo,
-    this.recommended,
-  });
+  const Chapter(
+      {this.id,
+      this.bookId,
+      required this.title,
+      required this.url,
+      required this.bookUrl,
+      required this.index,
+      required this.content,
+      this.contentVideo});
 
-  Chapter copyWith(
-      {Id? id,
-      int? bookId,
-      String? title,
-      String? url,
-      String? bookUrl,
-      int? index,
-      List<String>? content,
-      List<Map<String, dynamic>>? contentVideo,
-      List<Book>? recommended}) {
+  Chapter copyWith({
+    Id? id,
+    int? bookId,
+    String? title,
+    String? url,
+    String? bookUrl,
+    int? index,
+    List<String>? content,
+    List<Map<String, dynamic>>? contentVideo,
+  }) {
     return Chapter(
         id: id ?? this.id,
         bookId: bookId ?? this.bookId,
@@ -52,8 +46,7 @@ class Chapter {
         bookUrl: bookUrl ?? this.bookUrl,
         index: index ?? this.index,
         content: content ?? this.content,
-        contentVideo: contentVideo ?? this.contentVideo,
-        recommended: recommended ?? this.recommended);
+        contentVideo: contentVideo ?? this.contentVideo);
   }
 
   Map<String, dynamic> toMap() {
@@ -65,7 +58,6 @@ class Chapter {
       'bookUrl': bookUrl,
       'index': index,
       'content': content,
-      'recommended': recommended
     };
   }
 
@@ -86,10 +78,6 @@ class Chapter {
             ? List<Map<String, dynamic>>.from(
                 (map['contentVideo']),
               )
-            : [],
-        recommended: map['recommended'] != null
-            ? List<Book>.from(
-                map["recommended"].map<Book>((item) => Book.fromMap(map)))
             : []);
   }
 

@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 
 import 'package:ubook/app/config/app_type.dart';
@@ -28,10 +29,12 @@ class Book {
   final bool bookmark;
   final DateTime? updateAt;
   final bool isDownload;
+  final ReadBook? readBook;
+
   @ignore
   final List<Genre> genres;
-
-  final ReadBook? readBook;
+  @ignore
+  final List<Book>? recommended;
 
   const Book(
       {this.id,
@@ -47,7 +50,8 @@ class Book {
       required this.bookmark,
       this.readBook,
       this.genres = const [],
-      this.updateAt});
+      this.updateAt,
+      this.recommended});
 
   Book copyWith(
       {Id? id,
@@ -65,7 +69,8 @@ class Book {
       int? currentReadChapter,
       DateTime? updateAt,
       List<Genre>? genres,
-      ReadBook? readBook}) {
+      ReadBook? readBook,
+      List<Book>? recommended}) {
     return Book(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -80,7 +85,8 @@ class Book {
         genres: genres ?? this.genres,
         bookmark: bookmark ?? this.bookmark,
         updateAt: updateAt ?? this.updateAt,
-        readBook: readBook ?? this.readBook);
+        readBook: readBook ?? this.readBook,
+        recommended: recommended ?? this.recommended);
   }
 
   Book deleteBookmark() {
@@ -111,11 +117,22 @@ class Book {
       "genres": genres.map(
         (e) => e.toMap(),
       ),
-      'readBook': readBook?.toMap()
+      'readBook': readBook?.toMap(),
+      'recommended': recommended
     };
   }
 
   factory Book.fromMap(Map<String, dynamic> map) {
+    // map['recommended'] != null
+    //     ? List<Book>.from(
+    //         map["recommended"].map<Book>((item) => Book.fromMapVideo(map)))
+    //     : [];
+    List<Book>? recommended;
+    if (map['recommended'] is List && map["type"] != null) {
+      recommended = (map['recommended'] as List)
+          .map((e) => Book.fromMap({...e, "type": map["type"]}))
+          .toList();
+    }
     return Book(
         name: map['name'] ?? "",
         bookUrl: map['bookUrl'] ?? "",
@@ -139,7 +156,8 @@ class Book {
         bookmark: map["bookmark"] ?? false,
         updateAt: map["updateAt"],
         readBook:
-            map["readBook"] != null ? ReadBook.fromMap(map["readBook"]) : null);
+            map["readBook"] != null ? ReadBook.fromMap(map["readBook"]) : null,
+        recommended: recommended);
   }
 
   factory Book.fromMapComic(Map<String, dynamic> map) {
@@ -169,7 +187,47 @@ class Book {
 
   @override
   String toString() {
-    return 'Book(id: $id, name: $name, bookUrl: $bookUrl, author: $author, description: $description, cover: $cover, bookStatus: $bookStatus, totalChapters: $totalChapters, type: $type, bookmark: $bookmark, updateAt: $updateAt, genres: $genres, readBook: $readBook)';
+    return 'Book(id: $id, name: $name, bookUrl: $bookUrl, author: $author, description: $description, cover: $cover, bookStatus: $bookStatus, totalChapters: $totalChapters, type: $type, bookmark: $bookmark, updateAt: $updateAt, isDownload: $isDownload, readBook: $readBook, genres: $genres, recommended: $recommended)';
+  }
+
+  @override
+  bool operator ==(covariant Book other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.name == name &&
+        other.bookUrl == bookUrl &&
+        other.author == author &&
+        other.description == description &&
+        other.cover == cover &&
+        other.bookStatus == bookStatus &&
+        other.totalChapters == totalChapters &&
+        other.type == type &&
+        other.bookmark == bookmark &&
+        other.updateAt == updateAt &&
+        other.isDownload == isDownload &&
+        other.readBook == readBook &&
+        listEquals(other.genres, genres) &&
+        listEquals(other.recommended, recommended);
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        bookUrl.hashCode ^
+        author.hashCode ^
+        description.hashCode ^
+        cover.hashCode ^
+        bookStatus.hashCode ^
+        totalChapters.hashCode ^
+        type.hashCode ^
+        bookmark.hashCode ^
+        updateAt.hashCode ^
+        isDownload.hashCode ^
+        readBook.hashCode ^
+        genres.hashCode ^
+        recommended.hashCode;
   }
 }
 
@@ -237,27 +295,4 @@ class ReadBook {
 
   factory ReadBook.fromJson(String source) =>
       ReadBook.fromMap(json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() {
-    return 'ReadBook(index: $index, titleChapter: $titleChapter, nameExtension: $nameExtension, offsetLast: $offsetLast)';
-  }
-
-  @override
-  bool operator ==(covariant ReadBook other) {
-    if (identical(this, other)) return true;
-
-    return other.index == index &&
-        other.titleChapter == titleChapter &&
-        other.nameExtension == nameExtension &&
-        other.offsetLast == offsetLast;
-  }
-
-  @override
-  int get hashCode {
-    return index.hashCode ^
-        titleChapter.hashCode ^
-        nameExtension.hashCode ^
-        offsetLast.hashCode;
-  }
 }
