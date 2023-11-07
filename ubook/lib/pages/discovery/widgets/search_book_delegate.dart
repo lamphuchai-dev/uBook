@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:ubook/app/extensions/context_extension.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/data/models/book.dart';
-import 'package:ubook/pages/book/detail_book/detail_book.dart';
 import 'package:ubook/data/models/extension.dart';
 
 import '../../../widgets/book/books_grid_widget.dart';
@@ -66,9 +65,8 @@ class SearchBookDelegate extends SearchDelegate {
         _listBook = value;
       },
       onTap: (book) {
-        Navigator.pushNamed(context, RoutesName.detailBook,
-            arguments:
-                DetailBookArgs(book: book, extensionModel: extensionModel));
+        Navigator.pushNamed(context, RoutesName.detail,
+            arguments: book.bookUrl);
       },
     );
   }

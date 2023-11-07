@@ -3,7 +3,7 @@
     "name": "Anime47",
     "author": "uBook",
     "slug": "anime47",
-    "version": 1,
+    "version": 2,
     "source": "https://anime47.com",
     "regexp": "(anime47).(com)",
     "description": "Xem anime trang Anime47",

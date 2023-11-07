@@ -12,18 +12,19 @@ import 'package:ubook/pages/book/chapters/chapters.dart';
 import 'package:ubook/pages/book/read_book/read_book.dart';
 import 'package:ubook/widgets/cache_network_image.dart';
 import 'package:ubook/widgets/widgets.dart';
-import '../cubit/detail_book_cubit.dart';
-import '../widgets/widgets.dart';
+import '../cubit/detail_cubit.dart';
+import 'book_detail.dart';
 
-class DetailBookPage extends StatefulWidget {
-  const DetailBookPage({super.key});
+class BookLoaded extends StatefulWidget {
+  const BookLoaded({super.key, required this.book});
+  final Book book;
 
   @override
-  State<DetailBookPage> createState() => _DetailBookPageState();
+  State<BookLoaded> createState() => _BookLoadedState();
 }
 
-class _DetailBookPageState extends State<DetailBookPage> {
-  late DetailBookCubit _detailBookCubit;
+class _BookLoadedState extends State<BookLoaded> {
+  late DetailCubit _detailCubit;
 
   final collapsedBarHeight = kToolbarHeight;
   final ScrollController _scrollController = ScrollController();
@@ -31,8 +32,8 @@ class _DetailBookPageState extends State<DetailBookPage> {
   final ValueNotifier<double> _offset = ValueNotifier(0.0);
   @override
   void initState() {
-    _detailBookCubit = context.read<DetailBookCubit>();
-    _detailBookCubit.onInitFToat(context);
+    _detailCubit = context.read<DetailCubit>();
+    _detailCubit.onInitFToat(context);
 
     super.initState();
   }
@@ -41,13 +42,13 @@ class _DetailBookPageState extends State<DetailBookPage> {
   Widget build(BuildContext context) {
     final textTheme = context.appTextTheme;
     final colorScheme = context.colorScheme;
-    final coverUrl = _detailBookCubit.state.book.cover;
-    final book = _detailBookCubit.state.book;
+    final coverUrl = widget.book.cover;
+    final book = widget.book;
 
     final expandedBarHeight =
         (context.height * 0.3) < 250 ? 250.0 : (context.height * 0.3);
     const paddingAppBar = 16.0;
-    print(coverUrl);
+
     return Scaffold(
       body: NotificationListener(
         onNotification: (notification) {
@@ -120,34 +121,28 @@ class _DetailBookPageState extends State<DetailBookPage> {
                             Gaps.wGap12,
                             Expanded(
                                 flex: 3,
-                                child: BlocBuilder<DetailBookCubit,
-                                    DetailBookState>(
-                                  builder: (context, state) {
-                                    final book = state.book;
-                                    return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 12),
-                                            child: Text(
-                                              book.name,
-                                              style: textTheme.titleLarge,
-                                              maxLines: 2,
-                                            ),
-                                          ),
-                                          Text(
-                                            book.author,
-                                            maxLines: 2,
-                                          ),
-                                          Text(book.bookStatus),
-                                          Text(book.totalChapters == 0
-                                              ? ""
-                                              : book.totalChapters.toString()),
-                                        ]);
-                                  },
-                                )),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        child: Text(
+                                          book.name,
+                                          style: textTheme.titleLarge,
+                                          maxLines: 2,
+                                        ),
+                                      ),
+                                      Text(
+                                        book.author,
+                                        maxLines: 2,
+                                      ),
+                                      Text(book.bookStatus),
+                                      Text(book.totalChapters == 0
+                                          ? ""
+                                          : book.totalChapters.toString()),
+                                    ])),
                             Gaps.wGap16,
                           ],
                         ),
@@ -158,88 +153,61 @@ class _DetailBookPageState extends State<DetailBookPage> {
               ),
             ),
             SliverToBoxAdapter(
-              child: BlocBuilder<DetailBookCubit, DetailBookState>(
-                buildWhen: (previous, current) =>
-                    previous.statusType != current.statusType,
-                builder: (context, state) {
-                  final book = state.book;
-                  switch (state.statusType) {
-                    case StatusType.loading:
-                      return SizedBox(
-                          height: 200,
-                          child: SpinKitWaveSpinner(
-                            color: colorScheme.primary,
-                          ));
-                    case StatusType.loaded:
-                      return BookDetail(
-                        book: book,
-                        extension: _detailBookCubit.extension,
-                      );
-                    default:
-                      return const SizedBox();
-                  }
-                },
+              child: BookDetail(
+                book: book,
+                extension: _detailCubit.getExtension,
               ),
             )
           ],
         ),
       ),
-      bottomNavigationBar: BlocBuilder<DetailBookCubit, DetailBookState>(
-        buildWhen: (previous, current) =>
-            previous.statusType != current.statusType,
-        builder: (context, state) {
-          final run = state.statusType == StatusType.loaded;
-          return SlideTransitionAnimation(
-            runAnimation: run,
-            type: AnimationType.bottomToTop,
-            child: SafeArea(
-              child: Container(
-                margin: const EdgeInsets.symmetric(
-                    horizontal: Dimens.horizontalPadding, vertical: 10),
-                height: 60,
-                decoration: BoxDecoration(
-                  color: colorScheme.background,
-                ),
-                child: BlocBuilder<DetailBookCubit, DetailBookState>(
-                  builder: (context, state) {
-                    return Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: 100,
-                            decoration: BoxDecoration(
-                                color: colorScheme.surface,
-                                borderRadius:
-                                    BorderRadius.circular(Dimens.radius)),
-                            alignment: Alignment.center,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.download_rounded),
-                                  Text(
-                                    "Tải truyện",
-                                    style: textTheme.titleSmall,
-                                  )
-                                ]),
-                          ),
-                        ),
-                        Gaps.wGap8,
-                        Expanded(
-                            child:
-                                _listChapters(colorScheme.primary, state.book)),
-                        Gaps.wGap8,
-                        _tradingWidget(state.isBookmark, colorScheme,
-                            state.book, textTheme.titleSmall!)
-                      ],
-                    );
-                  },
-                ),
-              ),
+      bottomNavigationBar: SlideTransitionAnimation(
+        runAnimation: true,
+        type: AnimationType.bottomToTop,
+        child: SafeArea(
+          child: Container(
+            margin: const EdgeInsets.symmetric(
+                horizontal: Dimens.horizontalPadding, vertical: 10),
+            height: 60,
+            decoration: BoxDecoration(
+              color: colorScheme.background,
             ),
-          );
-        },
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: colorScheme.surface,
+                        borderRadius: BorderRadius.circular(Dimens.radius)),
+                    alignment: Alignment.center,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.download_rounded),
+                          Text(
+                            "Tải truyện",
+                            style: textTheme.titleSmall,
+                          )
+                        ]),
+                  ),
+                ),
+                Gaps.wGap8,
+                Expanded(
+                    child: _listChapters(colorScheme.primary, widget.book)),
+                Gaps.wGap8,
+                BlocBuilder<DetailCubit, DetailState>(
+                  builder: (context, state) {
+                    return _tradingWidget((state as DetailLoaded).book.bookmark,
+                        colorScheme, widget.book, textTheme.titleSmall!);
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -285,7 +253,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
     } else {
       return GestureDetector(
         onTap: () {
-          _detailBookCubit.add();
+          _detailCubit.addBookmark();
         },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -319,7 +287,7 @@ class _DetailBookPageState extends State<DetailBookPage> {
       onTap: () {
         Navigator.pushNamed(context, RoutesName.chaptersBook,
             arguments: ChaptersBookArgs(
-                book: book, extensionModel: _detailBookCubit.extension));
+                book: book, extensionModel: _detailCubit.getExtension));
       },
       child: Container(
         decoration: BoxDecoration(

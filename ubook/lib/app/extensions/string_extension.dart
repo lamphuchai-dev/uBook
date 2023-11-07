@@ -23,4 +23,13 @@ extension AppString on String {
     RegExp regex = RegExp(regexp);
     return regex.hasMatch(this);
   }
+
+  String? get getSourceByUrl {
+    try {
+      final uri = Uri.parse(this);
+      return "${uri.scheme}://${uri.host}";
+    } catch (error) {
+      return null;
+    }
+  }
 }

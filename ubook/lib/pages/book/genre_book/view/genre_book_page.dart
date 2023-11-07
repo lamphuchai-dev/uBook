@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/routes/routes_name.dart';
-import 'package:ubook/pages/book/detail_book/detail_book.dart';
 import 'package:ubook/widgets/book/books_grid_widget.dart';
 import '../cubit/genre_book_cubit.dart';
 
@@ -30,9 +29,8 @@ class _GenreBookPageState extends State<GenreBookPage> {
           return _genreBookCubit.onGetListBook(page);
         },
         onTap: (book) {
-          Navigator.pushNamed(context, RoutesName.detailBook,
-              arguments: DetailBookArgs(
-                  book: book, extensionModel: _genreBookCubit.extension));
+          Navigator.pushNamed(context, RoutesName.detail,
+              arguments: book.bookUrl);
         },
       ),
     );

@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ubook/app/constants/gaps.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/data/models/extension.dart';
-import 'package:ubook/pages/book/detail_book/detail_book.dart';
 
 import 'package:ubook/widgets/widgets.dart';
 
@@ -152,9 +151,12 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                 return _discoveryCubit.onGetListBook(tabHome.url, page);
               },
               onTap: (book) {
-                Navigator.pushNamed(context, RoutesName.detailBook,
-                    arguments:
-                        DetailBookArgs(book: book, extensionModel: extension));
+                // Navigator.pushNamed(context, RoutesName.detail,
+                //     arguments:
+                //         DetailBookArgs(book: book, extensionModel: extension));
+
+                Navigator.pushNamed(context, RoutesName.detail,
+                    arguments: book.bookUrl);
               },
             ),
           ),

@@ -3,11 +3,11 @@ import 'package:page_transition/page_transition.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/pages/book/genre_book/genre_book.dart';
 import 'package:ubook/pages/bottom_navigation_bar/bottom_navigation_bar.dart';
-import 'package:ubook/pages/book/detail_book/detail_book.dart';
 import 'package:ubook/pages/book/chapters/chapters.dart';
 import 'package:ubook/pages/book/read_book/read_book.dart';
 import 'package:ubook/pages/install_extension/install_extension.dart';
 import 'package:ubook/pages/splash/splash.dart';
+import 'package:ubook/pages/book/detail/detail.dart';
 
 class Routes {
   static const initialRoute = "/";
@@ -16,36 +16,35 @@ class Routes {
     switch (settings.name) {
       case initialRoute:
         return PageTransition(
-            settings: settings,
+            // settings: settings,
             child: const SplashView(),
             type: PageTransitionType.rightToLeft);
 
       case RoutesName.bottomNav:
         return PageTransition(
-            settings: settings,
+            // settings: settings,
             child: const BottomNavigationBarView(),
             type: PageTransitionType.rightToLeft);
 
       case RoutesName.installExt:
         return PageTransition(
-            settings: settings,
+            // settings: settings,
             child: const InstallExtensionView(),
             type: PageTransitionType.rightToLeft);
 
-      case RoutesName.detailBook:
-        assert(args != null && args is DetailBookArgs,
-            "args must be DetailBookArgs");
+      case RoutesName.detail:
+        assert(args != null && args is String, "args must be String");
         return PageTransition(
-            settings: settings,
-            child: DetailBookView(
-              args: args as DetailBookArgs,
+            // settings: settings,
+            child: DetailView(
+              bookUrl: args as String,
             ),
             type: PageTransitionType.rightToLeft);
 
       case RoutesName.chaptersBook:
         assert(args != null && args is ChaptersBookArgs, "args must be Book");
         return PageTransition(
-            settings: settings,
+            // settings: settings,
             child: ChaptersView(
               args: args as ChaptersBookArgs,
             ),
@@ -54,7 +53,7 @@ class Routes {
       case RoutesName.readBook:
         assert(args != null && args is ReadBookArgs, "args must be Book");
         return PageTransition(
-            settings: settings,
+            // settings: settings,
             child: ReadBookView(
               readBookArgs: args as ReadBookArgs,
             ),
@@ -63,7 +62,7 @@ class Routes {
       case RoutesName.genreBook:
         assert(args != null && args is GenreBookArg, "args must be Book");
         return PageTransition(
-            settings: settings,
+            // settings: settings,
             child: GenreBookView(
               arg: args as GenreBookArg,
             ),

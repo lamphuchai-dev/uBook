@@ -5,7 +5,6 @@ import 'package:ubook/app/constants/gaps.dart';
 import 'package:ubook/app/extensions/index.dart';
 import 'package:ubook/app/routes/routes_name.dart';
 import 'package:ubook/data/models/book.dart';
-import 'package:ubook/pages/book/detail_book/detail_book.dart';
 import 'package:ubook/pages/book/read_book/cubit/read_book_cubit.dart';
 import 'package:ubook/widgets/cache_network_image.dart';
 import 'package:ubook/widgets/widgets.dart';
@@ -95,9 +94,8 @@ class _BookDrawerState extends State<BookDrawer> {
       height: context.height * 0.22,
       child: GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, RoutesName.detailBook,
-              arguments: DetailBookArgs(
-                  book: _book, extensionModel: _readBookCubit.getExtension));
+          Navigator.pushNamed(context, RoutesName.detail,
+              arguments: _book.bookUrl);
         },
         child: Stack(
           fit: StackFit.expand,

@@ -5,7 +5,11 @@ async function detail(bookUrl) {
   const name = await Extension.querySelector(detailEl.content, "span.title-1")
     .text;
 
-  var cover = await Extension.getAttributeText(detailEl.content, "img", "src");
+  var cover = await Extension.getAttributeText(
+    detailEl.content,
+    "div.movie-l-img img",
+    "src"
+  );
 
   const authorRow = await Extension.querySelectorAll(
     detailEl.content,
