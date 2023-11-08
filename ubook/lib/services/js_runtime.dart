@@ -200,9 +200,9 @@ class JsRuntime {
       required String jsScript,
       required ExtensionType extType}) async {
     return _runExtension(() async {
-      evaluateJsScript(jsScript);
+      _evaluateJsScript(jsScript);
       final jsResult = await runtime.handlePromise(
-          await evaluateAsyncJsScript('stringify(()=>home("$url",$page))'));
+          await _evaluateAsyncJsScript('stringify(()=>home("$url",$page))'));
       return jsResult.toJson
           .map<Book>((map) => Book.fromExtensionType(extType, map))
           .toList();
@@ -214,9 +214,9 @@ class JsRuntime {
       required String jsScript,
       required ExtensionType extType}) async {
     return _runExtension(() async {
-      evaluateJsScript(jsScript);
+      _evaluateJsScript(jsScript);
       final jsResult = await runtime.handlePromise(
-          await evaluateAsyncJsScript('stringify(()=>detail("$url"))'));
+          await _evaluateAsyncJsScript('stringify(()=>detail("$url"))'));
       return Book.fromExtensionType(extType, jsResult.toJson);
     });
   }
@@ -224,9 +224,9 @@ class JsRuntime {
   Future<List<Chapter>> getChapters(
       {required String url, required String jsScript, int? bookId}) async {
     return _runExtension(() async {
-      evaluateJsScript(jsScript);
+      _evaluateJsScript(jsScript);
       final jsResult = await runtime.handlePromise(
-          await evaluateAsyncJsScript('stringify(()=>chapters("$url"))'));
+          await _evaluateAsyncJsScript('stringify(()=>chapters("$url"))'));
       List<Chapter> chapters = jsResult.toJson
           .map<Chapter>((map) => Chapter.fromMap({...map, "bookId": bookId}))
           .toList();
@@ -238,7 +238,7 @@ class JsRuntime {
   Future<List<dynamic>> chapter(
       {required String url, required String jsScript}) async {
     return _runExtension(() async {
-      evaluateJsScript(jsScript);
+      _evaluateJsScript(jsScript);
       final jsResult = await runtime.handlePromise(
           await runtime.evaluateAsync('stringify(()=>chapter("$url"))'));
       return List<dynamic>.from(jsResult.toJson);
@@ -248,7 +248,7 @@ class JsRuntime {
   Future<List<Genre>> genre(
       {required String url, required String jsScript}) async {
     return _runExtension(() async {
-      evaluateJsScript(jsScript);
+      _evaluateJsScript(jsScript);
       final jsResult = await runtime.handlePromise(
           await runtime.evaluateAsync('stringify(()=>genre("$url"))'));
       return jsResult.toJson.map<Genre>((map) => Genre.fromMap(map)).toList();
@@ -262,8 +262,8 @@ class JsRuntime {
       required String jsScript,
       required ExtensionType extType}) async {
     return _runExtension(() async {
-      evaluateJsScript(jsScript);
-      final jsResult = await runtime.handlePromise(await evaluateAsyncJsScript(
+      _evaluateJsScript(jsScript);
+      final jsResult = await runtime.handlePromise(await _evaluateAsyncJsScript(
           'stringify(()=>search("$url","$keyWord",$page))'));
       return jsResult.toJson
           .map<Book>((map) => Book.fromExtensionType(extType, map))
@@ -271,7 +271,7 @@ class JsRuntime {
     });
   }
 
-  bool evaluateJsScript(String code, {bool exception = true}) {
+  bool _evaluateJsScript(String code, {bool exception = true}) {
     final jsEvalResult = runtime.evaluate(code);
     if (jsEvalResult.isError && exception) {
       throw const RuntimeException(RuntimeExceptionType.extensionScript);
@@ -279,7 +279,7 @@ class JsRuntime {
     return jsEvalResult.isError;
   }
 
-  Future<JsEvalResult> evaluateAsyncJsScript(String code,
+  Future<JsEvalResult> _evaluateAsyncJsScript(String code,
       {bool exception = true}) async {
     final jsEvalResult = await runtime.evaluateAsync(code);
     if (jsEvalResult.isError && exception) {
