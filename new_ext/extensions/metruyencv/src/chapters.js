@@ -1,5 +1,5 @@
 async function chapters(url) {
-  const htmlPage = await Browser.launch(bookUrl, 10000);
+  const htmlPage = await Browser.launch(url, 10000);
   if (htmlPage == null) return null;
 
   Browser.callJs(

@@ -41,8 +41,8 @@ async function detail(url) {
       "src"
     ),
     bookStatus: bookStatus ? bookStatus.trim() : "Đang cập nhật",
-    link: url.replace("https://metruyencv.net", ""),
-    host: "https://metruyencv.net",
+    link: url.replace("https://metruyencv.com", ""),
+    host: "https://metruyencv.com",
     // author: json.author.name,
     description: await Extension.querySelector(
       res,

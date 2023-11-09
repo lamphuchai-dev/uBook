@@ -28,6 +28,6 @@ async function chapter(url) {
 
 // runFn(() =>
 //   chapter(
-//     "https://metruyencv.net/truyen/cam-kiem-cho-ruou-kinh-hong-khach/chuong-50"
+//     "https://metruyencv.com/truyen/cam-kiem-cho-ruou-kinh-hong-khach/chuong-50"
 //   )
 // );
