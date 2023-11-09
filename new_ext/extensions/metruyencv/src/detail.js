@@ -5,12 +5,12 @@ async function detail(url) {
         "Mozilla/5.0 (Linux; Android 13; Pixel 7 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36",
     },
   });
-  var data = await Extension.querySelector(
-    res,
-    'script[type="application/ld+json"]'
-  ).text;
+  // var data = await Extension.querySelector(
+  //   res,
+  //   'script[type="application/ld+json"]'
+  // ).text;
 
-  const json = JSON.parse(data);
+  // const json = JSON.parse(data);
   const genresEl = await Extension.querySelectorAll(
     res,
     '.nh-section ul[class="list-unstyled"] li a'
@@ -33,15 +33,17 @@ async function detail(url) {
     ".nh-section ul.list-unstyled li div.font-weight-semibold"
   ).text;
 
-  // name: await Extension.querySelector(res, ".nh-section h1").text,
-  // cover: await Extension.getAttributeText(res, ".nh-thumb.nh-thumb--150 img", "src"),
   return {
-    name: json.name,
-    cover: json.image,
+    name: await Extension.querySelector(res, ".nh-section h1").text,
+    cover: await Extension.getAttributeText(
+      res,
+      ".nh-thumb.nh-thumb--150 img",
+      "src"
+    ),
     bookStatus: bookStatus ? bookStatus.trim() : "Đang cập nhật",
     link: url.replace("https://metruyencv.net", ""),
     host: "https://metruyencv.net",
-    author: json.author.name,
+    // author: json.author.name,
     description: await Extension.querySelector(
       res,
       ".tab-content .nh-section .content p"
