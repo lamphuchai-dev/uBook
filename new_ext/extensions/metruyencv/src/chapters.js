@@ -15,7 +15,7 @@ async function chapters(bookUrl) {
   const chapters = [];
   data.response._data.chapters.forEach((chapter) => {
     chapters.push({
-      title: chapter.name,
+      name: chapter.name,
       url: "/chuong-" + chapter.index,
       host: bookUrl,
     });
