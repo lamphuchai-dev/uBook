@@ -23,7 +23,7 @@ async function chapter(url) {
   }
   html = html.replace(/<br>/g, "\n");
   var text = await Extension.querySelector(html, "#article").text;
-  return text.split("\n");
+  return text;
 }
 
 // runFn(() =>

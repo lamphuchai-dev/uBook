@@ -4,7 +4,7 @@ async function chapters(url) {
 
   Browser.callJs(
     "for(const a of document.querySelectorAll('a')){if(a.textContent.includes('Danh sách chương')){a.click()}}",
-    1000
+    500
   );
 
   const data = await Browser.waitUrlAjaxResponse(
