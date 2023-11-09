@@ -1,4 +1,4 @@
-async function chapters(bookUrl) {
+async function chapters(url) {
   const htmlPage = await Browser.launch(bookUrl, 10000);
   if (htmlPage == null) return null;
 
@@ -16,15 +16,16 @@ async function chapters(bookUrl) {
   data.response._data.chapters.forEach((chapter) => {
     chapters.push({
       name: chapter.name,
-      url: "/chuong-" + chapter.index,
-      host: bookUrl,
+      url:
+        url.replace("https://metruyencv.com", "") + "/chuong-" + chapter.index,
+      host: "https://metruyencv.com",
     });
   });
   return chapters;
 }
 
-runFn(() =>
-  chapters(
-    "https://metruyencv.com/truyen/dau-la-phan-phai-may-mo-phong-bat-dau-ham-hai-thien-nhan-tuyet"
-  )
-);
+// runFn(() =>
+//   chapters(
+//     "https://metruyencv.com/truyen/dau-la-phan-phai-may-mo-phong-bat-dau-ham-hai-thien-nhan-tuyet"
+//   )
+// );
