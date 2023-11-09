@@ -22,7 +22,7 @@ async function home(url, page) {
     books.push({
       name: book.name,
       link: "/truyen/" + book.slug,
-      cover: book["poster"]["default"],
+      cover: book["poster"]["300"],
       description: book.author_name,
       host: "https://metruyencv.com",
     });
